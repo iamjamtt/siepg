@@ -210,7 +210,8 @@
                                                                 <span class="badge badge-secondary fs-6 px-3 py-2">
                                                                     NSP
                                                                 </span>
-                                                            @elseif ($data->matricula_curso_estado == 2)
+                                                            @elseif ($nota_matricula_curso->nota_promedio_final >= 14)
+                                                            <span class="badge badge-success fs-6 px-3 py-2">
                                                                 <span class="badge badge-success fs-6 px-3 py-2">
                                                                     APROBADO
                                                                 </span>
