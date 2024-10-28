@@ -18,6 +18,7 @@ Route::get('/hash/{password}', function($password){
     return Hash::make($password);
 });
 
+
 // Ruta para ir a la vista de registro de docentes
 Route::get('/posgrado/registro-docente', [InscripcionController::class, 'registro_docente'])->name('posgrado.registro.docente');
 // Ruta para ir a la vista de gracias al final del registro de docentes
