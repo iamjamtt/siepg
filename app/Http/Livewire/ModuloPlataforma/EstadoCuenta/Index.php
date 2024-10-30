@@ -105,7 +105,7 @@ class Index extends Component
                                                 ->orWhere('mensualidad.id_mensualidad', 'like', "%{$this->search}%");
                                         })
                                         ->orderBy('mensualidad.id_mensualidad', 'asc')
-                                        ->paginate(5);
+                                        ->paginate(8);
 
         $monto_total = $this->costo_enseñanza->costo_credito * $this->creditos_totales;
         $monto_pagado = 0;
