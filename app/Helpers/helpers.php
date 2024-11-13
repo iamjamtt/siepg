@@ -347,7 +347,8 @@ function finalizar_evaluacion($evaluacion, $puntaje)
     }
 }
 
-function dataPagoMatricula($item) {
+function dataPagoMatricula($item)
+{
     // buscar ultima matricula
     $ultima_matricula = Matricula::where('id_admitido', $item->id_admitido)->where('matricula_estado', 1)->orderBy('id_matricula', 'desc')->first();
 
@@ -355,15 +356,14 @@ function dataPagoMatricula($item) {
     // buscar cursos de la ultima matricula
     $cursos = $ultima_matricula ?
         MatriculaCurso::join('curso_programa_plan', 'matricula_curso.id_curso_programa_plan', '=', 'curso_programa_plan.id_curso_programa_plan')
-                            ->join('curso', 'curso_programa_plan.id_curso', '=', 'curso.id_curso')
-                            ->where('matricula_curso.id_matricula', $ultima_matricula->id_matricula)
-                            ->get() :
+        ->join('curso', 'curso_programa_plan.id_curso', '=', 'curso.id_curso')
+        ->where('matricula_curso.id_matricula', $ultima_matricula->id_matricula)
+        ->get() :
         collect([]);
 
     // sumar creditos de los cursos
     $creditos_totales = 0;
-    foreach($cursos as $curso)
-    {
+    foreach ($cursos as $curso) {
         $creditos_totales += $curso->curso_credito;
     }
 
@@ -377,10 +377,8 @@ function dataPagoMatricula($item) {
     $monto_total = $costo_enseñanza->costo_credito * $creditos_totales;
     $monto_pagado = 0;
 
-    foreach($mensualidades as $mensualidad)
-    {
-        if ( $mensualidad->pago->pago_estado == 2 && $mensualidad->pago->pago_verificacion == 2 )
-        {
+    foreach ($mensualidades as $mensualidad) {
+        if ($mensualidad->pago->pago_estado == 2 && $mensualidad->pago->pago_verificacion == 2) {
             $monto_pagado += $mensualidad->pago->pago_monto;
         }
     }
