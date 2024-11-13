@@ -93,7 +93,7 @@
                     <div class="card p-5 mb-5">
                         <div class="row g-3">
                             <div class="col-md-4">
-                                <button type="button" class="btn btn-outline btn-outline-dashed btn-outline-primary btn-active-light-primary btn-center fw-bold w-100px w-md-125px"
+                                {{-- <button type="button" class="btn btn-outline btn-outline-dashed btn-outline-primary btn-active-light-primary btn-center fw-bold w-100px w-md-125px"
                                     data-kt-menu-trigger="click" data-kt-menu-placement="bottom-start">
                                     <span class="svg-icon svg-icon-3 me-1">
                                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -141,7 +141,7 @@
                                                 data-kt-menu-dismiss="true">Aplicar</button>
                                         </div>
                                     </form>
-                                </div>
+                                </div> --}}
                             </div>
                             <div class="col-md-4"></div>
                             <div class="col-md-4">

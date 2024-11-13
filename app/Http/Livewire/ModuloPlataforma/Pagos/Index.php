@@ -360,6 +360,25 @@ class Index extends Component
             // validar si ya cuenta con el pago de su ficha de matricula del ciclo correspondiente
 
             // validar si el registro del pago es del ciclo correspondiente
+
+            // validamos si el monto de pago de costo por enseñanza es mayor al monto de deuda
+            $monto_total = calcularMontoTotalCostoPorEnsenhanzaEstudiante($admitido->id_admitido);
+            $monto_pagado = calcularMontoPagadoCostoPorEnsenhanzaEstudiante($admitido->id_admitido);
+            $deuda = $monto_total - $monto_pagado;
+            $monto_ingresado = $this->monto_operacion;
+            if ($this->concepto_pago == 7) {
+                if ($monto_ingresado > $deuda) {
+                    $this->dispatchBrowserEvent('alerta_pago_plataforma', [
+                        'title' => '¡Error!',
+                        // 'text' => 'El monto de pago ingresado es mayor al monto de deuda, por favor verifique el monto correcto e ingrese nuevamente.',
+                        'text' => 'El monto deuda es S/ ' . number_format($deuda, 2) . ' y el monto ingresado es S/ ' . number_format($monto_ingresado, 2) . ', por favor verifique el monto correcto e ingrese nuevamente.',
+                        'icon' => 'error',
+                        'confirmButtonText' => 'Aceptar',
+                        'color' => 'danger'
+                    ]);
+                    return;
+                }
+            }
         } else {
             if ($this->activar_voucher == true) {
                 $this->validate([

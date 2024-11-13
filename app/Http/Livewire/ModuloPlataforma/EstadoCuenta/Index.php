@@ -97,26 +97,19 @@ class Index extends Component
     public function render()
     {
         $mensualidades  = Mensualidad::join('matricula', 'mensualidad.id_matricula', '=', 'matricula.id_matricula')
-                                        ->join('pago', 'mensualidad.id_pago', '=', 'pago.id_pago')
-                                        ->where('mensualidad.id_admitido', $this->admitido->id_admitido)
-                                        ->where('matricula.id_matricula', $this->data_matricula ? '=' : '!=', $this->data_matricula)
-                                        ->where(function ($query) {
-                                            $query->where('pago.pago_operacion', 'like', "%{$this->search}%")
-                                                ->orWhere('mensualidad.id_mensualidad', 'like', "%{$this->search}%");
-                                        })
-                                        ->orderBy('mensualidad.id_mensualidad', 'asc')
-                                        ->paginate(8);
+            ->join('pago', 'mensualidad.id_pago', '=', 'pago.id_pago')
+            ->where('mensualidad.id_admitido', $this->admitido->id_admitido)
+            ->where('matricula.id_matricula', $this->data_matricula ? '=' : '!=', $this->data_matricula)
+            ->where(function ($query) {
+                $query->where('pago.pago_operacion', 'like', "%{$this->search}%")
+                    ->orWhere('mensualidad.id_mensualidad', 'like', "%{$this->search}%");
+            })
+            ->orderBy('mensualidad.id_mensualidad', 'asc')
+            ->paginate(10);
 
-        $monto_total = $this->costo_enseñanza->costo_credito * $this->creditos_totales;
-        $monto_pagado = 0;
-
-        foreach($mensualidades as $mensualidad)
-        {
-            if ( $mensualidad->pago->pago_estado == 2 && $mensualidad->pago->pago_verificacion == 2 )
-            {
-                $monto_pagado += $mensualidad->pago->pago_monto;
-            }
-        }
+        $monto_total = calcularMontoTotalCostoPorEnsenhanzaEstudiante($this->admitido->id_admitido);
+        $monto_pagado = calcularMontoPagadoCostoPorEnsenhanzaEstudiante($this->admitido->id_admitido);
+        // dd($monto_total, $monto_pagado);
 
         $deuda = $monto_total - $monto_pagado;
 

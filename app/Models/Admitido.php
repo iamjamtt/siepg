@@ -49,4 +49,11 @@ class Admitido extends Model
         return $this->belongsTo(TipoEstudiante::class,
         'id_tipo_estudiante','id_tipo_estudiante');
     }
+
+    public function ultimaMatricula(){
+        return $this->hasOne(Matricula::class,
+            'id_admitido','id_admitido')
+            ->where('matricula_estado', 1)
+            ->orderBy('id_matricula', 'desc');
+    }
 }

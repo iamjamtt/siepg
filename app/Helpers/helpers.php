@@ -2,6 +2,7 @@
 
 use App\Models\Admision;
 use App\Models\Admitido;
+use App\Models\CostoEnseñanza;
 use App\Models\ExpedienteAdmision;
 use App\Models\ExpedienteInscripcion;
 use App\Models\ExpedienteInscripcionSeguimiento;
@@ -390,6 +391,72 @@ function dataPagoMatricula($item)
         'monto_pagado' => $monto_pagado,
         'deuda' => $deuda
     ];
+}
+
+function calcularMontoTotalCostoPorEnsenhanzaEstudiante($id_admitido)
+{
+    $admitido = Admitido::query()
+        ->with('ultimaMatricula')
+        ->find($id_admitido);
+
+    $ultima_matricula = $admitido->ultimaMatricula;
+
+    if (!$ultima_matricula) {
+        return 0;
+    }
+
+    $cursos = MatriculaCurso::query()
+        ->join('curso_programa_plan', 'matricula_curso.id_curso_programa_plan', '=', 'curso_programa_plan.id_curso_programa_plan')
+        ->join('curso', 'curso_programa_plan.id_curso', '=', 'curso.id_curso')
+        ->where('matricula_curso.id_matricula', $ultima_matricula->id_matricula)
+        ->get();
+
+    $creditos_totales = 0;
+
+    foreach ($cursos as $curso) {
+        $creditos_totales += $curso->curso_credito;
+    }
+
+    $costo_enseñanza = CostoEnseñanza::query()
+        ->where('id_plan', $admitido->programa_proceso->programa_plan->id_plan)
+        ->where('programa_tipo', $admitido->programa_proceso->programa_plan->programa->programa_tipo)
+        ->first();
+
+    $monto_total = $costo_enseñanza->costo_credito * $creditos_totales;
+
+    return $monto_total;
+}
+
+function calcularMontoPagadoCostoPorEnsenhanzaEstudiante($id_admitido)
+{
+    $admitido = Admitido::query()
+        ->with('ultimaMatricula')
+        ->find($id_admitido);
+
+    $ultima_matricula = $admitido->ultimaMatricula;
+
+    if (!$ultima_matricula) {
+        return 0;
+    }
+
+    $mensualidades  = Mensualidad::query()
+        ->join('matricula', 'mensualidad.id_matricula', '=', 'matricula.id_matricula')
+        ->join('pago', 'mensualidad.id_pago', '=', 'pago.id_pago')
+        ->where('mensualidad.id_admitido', $id_admitido)
+        ->where('matricula.id_matricula', $ultima_matricula->id_matricula ? '=' : '!=', $ultima_matricula->id_matricula)
+        ->get();
+
+    $monto_pagado = 0;
+
+    foreach($mensualidades as $mensualidad)
+    {
+        if ( $mensualidad->pago->pago_estado == 2 && $mensualidad->pago->pago_verificacion == 2 )
+        {
+            $monto_pagado += $mensualidad->pago->pago_monto;
+        }
+    }
+
+    return $monto_pagado;
 }
 
 //
