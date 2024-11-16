@@ -20,6 +20,7 @@ class MatriculaCurso extends Model
         'id_curso_programa_plan',
         'id_programa_proceso_grupo',
         'id_docente',
+        'periodo',
         'es_acta_adicional',
         'es_acta_reingreso',
         'es_acta_incorporacion',
