@@ -314,9 +314,15 @@ class Index extends Component
                         }
                     }
                     // validamos si la fecha de pago por concepto de matricula esta dentro de las fechas establecidas
-                    $admision = Admision::where('admision_estado', 1)->first();
+                    $matriculaGestion = MatriculaGestion::query()
+                        ->where('id_programa_proceso', $admitido->id_programa_proceso)
+                        ->where('id_admision', $admitido->programa_proceso->id_admision)
+                        ->where('id_ciclo', calcularCicloEstudiante($admitido->id_admitido))
+                        ->where('matricula_gestion_estado', 1)
+                        ->orderBy('id_matricula_gestion', 'desc')
+                        ->first();
                     if ($this->concepto_pago == 3 || $this->concepto_pago == 4) {
-                        if ($this->fecha_pago < $admision->admision_fecha_inicio_matricula || $this->fecha_pago > $admision->admision_fecha_fin_matricula) {
+                        if ($this->fecha_pago < $matriculaGestion->matricula_gestion_fecha_inicio || $this->fecha_pago > $matriculaGestion->matricula_gestion_fecha_fin) {
                             $this->dispatchBrowserEvent('alerta_pago_plataforma', [
                                 'title' => '¡Error!',
                                 'text' => 'La fecha de pago ingresada no se encuentra dentro del rango de fechas de matrícula.',
@@ -328,7 +334,7 @@ class Index extends Component
                         }
                     }
                     if ($this->concepto_pago == 5 || $this->concepto_pago == 6) {
-                        if ($this->fecha_pago < $admision->admision_fecha_inicio_matricula_extemporanea || $this->fecha_pago > $admision->admision_fecha_fin_matricula_extemporanea) {
+                        if ($this->fecha_pago < $matriculaGestion->matricula_gestion_fecha_extemporanea_inicio || $this->fecha_pago > $matriculaGestion->matricula_gestion_fecha_extemporanea_fin) {
                             $this->dispatchBrowserEvent('alerta_pago_plataforma', [
                                 'title' => '¡Error!',
                                 'text' => 'La fecha de pago ingresada no se encuentra dentro del rango de fechas de matrícula extemporánea.',
@@ -340,8 +346,8 @@ class Index extends Component
                         }
                     }
                     // validar si el pago a registrar pertenece a la matricula extemporanea
-                    $fecha_matricula_extemporanea_inicio = Admision::where('admision_estado', 1)->first()->admision_fecha_inicio_matricula_extemporanea;
-                    $fecha_matricula_extemporanea_fin = Admision::where('admision_estado', 1)->first()->admision_fecha_fin_matricula_extemporanea;
+                    $fecha_matricula_extemporanea_inicio = $matriculaGestion->matricula_gestion_fecha_extemporanea_inicio;
+                    $fecha_matricula_extemporanea_fin = $matriculaGestion->matricula_gestion_fecha_extemporanea_fin;
                     if ($this->concepto_pago != 5 || $this->concepto_pago != 6) {
                         if ($this->concepto_pago == 3 || $this->concepto_pago == 4) {
                             if ($this->fecha_pago >= $fecha_matricula_extemporanea_inicio && $this->fecha_pago <= $fecha_matricula_extemporanea_fin) {
@@ -627,7 +633,7 @@ class Index extends Component
         $admision = $this->admitido ? $this->admitido->programa_proceso->admision : null; // admision del admitido del usuario logueado
 
         // verificar si el usuario logueado tiene una matricula activa
-        $this->activarConceptosDeMatricula = $this->verificarSiHayMatriculaActiva();
+        $this->activarConceptosDeMatricula = $this->verificarSiHayMatriculaActiva($this->admitido->id_admitido);
 
         if ($admision) {
             $constancia_ingreso = ConstanciaIngreso::where('id_admitido', $this->admitido->id_admitido)->first(); // constancia de ingreso del usuario logueado
@@ -651,12 +657,14 @@ class Index extends Component
         ]);
     }
 
-    public function verificarSiHayMatriculaActiva()
+    public function verificarSiHayMatriculaActiva($id_admitido)
     {
+        $admitido = Admitido::find($id_admitido);
+
         $matriculaGestion = MatriculaGestion::query()
-            ->where('id_programa_proceso', $this->admitido->id_programa_proceso)
-            ->where('id_admision', $this->admitido->programa_proceso->id_admision)
-            ->where('id_ciclo', calcularCicloEstudiante($this->admitido->id_admitido))
+            ->where('id_programa_proceso', $admitido->id_programa_proceso)
+            ->where('id_admision', $admitido->programa_proceso->id_admision)
+            ->where('id_ciclo', calcularCicloEstudiante($id_admitido))
             ->where('matricula_gestion_estado', 1)
             ->orderBy('id_matricula_gestion', 'desc')
             ->first();
