@@ -36,6 +36,8 @@ class Index extends Component
     public $button_modal = 'Registrar Pago'; // variable para el boton del modal de registro
     public $terminos_condiciones_pagos = false; // variable para los terminos y condiciones de los pagos
 
+    public bool $activarConceptosDeMatricula = false; // variable para activar la matricula
+
     // variables para el filtro
     public $search = '';
     public $filtro_concepto_pago; // variable para el filtro de concepto de pago
@@ -623,31 +625,17 @@ class Index extends Component
         $inscripcion_ultima = Inscripcion::where('id_persona', $persona->id_persona)->orderBy('id_inscripcion', 'desc')->first(); // inscripcion del usuario logueado
         $evaluacion = $this->admitido ? Evaluacion::where('id_evaluacion', $this->admitido->id_evaluacion)->first() : $inscripcion_ultima->evaluacion()->orderBy('id_evaluacion', 'desc')->first(); // evaluacion de la inscripcion del usuario logueado
         $admision = $this->admitido ? $this->admitido->programa_proceso->admision : null; // admision del admitido del usuario logueado
-        $activar_matricula = false; // variable para activar la matricula
+
+        // verificar si el usuario logueado tiene una matricula activa
+        $this->activarConceptosDeMatricula = $this->verificarSiHayMatriculaActiva();
+
         if ($admision) {
             $constancia_ingreso = ConstanciaIngreso::where('id_admitido', $this->admitido->id_admitido)->first(); // constancia de ingreso del usuario logueado
 
             $matricula_count = Matricula::where('id_admitido', $this->admitido->id_admitido)->where('matricula_estado', 1)->count(); // matricula del usuario logueado
-
-            $matricula_gestion = MatriculaGestion::where('id_programa_proceso', $this->admitido->id_programa_proceso)
-                ->where('matricula_gestion_estado', 1)
-                ->orderBy('id_matricula_gestion', 'desc')
-                ->first(); // gestion de matricula actual
-
-            if ($matricula_gestion) {
-                if ($matricula_gestion->matricula_gestion_fecha_inicio <= date('Y-m-d') && $matricula_gestion->matricula_gestion_fecha_extemporanea_fin >= date('Y-m-d')) {
-                    $activar_matricula = true;
-                }
-            }
-
-            if ($admision->admision_fecha_inicio_matricula <= date('Y-m-d') && $admision->admision_fecha_fin_matricula_extemporanea >= date('Y-m-d')) {
-                $activar_matricula = true;
-            }
         } else {
             $constancia_ingreso = null;
             $matricula_count = 0;
-            $matricula_gestion = null;
-            $activar_matricula = false;
         }
         $canales_pagos = CanalPago::where('canal_pago_estado', 1)->get(); // canales de pago
         $conceptos_pagos = ConceptoPago::where('concepto_pago_estado', 1)->get(); // canales de pago
@@ -659,9 +647,31 @@ class Index extends Component
             'conceptos_pagos' => $conceptos_pagos,
             'admision' => $admision,
             'constancia_ingreso' => $constancia_ingreso,
-            'matricula_count' => $matricula_count,
-            'matricula_gestion' => $matricula_gestion,
-            'activar_matricula' => $activar_matricula, // variable para activar la matricula
+            'matricula_count' => $matricula_count
         ]);
+    }
+
+    public function verificarSiHayMatriculaActiva()
+    {
+        $matriculaGestion = MatriculaGestion::query()
+            ->where('id_programa_proceso', $this->admitido->id_programa_proceso)
+            ->where('id_admision', $this->admitido->programa_proceso->id_admision)
+            ->where('id_ciclo', calcularCicloEstudiante($this->admitido->id_admitido))
+            ->where('matricula_gestion_estado', 1)
+            ->orderBy('id_matricula_gestion', 'desc')
+            ->first();
+
+        if ($matriculaGestion) {
+            if (
+                $matriculaGestion->matricula_gestion_fecha_inicio <= date('Y-m-d') &&
+                $matriculaGestion->matricula_gestion_fecha_extemporanea_fin >= date('Y-m-d')
+            ) {
+                return true;
+            }
+        } else {
+            return false;
+        }
+
+        return false;
     }
 }

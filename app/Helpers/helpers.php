@@ -459,4 +459,37 @@ function calcularMontoPagadoCostoPorEnsenhanzaEstudiante($id_admitido)
     return $monto_pagado;
 }
 
+function calcularCicloEstudiante($id_admitido)
+{
+    $ciclo = 0;
+
+    $admitido = Admitido::query()
+        ->with('ultimaMatricula')
+        ->find($id_admitido);
+
+    $ultima_matricula = $admitido->ultimaMatriculaNuevo;
+
+    if (!$ultima_matricula) {
+        return 1;
+    }
+
+    $ciclosTotalesDelPrograma = $admitido->programa_proceso->programa_plan->programa->duracion_ciclos;
+
+    $cursos = $ultima_matricula->cursos;
+    // calcular el ciclo mayor de los cursos
+    foreach ($cursos as $curso) {
+        if ($curso->cursoProgramaPlan->curso->id_ciclo > $ciclo) {
+            $ciclo = $curso->cursoProgramaPlan->curso->id_ciclo;
+        }
+    }
+
+    if ($ciclo >= $ciclosTotalesDelPrograma) {
+        $ciclo = $ciclosTotalesDelPrograma;
+    } else {
+        $ciclo++;
+    }
+
+    return $ciclo;
+}
+
 //

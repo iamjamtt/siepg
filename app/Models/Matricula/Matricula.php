@@ -3,6 +3,7 @@
 namespace App\Models\Matricula;
 
 use App\Models\Admitido;
+use App\Models\Matricula\MatriculaCurso;
 use App\Models\MatriculaGestion;
 use App\Models\Pago;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -43,5 +44,10 @@ class Matricula extends Model
     public function pago()
     {
         return $this->belongsTo(Pago::class, 'id_pago', 'id_pago');
+    }
+
+    public function cursos()
+    {
+        return $this->hasMany(MatriculaCurso::class, 'id_matricula', 'id_matricula');
     }
 }
