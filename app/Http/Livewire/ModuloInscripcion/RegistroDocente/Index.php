@@ -12,9 +12,12 @@ use App\Models\TrabajadorTipoTrabajador;
 use App\Models\Usuario;
 use Illuminate\Support\Facades\Hash;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 
 class Index extends Component
 {
+    use WithFileUploads;
+
     public $paso = 1;
 
     public $prefijo;
