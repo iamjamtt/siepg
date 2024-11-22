@@ -39,6 +39,7 @@ class Index extends Component
     //
 
     public $alumno;
+    public $id_ciclo;
     public $cursosPrematriculados;
 
     protected $listeners = [
@@ -74,7 +75,7 @@ class Index extends Component
         $programa = Programa::find($this->alumno->programa_proceso->programa_plan->programa->id_programa);
         $totalCiclos = $programa->duracion_ciclos;
         $id_ciclo = $id_ciclo + 1;
-        $id_ciclo = $id_ciclo > $totalCiclos ? $totalCiclos : $id_ciclo;
+        $this->id_ciclo = $id_ciclo > $totalCiclos ? $totalCiclos : $id_ciclo;
 
         // primero verificamos si hay una gestion de matricula activa
         $gestion = MatriculaGestion::query()
@@ -119,29 +120,25 @@ class Index extends Component
     public function alerta_generar_matricula()
     {
         // validamos el formulario
-        // buscamos las matriculas del admitido
-        $matriculas = Matricula::where('id_admitido', $this->admitido->id_admitido)->where('matricula_estado', 1)->get();
-        if ($matriculas->count() == 0) {
-            $this->validate([
-                'grupo' => 'required|numeric',
-                'check_pago' => 'required|array|min:1|max:1',
+        $matriculasCount = $this->alumno->matriculas()
+            ->where('estado', 1)
+            ->count();
+
+        $this->validate([
+            'grupo' => $matriculasCount == 0 ? 'required|numeric' : 'nullable|numeric',
+            'check_pago' => 'required|array|min:1|max:1',
+            'check_cursos' => 'required|array|min:1',
+        ]);
+
+        if (count($this->check_cursos) == 0) {
+            $this->dispatchBrowserEvent('alerta_generar_matricula', [
+                'title' => '¡Error!',
+                'text' => 'Debe seleccionar un curso para generar la matrícula',
+                'icon' => 'error',
+                'confirmButtonText' => 'Aceptar',
+                'color' => 'danger'
             ]);
-        } else {
-            $this->validate([
-                'grupo' => 'nullable|numeric',
-                'check_pago' => 'required|array|min:1|max:1',
-                'check_cursos' => 'required|array|min:1',
-            ]);
-            if (count($this->check_cursos) == 0) {
-                $this->dispatchBrowserEvent('alerta_generar_matricula', [
-                    'title' => '¡Error!',
-                    'text' => 'Debe seleccionar un curso para generar la matrícula',
-                    'icon' => 'error',
-                    'confirmButtonText' => 'Aceptar',
-                    'color' => 'danger'
-                ]);
-                return;
-            }
+            return;
         }
 
         // validar que el checkbox tenga al menos un pago seleccionado y como maximo sea un pago el seleccionado
@@ -178,10 +175,6 @@ class Index extends Component
 
     public function generar_matricula()
     {
-        // buscamos el pago
-        $pago = Pago::find($this->check_pago[0]);
-        $admitido = $this->admitido;
-
         // buscamos el grupo
         $grupo = $this->grupo;
 
@@ -189,10 +182,10 @@ class Index extends Component
         $codigo = 'M' . date('Y') . str_pad(1, 5, "0", STR_PAD_LEFT);
 
         // obtener el ultimo registro de matricula
-        $matricula = Matricula::orderBy('id_matricula', 'desc')->first();
+        $matricula = ModelMatricula::orderBy('id_matricula', 'desc')->first();
 
         if ($matricula) {
-            $codigo = $matricula->matricula_codigo;
+            $codigo = $matricula->codigo;
             $codigo = substr($codigo, 5);
             $codigo = (int)$codigo + 1;
             $codigo = 'M' . date('Y') . str_pad($codigo, 5, "0", STR_PAD_LEFT);
@@ -200,80 +193,43 @@ class Index extends Component
             $codigo = 'M' . date('Y') . str_pad(1, 5, "0", STR_PAD_LEFT);
         }
 
-        // buscamos las matriculas del admitido
-        $matriculas = Matricula::where('id_admitido', $this->admitido->id_admitido)->where('matricula_estado', 1)->get();
-
-
         // obtener ultima matricula del admitido
-        $ultima_matricula_admitido = Matricula::where('id_admitido', $this->admitido->id_admitido)->orderBy('id_matricula', 'desc')->first();
-        $grup_antiguo = $ultima_matricula_admitido ? $ultima_matricula_admitido->id_programa_proceso_grupo : null;
+        $ultimaMatricula = $this->alumno->ultimaMatriculaNuevo;
+        if ($ultimaMatricula) {
+            $cursos = $ultimaMatricula->cursos()->with('programaProcesoGrupo')->get();
+            foreach ($cursos as $curso) {
+                //
+            }
+        }
 
         // registrar matricula
-        $matricula = new Matricula();
-        $matricula->matricula_codigo = $codigo;
-        if ($matriculas->count() == 0) {
-            $matricula->matricula_proceso = $admitido->programa_proceso->admision->admision_año . ' - ' . 1;
-        } else {
-            $matricula->matricula_proceso = $admitido->programa_proceso->admision->admision_año . ' - ' . ($matriculas->count() + 1);
-        }
-        $matricula->matricula_year = date('Y-m-d');
-        $matricula->matricula_fecha_creacion = date('Y-m-d H:i:s');
-        $matricula->matricula_estado = 1;
-        $matricula->id_admitido = $admitido->id_admitido;
-        if ($matriculas->count() == 0) {
-            $matricula->id_programa_proceso_grupo = $grupo;
-        } else {
-            $matricula->id_programa_proceso_grupo = $grup_antiguo;
-        }
-        $matricula->id_pago = $pago->id_pago;
-        if ($matriculas->count() == 0) {
-            $matricula->matricula_primer_ciclo = 1; // si es la primera matricula del admitido
-        }
+        $matricula = new ModelMatricula();
+        $matricula->id_admitido = $this->alumno->id_admitido;
+        $matricula->ciclo = $this->id_ciclo;
+        $matricula->codigo = $codigo;
+        $matricula->fecha_matricula = date('Y-m-d');
+        $matricula->id_pago = $this->check_pago[0];
         $matricula->save();
 
         // cambiar de estado
+        $pago = Pago::find($this->check_pago[0]);
         $pago->pago_estado = 2;
         $pago->save();
 
         // registramos los cursos de la matricula
-        // obetenmos los cursos del ciclo del admitido
-        if ($matriculas->count() == 0) {
-            $curso_programa_plan = CursoProgramaPlan::join('curso', 'curso.id_curso', 'curso_programa_plan.id_curso')
-                ->where('curso_programa_plan.id_programa_plan', $admitido->programa_proceso->programa_plan->id_programa_plan)
-                ->where('curso.id_ciclo', 1)
-                ->get();
-            foreach ($curso_programa_plan as $item) {
-                $matricula_curso = new MatriculaCurso();
-                $matricula_curso->id_matricula = $matricula->id_matricula;
-                $matricula_curso->id_curso_programa_plan = $item->id_curso_programa_plan;
-                $matricula_curso->id_admision = $admitido->programa_proceso->id_admision;
-                $matricula_curso->id_programa_proceso_grupo = $grupo;
-                $matricula_curso->matricula_curso_fecha_creacion = date('Y-m-d H:i:s');
-                $matricula_curso->matricula_curso_estado = 1;
-                $matricula_curso->save();
-            }
-        } else {
-            foreach ($this->check_cursos as $item) {
-                $matricula_curso = new MatriculaCurso();
-                $matricula_curso->id_matricula = $matricula->id_matricula;
-                $matricula_curso->id_curso_programa_plan = $item;
-                $matricula_curso->id_admision = $admitido->programa_proceso->id_admision;
-                $matricula_curso->id_programa_proceso_grupo = $grup_antiguo;
-                $matricula_curso->matricula_curso_fecha_creacion = date('Y-m-d H:i:s');
-                $matricula_curso->matricula_curso_estado = 1;
-                $matricula_curso->save();
+        foreach ($this->check_cursos as $item) {
+            $matriculaCurso = new ModelMatriculaCurso();
+            $matriculaCurso->id_matricula = $matricula->id_matricula;
+            $matriculaCurso->id_curso_programa_plan = $item;
+            $matriculaCurso->id_programa_proceso_grupo = $grupo;
+            $matriculaCurso->id_docente = null;
+            $matriculaCurso->save();
+        }
 
-                // cambiar de estado al curso de la prematricula
-                if ($this->prematricula) {
-                    $prematricula_curso = PrematriculaCurso::where('id_prematricula', $this->prematricula->id_prematricula)->where('id_curso_programa_plan', $item)->first();
-                    $prematricula_curso->prematricula_curso_estado = 2;
-                    $prematricula_curso->save();
-                }
-            }
-            if ($this->prematricula) {
-                $this->prematricula->prematricula_estado = 2;
-                $this->prematricula->save();
-            }
+        // cambiamos el estado de los cursos de la prematricula
+        foreach ($this->cursosPrematriculados as $curso) {
+            $curso->estado = 0;
+            $curso->save();
         }
 
         // emitimos una alerta de que se esta generando la matricula
