@@ -22,6 +22,7 @@ use App\Jobs\ProcessEnvioFichaMatricula;
 use App\Models\Matricula\Matricula as ModelMatricula;
 use App\Models\Matricula\MatriculaCurso as ModelMatriculaCurso;
 use App\Models\Matricula\PreMatriculaCurso as ModelPreMatriculaCurso;
+use App\Models\MatriculaGestion;
 use App\Models\Programa;
 
 class Index extends Component
@@ -38,6 +39,7 @@ class Index extends Component
     //
 
     public $alumno;
+    public $cursosPrematriculados;
 
     protected $listeners = [
         'generar_matricula' => 'generar_matricula',
@@ -55,248 +57,60 @@ class Index extends Component
 
     public function limpiar_modal()
     {
-        $this->reset();
+        $this->reset([
+            'grupo',
+            'check_pago',
+            'check_cursos'
+        ]);
         $this->resetErrorBag();
         $this->resetValidation();
     }
 
     public function abrir_modal()
     {
-        // buscamos el admitido tiene prematricula
-        $this->prematricula = Prematricula::where('id_admitido', $this->admitido->id_admitido)->orderBy('id_prematricula', 'desc')->where('prematricula_estado', 1)->first();
-        // dd($this->prematricula);
-        if ( $this->prematricula ) {
-            $this->curso_prematricula = PrematriculaCurso::where('id_prematricula', $this->prematricula->id_prematricula)
-                ->where('prematricula_curso_estado', 1)
-                ->get();
+        // obtenemos el ciclo mayor
+        $id_ciclo = $this->obtenerCicloMayor($this->alumno->id_admitido);
+
+        $programa = Programa::find($this->alumno->programa_proceso->programa_plan->programa->id_programa);
+        $totalCiclos = $programa->duracion_ciclos;
+        $id_ciclo = $id_ciclo + 1;
+        $id_ciclo = $id_ciclo > $totalCiclos ? $totalCiclos : $id_ciclo;
+
+        // primero verificamos si hay una gestion de matricula activa
+        $gestion = MatriculaGestion::query()
+            ->where('id_programa_proceso', $this->alumno->id_programa_proceso)
+            ->where('id_ciclo', $id_ciclo)
+            ->where('matricula_gestion_estado', 1)
+            ->first();
+
+        if (!$gestion) {
+            $this->dispatchBrowserEvent('alerta_generar_matricula', [
+                'title' => '¡Error!',
+                'text' => 'No existe una matrícula activa en estos momentos.',
+                'icon' => 'error',
+                'confirmButtonText' => 'Aceptar',
+                'color' => 'danger'
+            ]);
+            return;
         }
 
-        // buscamos si existen matriculas
-        $matriculas_count = Matricula::where('id_admitido', $this->admitido->id_admitido)->count();
-        // if ($matriculas_count > 0) {
-        //     // // buscamos los cursos de prematricula del admitido
-        //     // $this->prematricula = Prematricula::where('id_admitido', $this->admitido->id_admitido)->orderBy('id_prematricula', 'desc')->first();
+        // verificamos si estamos en fechas de matricula
+        if (!$this->verificarFechasMatriculaGestion($gestion)) {
+            $this->dispatchBrowserEvent('alerta_generar_matricula', [
+                'title' => '¡Error!',
+                'text' => 'No se encuentra en fechas de matrícula.',
+                'icon' => 'error',
+                'confirmButtonText' => 'Aceptar',
+                'color' => 'danger'
+            ]);
+            return;
+        }
 
-        //     // if ($this->prematricula) {
-        //     //     $this->curso_prematricula = PrematriculaCurso::where('id_prematricula', $this->prematricula->id_prematricula)->get();
-        //     // }
-        //     // // buscamos su mensualidad
-        //     // $mensualidades  = Mensualidad::join('matricula', 'mensualidad.id_matricula', '=', 'matricula.id_matricula')
-        //     //         ->join('pago', 'mensualidad.id_pago', '=', 'pago.id_pago')
-        //     //         ->where('mensualidad.id_admitido', $this->admitido->id_admitido)
-        //     //         // ->where('matricula.id_ciclo', $ciclo_actual->id_ciclo)
-        //     //         ->orderBy('mensualidad.id_mensualidad', 'asc')
-        //     //         ->get();
-        //     // // dd($mensualidades);
-        //     // // buscamos el costo de enseñanza del ciclo actual
-        //     // $costo_enseñanza = CostoEnseñanza::where('id_programa_plan', $this->admitido->programa_proceso->id_programa_plan)->where('id_ciclo', $ciclo_actual->id_ciclo)->first();
-        //     // // dd($costo_enseñanza);
-        //     // $monto_total = $costo_enseñanza->costo_ciclo;
-        //     // $monto_pagado = 0;
-        //     // foreach($mensualidades as $mensualidad)
-        //     // {
-        //     //     if ( $mensualidad->pago->pago_estado == 2 && $mensualidad->pago->pago_verificacion == 2 )
-        //     //     {
-        //     //         $monto_pagado += $mensualidad->pago->pago_monto;
-        //     //     }
-        //     // }
-        //     // $deuda = $monto_total - $monto_pagado;
-        //     // // verificamos si hay la gestion de matricula abierta
-        //     // $matricula_gestion = MatriculaGestion::where('id_programa_proceso', $this->admitido->id_programa_proceso)
-        //     //                 ->where('id_ciclo', $ciclo_actual->id_ciclo)
-        //     //                 ->where('matricula_gestion_estado', 1)->first();
-        //     // if ( $ciclo_actual->id_ciclo != 1 ) {
-        //     //     if ( $matricula_gestion ) {
-        //     //         if ( $matricula_gestion->matricula_gestion_fecha_inicio <= date('Y-m-d') && $matricula_gestion->matricula_gestion_fecha_extemporanea_fin >= date('Y-m-d') ) {
-        //     //             $this->dispatchBrowserEvent('modal_matricula', ['action' => 'show']);
-        //     //             return;
-        //     //         } else {
-        //     //             $this->dispatchBrowserEvent('alerta_generar_matricula', [
-        //     //                 'title' => '¡Error!',
-        //     //                 'text' => 'La matricula no esta disponible en este momento, termina el ' . date('d/m/Y', strtotime($matricula_gestion->matricula_gestion_fecha_fin)) . '.',
-        //     //                 'icon' => 'error',
-        //     //                 'confirmButtonText' => 'Aceptar',
-        //     //                 'color' => 'danger'
-        //     //             ]);
-        //     //             return;
-        //     //         }
-        //     //     } else {
-        //     //         $this->dispatchBrowserEvent('alerta_generar_matricula', [
-        //     //             'title' => '¡Error!',
-        //     //             'text' => 'No existe una matrícula abierta en este momento.',
-        //     //             'icon' => 'error',
-        //     //             'confirmButtonText' => 'Aceptar',
-        //     //             'color' => 'danger'
-        //     //         ]);
-        //     //         return;
-        //     //     }
-        //     // }
-        //     // buscamos su ultima matricula
-        //     $matricula = Matricula::where('id_admitido', $this->admitido->id_admitido)->orderBy('id_matricula', 'desc')->first();
-        //     // // dd($matricula);
-        //     // // dd($matricula_gestion);
-        //     // if ( $matricula ) {
-        //     //     if ( $deuda > 0 ) {
-        //     //         $this->dispatchBrowserEvent('alerta_generar_matricula', [
-        //     //             'title' => '¡Error!',
-        //     //             'text' => 'Usted tiene una deuda de S/. ' . number_format($deuda, 2, ',', '.') . '. Pague su deuda para poder generar su matricula.',
-        //     //             'icon' => 'error',
-        //     //             'confirmButtonText' => 'Aceptar',
-        //     //             'color' => 'danger'
-        //     //         ]);
-        //     //         return;
-        //     //     }
-        //     // }
-        //     // dd($monto_total, $monto_pagado, $deuda);
-        //     // buscamos los cursos de su ultima matricula
-        //     if ( $matricula ) {
-        //         $cursos = MatriculaCurso::join('curso_programa_proceso', 'curso_programa_proceso.id_curso_programa_proceso', '=', 'matricula_curso.id_curso_programa_proceso')
-        //             ->join('curso', 'curso.id_curso', '=', 'curso_programa_proceso.id_curso')
-        //             ->where('matricula_curso.id_matricula', $matricula->id_matricula)
-        //             ->get();
-        //         $contador_cursos = $cursos->count();
-        //     } else {
-        //         $cursos = collect();
-        //         $contador_cursos = 0;
-        //     }
-        //     $verificar = false;
-        //     $contador = 0;
-        //     // dd($contador, $contador_cursos);
-        //     if ( $contador_cursos != 0 ) {
-        //         foreach ($cursos as $curso) {
-        //             if ($curso->matricula_curso_estado == 2 || $curso->matricula_curso_estado == 3) {
-        //                 $contador++;
-        //             }
-        //         }
-        //         if ($contador == $contador_cursos) {
-        //             $verificar = true;
-        //         } else {
-        //             $verificar = false;
-        //         }
-        //     }
-        //     // buscamos su programa
-        //     $programa = ProgramaProceso::join('programa_plan', 'programa_plan.id_programa_plan', '=', 'programa_proceso.id_programa_plan')
-        //         ->join('programa', 'programa.id_programa', '=', 'programa_plan.id_programa')
-        //         ->where('programa_proceso.id_programa_proceso', $this->admitido->id_programa_proceso)
-        //         ->first();
-        //     // // dd($programa, $verificar);
-        //     // // aumentamos el ciclo del admitido
-        //     // if ( $verificar == true )
-        //     // {
-        //     //     $ciclo = AdmitidoCiclo::where('id_admitido', $this->admitido->id_admitido)->orderBy('id_admitido_ciclo', 'desc')->first();
-        //     //     $ciclo_count = AdmitidoCiclo::where('id_admitido', $this->admitido->id_admitido)->count();
-        //     //     if ( $programa->programa_tipo == 1 ) {
-        //     //         if ( $ciclo_count < 3 ) {
-        //     //             $ciclo->admitido_ciclo_estado = 0;
-        //     //             $ciclo->save();
-        //     //             $ciclo_nuevo = new AdmitidoCiclo();
-        //     //             $ciclo_nuevo->id_admitido = $this->admitido->id_admitido;
-        //     //             $ciclo_nuevo->id_ciclo = $ciclo->id_ciclo + 1;
-        //     //             $ciclo_nuevo->admitido_ciclo_estado = 1;
-        //     //             $ciclo_nuevo->save();
+        // generamos la prematricula
+        $this->generarPrematricula ($id_ciclo, $this->alumno);
 
-        //     //             // crear pre matricula
-        //     //             $prematricula = new Prematricula();
-        //     //             $prematricula->prematricula_fecha_creacion = date('Y-m-d H:i:s');
-        //     //             $prematricula->prematricula_estado = 1;
-        //     //             $prematricula->id_admitido = $this->admitido->id_admitido;
-        //     //             $prematricula->id_ciclo = $ciclo_nuevo->id_ciclo;
-        //     //             $prematricula->save();
-
-        //     //             // asignar los cursos a la pre matricula
-        //     //             $cursos = CursoProgramaProceso::join('curso', 'curso.id_curso', '=', 'curso_programa_proceso.id_curso')
-        //     //                 ->where('curso_programa_proceso.id_programa_proceso', $this->admitido->id_programa_proceso)
-        //     //                 ->where('curso.id_ciclo', $ciclo_nuevo->id_ciclo)
-        //     //                 ->get();
-        //     //             foreach ($cursos as $curso) {
-        //     //                 if ( $curso->curso_prerequisito ) {
-        //     //                     // buscamos su ultima matricula
-        //     //                     $matricula = Matricula::where('id_admitido', $this->admitido->id_admitido)->orderBy('id_matricula', 'desc')->first();
-        //     //                     // buscamos los el curso prerequisito de su ultima matricula
-        //     //                     $curso_prerequisito = MatriculaCurso::join('curso_programa_proceso', 'curso_programa_proceso.id_curso_programa_proceso', '=', 'matricula_curso.id_curso_programa_proceso')
-        //     //                         ->join('curso', 'curso.id_curso', '=', 'curso_programa_proceso.id_curso')
-        //     //                         ->where('matricula_curso.id_matricula', $matricula->id_matricula)
-        //     //                         ->where('curso.id_curso', $curso->curso_prerequisito)
-        //     //                         ->first();
-        //     //                     if ( $curso_prerequisito->matricula_curso_estado == 2 ) {
-        //     //                         $prematricula_curso = new PrematriculaCurso();
-        //     //                         $prematricula_curso->id_prematricula = $prematricula->id_prematricula;
-        //     //                         $prematricula_curso->id_curso_programa_proceso = $curso->id_curso_programa_proceso;
-        //     //                         $prematricula_curso->prematricula_curso_fecha_creacion = date('Y-m-d H:i:s');
-        //     //                         $prematricula_curso->prematricula_curso_estado = 1;
-        //     //                         $prematricula_curso->save();
-        //     //                     }
-        //     //                 } else {
-        //     //                     $prematricula_curso = new PrematriculaCurso();
-        //     //                     $prematricula_curso->id_prematricula = $prematricula->id_prematricula;
-        //     //                     $prematricula_curso->id_curso_programa_proceso = $curso->id_curso_programa_proceso;
-        //     //                     $prematricula_curso->prematricula_curso_fecha_creacion = date('Y-m-d H:i:s');
-        //     //                     $prematricula_curso->prematricula_curso_estado = 1;
-        //     //                     $prematricula_curso->save();
-        //     //                 }
-        //     //             }
-        //     //         }
-        //     //     } else {
-        //     //         if ( $ciclo_count < 6 ) {
-        //     //             $ciclo->admitido_ciclo_estado = 0;
-        //     //             $ciclo->save();
-        //     //             $ciclo_nuevo = new AdmitidoCiclo();
-        //     //             $ciclo_nuevo->id_admitido = $this->admitido->id_admitido;
-        //     //             $ciclo_nuevo->id_ciclo = $ciclo->id_ciclo + 1;
-        //     //             $ciclo_nuevo->admitido_ciclo_estado = 1;
-        //     //             $ciclo_nuevo->save();
-
-        //     //             // crear pre matricula
-        //     //             $prematricula = new Prematricula();
-        //     //             $prematricula->prematricula_fecha_creacion = date('Y-m-d H:i:s');
-        //     //             $prematricula->prematricula_estado = 1;
-        //     //             $prematricula->id_admitido = $this->admitido->id_admitido;
-        //     //             $prematricula->id_ciclo = $ciclo_nuevo->id_ciclo;
-        //     //             $prematricula->save();
-
-        //     //             // asignar los cursos a la pre matricula
-        //     //             $cursos = CursoProgramaProceso::join('curso', 'curso.id_curso', '=', 'curso_programa_proceso.id_curso')
-        //     //                 ->where('curso_programa_proceso.id_programa_proceso', $this->admitido->id_programa_proceso)
-        //     //                 ->where('curso.id_ciclo', $ciclo_nuevo->id_ciclo)
-        //     //                 ->get();
-        //     //             foreach ($cursos as $curso) {
-        //     //                 if ( $curso->curso_prerequisito ) {
-        //     //                     // buscamos su ultima matricula
-        //     //                     $matricula = Matricula::where('id_admitido', $this->admitido->id_admitido)->orderBy('id_matricula', 'desc')->first();
-        //     //                     // buscamos los el curso prerequisito de su ultima matricula
-        //     //                     $curso_prerequisito = MatriculaCurso::join('curso_programa_proceso', 'curso_programa_proceso.id_curso_programa_proceso', '=', 'matricula_curso.id_curso_programa_proceso')
-        //     //                         ->join('curso', 'curso.id_curso', '=', 'curso_programa_proceso.id_curso')
-        //     //                         ->where('matricula_curso.id_matricula', $matricula->id_matricula)
-        //     //                         ->where('curso.id_curso', $curso->curso_prerequisito)
-        //     //                         ->first();
-        //     //                     if ( $curso_prerequisito->matricula_curso_estado == 2 ) {
-        //     //                         $prematricula_curso = new PrematriculaCurso();
-        //     //                         $prematricula_curso->id_prematricula = $prematricula->id_prematricula;
-        //     //                         $prematricula_curso->id_curso_programa_proceso = $curso->id_curso_programa_proceso;
-        //     //                         $prematricula_curso->prematricula_curso_fecha_creacion = date('Y-m-d H:i:s');
-        //     //                         $prematricula_curso->prematricula_curso_estado = 1;
-        //     //                         $prematricula_curso->save();
-        //     //                     }
-        //     //                 } else {
-        //     //                     $prematricula_curso = new PrematriculaCurso();
-        //     //                     $prematricula_curso->id_prematricula = $prematricula->id_prematricula;
-        //     //                     $prematricula_curso->id_curso_programa_proceso = $curso->id_curso_programa_proceso;
-        //     //                     $prematricula_curso->prematricula_curso_fecha_creacion = date('Y-m-d H:i:s');
-        //     //                     $prematricula_curso->prematricula_curso_estado = 1;
-        //     //                     $prematricula_curso->save();
-        //     //                 }
-        //     //             }
-        //     //         }
-        //     //     }
-        //     // }
-
-        //     // // buscamos los cursos de prematricula del admitido
-        //     // $this->prematricula = Prematricula::where('id_admitido', $this->admitido->id_admitido)->where('id_ciclo', $ciclo_actual->id_ciclo)->first();
-        //     // // dd($this->prematricula);
-        //     // if ( $this->prematricula ) {
-        //     //     $this->curso_prematricula = PrematriculaCurso::where('id_prematricula', $this->prematricula->id_prematricula)->get();
-        //     // }
-        // }
+        // cargamos los cursos prematriculados
+        $this->cargarCursosPrematriculados($id_ciclo, $this->alumno->id_admitido);
 
         // abrimos el modal
         $this->dispatchBrowserEvent('modal_matricula', ['action' => 'show']);
@@ -581,22 +395,17 @@ class Index extends Component
 
     public function render()
     {
-        $usuario = auth('plataforma')->user(); // obtenemos el usuario autenticado en la plataforma
-        $persona = Persona::where('id_persona', $usuario->id_persona)->first(); // obtenemos la persona del usuario autenticado en la plataforma
-        $inscripcion_ultima = Inscripcion::where('id_persona', $persona->id_persona)->orderBy('id_inscripcion', 'desc')->first(); // inscripcion del usuario logueado
+        $grupos = ProgramaProcesoGrupo::query()
+            ->where('id_programa_proceso', $this->alumno->id_programa_proceso)
+            ->get();
 
-        $this->admitido = Admitido::where('id_persona', $persona->id_persona)->orderBy('id_admitido', 'desc')->first(); // obtenemos el admitido de la inscripcion de la persona del usuario autenticado en la plataforma
-        $inscripcion_ultima = Inscripcion::where('id_persona', $persona->id_persona)->orderBy('id_inscripcion', 'desc')->first(); // inscripcion del usuario logueado
-        $evaluacion = $this->admitido ? Evaluacion::where('id_evaluacion', $this->admitido->id_evaluacion)->first() : $inscripcion_ultima->evaluacion()->orderBy('id_evaluacion', 'desc')->first(); // evaluacion de la inscripcion del usuario logueado
+        $matriculas = $this->alumno->matriculas()
+            ->where('estado', 1)
+            ->orderBy('id_matricula', 'desc')
+            ->get();
 
-        $grupos = $this->admitido ? ProgramaProcesoGrupo::where('id_programa_proceso', $this->admitido->id_programa_proceso)->get() : collect(); // grupos de la admision del usuario logueado
-        $matriculas = $this->admitido ? Matricula::where('id_admitido', $this->admitido->id_admitido)->get() : collect(); // matriculas del usuario logueado
-
-        $pagos = Pago::where(function ($query) {
-            $query->where('pago_operacion', 'like', '%' . $this->search . '%')
-                ->orWhere('id_pago', 'like', '%' . $this->search . '%');
-        })
-            ->where('pago_documento', $persona->numero_documento)
+        $pagos = Pago::query()
+            ->where('pago_documento', $this->alumno->persona->numero_documento)
             ->where('pago_estado', 1)
             ->where('pago_verificacion', 2)
             ->where(function ($query) {
@@ -606,7 +415,7 @@ class Index extends Component
                     ->orWhere('id_concepto_pago', 6);
             })
             ->orderBy('id_pago', 'desc')
-            ->get(); // pagos del usuario logueado
+            ->get();
 
         return view('livewire.modulo-plataforma.matriculas.index', [
             'pagos' => $pagos,
@@ -624,13 +433,10 @@ class Index extends Component
             ->where('id_persona', $persona->id_persona)
             ->first();
 
-        // obtenemos el ciclo mayor
-        $id_ciclo = $this->obtenerCicloMayor($this->alumno->id_admitido);
-
-        // generamos la prematricula
-        $this->generarPrematricula ($id_ciclo, $this->alumno);
-
-        // primero verificamos si hay una gestion de matricula activa
+        if (!$this->alumno) {
+            abort(404, 'No se encontró el alumno');
+        }
+        $this->cursosPrematriculados = collect();
     }
 
     public function obtenerCicloMayor($id_admitido)
@@ -640,6 +446,19 @@ class Index extends Component
             ->orderBy('id_matricula', 'desc')
             ->first();
         return $ciclo->ciclo ?? 0;
+    }
+
+    public function verificarFechasMatriculaGestion($gestion)
+    {
+        $fechaActual = date('Y-m-d');
+        $fechaInicio = $gestion->matricula_gestion_fecha_inicio;
+        $fechaFin = $gestion->matricula_gestion_fecha_extemporanea_fin;
+
+        if ($fechaActual >= $fechaInicio && $fechaActual <= $fechaFin) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public function generarPrematricula($id_ciclo, $alumno)
@@ -659,11 +478,6 @@ class Index extends Component
                 ->first();
             dd($matricula);
         }
-
-        $programa = Programa::find($alumno->programa_proceso->programa_plan->programa->id_programa);
-        $totalCiclos = $programa->duracion_ciclos;
-        $id_ciclo = $id_ciclo + 1;
-        $id_ciclo = $id_ciclo > $totalCiclos ? $totalCiclos : $id_ciclo;
 
         // obtemos los cursos del ciclo actual al que se va a matricular
         $cursos = CursoProgramaPlan::query()
@@ -713,5 +527,19 @@ class Index extends Component
             $prematriculaCurso->id_ciclo = $id_ciclo;
             $prematriculaCurso->save();
         }
+    }
+
+    public function cargarCursosPrematriculados($id_ciclo, $id_admitido)
+    {
+        $this->cursosPrematriculados = ModelPreMatriculaCurso::query()
+            ->with([
+                'cursoProgramaPlan' => function ($query) {
+                    $query->with('curso');
+                }
+            ])
+            ->where('id_admitido', $id_admitido)
+            ->where('id_ciclo', $id_ciclo)
+            ->where('estado', 1)
+            ->get();
     }
 }

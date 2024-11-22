@@ -15,14 +15,12 @@
                     <li class="breadcrumb-item text-muted">Gestión de Matricula</li>
                 </ul>
             </div>
-            @if ($admitido)
-                @if ($admitido->admitido_estado == 1)
-                    <div class="d-flex align-items-center gap-2 gap-lg-3">
-                        <button type="button" class="btn fw-bold btn-primary" wire:click="abrir_modal">
-                            Generar Matricula
-                        </button>
-                    </div>
-                @endif
+            @if ($alumno->admitido_estado == 1)
+                <div class="d-flex align-items-center gap-2 gap-lg-3">
+                    <button type="button" class="btn fw-bold btn-primary" wire:click="abrir_modal" wire:loading.attr="disabled" wire:target="abrir_modal">
+                        Generar Matricula
+                    </button>
+                </div>
             @endif
         </div>
     </div>
@@ -209,9 +207,9 @@
                     </div>
                 </div>
                 <div class="modal-body">
-                    <form autocomplete="off" class="row g-5">
+                    <form autocomplete="off" class="row g-3">
                         @if ($matriculas->count() == 0)
-                            @if ($grupos)
+                            @if ($grupos->count() > 0)
                                 <div class="col-md-12">
                                     <label for="grupo" class="required form-label">
                                         Grupo
@@ -220,7 +218,10 @@
                                         <option></option>
                                         @foreach ($grupos as $item)
                                         @php
-                                            $contador_matriculados_grupos = App\Models\Matricula::where('id_programa_proceso_grupo', $item->id_programa_proceso_grupo)->where('matricula_primer_ciclo', 1)->count();
+                                            $contador_matriculados_grupos = App\Models\Matricula::query()
+                                                ->where('id_programa_proceso_grupo', $item->id_programa_proceso_grupo)
+                                                ->where('matricula_primer_ciclo', 1)
+                                                ->count();
                                         @endphp
                                         <option value="{{ $item->id_programa_proceso_grupo }}" @if($item->grupo_cantidad <= $contador_matriculados_grupos) disabled @endif>
                                             GRUPO {{ $item->grupo_detalle }} - CUPOS: {{ $item->grupo_cantidad - $contador_matriculados_grupos }}
@@ -242,10 +243,10 @@
                                     <thead class="bg-light-warning">
                                         <tr class="fw-bold fs-5 text-gray-900 border-bottom-2 border-gray-200">
                                             <th>Concepto Pago</th>
-                                            <th>Operacion</th>
-                                            <th>Monto</th>
-                                            <th>Fecha</th>
-                                            <th>Estado</th>
+                                            <th class="text-center">Operacion</th>
+                                            <th class="text-center">Monto</th>
+                                            <th class="text-center">Fecha</th>
+                                            <th class="text-center">Estado</th>
                                             <th></th>
                                         </tr>
                                     </thead>
@@ -255,16 +256,16 @@
                                             <td>
                                                 {{ $item->concepto_pago->concepto_pago }}
                                             </td>
-                                            <td>
+                                            <td class="text-center">
                                                 {{ $item->pago_operacion }}
                                             </td>
-                                            <td>
+                                            <td class="text-center">
                                                 S/. {{ number_format($item->pago_monto, 2, ',', '.') }}
                                             </td>
-                                            <td>
+                                            <td class="text-center">
                                                 {{ date('d/m/Y', strtotime($item->pago_fecha)) }}
                                             </td>
-                                            <td>
+                                            <td class="text-center">
                                                 @if ($item->pago_verificacion == 1)
                                                     <span class="badge badge-warning fs-6 px-3 py-2">Pendiente</span>
                                                 @elseif ($item->pago_verificacion == 2)
@@ -277,19 +278,20 @@
                                             </td>
                                             <td class="text-end">
                                                 <div class="form-check">
-                                                    <input class="form-check-input @error('check_pago') is-invalid @enderror" type="checkbox" wire:model="check_pago" value="{{ $item->id_pago }}" />
+                                                    <input
+                                                        type="checkbox"
+                                                        class="form-check-input @error('check_pago') is-invalid @enderror"
+                                                        wire:model="check_pago"
+                                                        value="{{ $item->id_pago }}"
+                                                    />
                                                 </div>
                                             </td>
                                         </tr>
                                         @empty
                                         <tr class="fs-6">
-                                            <td colspan="7" class="text-center">
-                                                <div class="text-muted py-5">
-                                                    @if ($search == '')
-                                                        No se encontraron resultados
-                                                    @elseif($search)
-                                                        No hay resultados de la busqueda "{{ $search }}"
-                                                    @endif
+                                            <td colspan="6" class="text-center">
+                                                <div class="text-muted py-4">
+                                                    No se encontraron resultados
                                                 </div>
                                             </td>
                                         </tr>
@@ -298,68 +300,60 @@
                                 </table>
                             </div>
                         </div>
-                        @if ($matriculas->count() != 0)
-                            {{-- @php
-                                $matricula = App\Models\Matricula::where('id_admitido', $admitido->id_admitido)->where('id_ciclo', $ciclo_admitido->id_ciclo)->first();
-                            @endphp
-                            @if ($matricula == null) --}}
-                                <div class="col-12">
-                                    <label for="pagos" class="required form-label">
-                                        Cursos a Matricular
-                                    </label>
-                                    <div class="table-responsive">
-                                        <table class="table table-hover align-middle table-rounded border mb-0 gy-5 gs-5">
-                                            <thead class="bg-light-warning">
-                                                <tr class="fw-bold fs-5 text-gray-900 border-bottom-2 border-gray-200">
-                                                    <th>Codigo</th>
-                                                    <th>Nombre del Curso</th>
-                                                    <th>Credito</th>
-                                                    <th>Ciclo</th>
-                                                    <th></th>
-                                                </tr>
-                                            </thead>
-                                            <tbody class="fw-semibold text-gray-700">
-                                                @if ($curso_prematricula)
-                                                    @forelse ($curso_prematricula as $item)
-                                                        <tr class="fs-6 text-gray-700 fw-semibold">
-                                                            <td>
-                                                                {{ $item->curso_programa_plan->curso->curso_codigo }}
-                                                            </td>
-                                                            <td>
-                                                                {{ $item->curso_programa_plan->curso->curso_nombre }}
-                                                            </td>
-                                                            <td>
-                                                                {{ $item->curso_programa_plan->curso->curso_credito }}
-                                                            </td>
-                                                            <td>
-                                                                CICLO {{ $item->curso_programa_plan->curso->ciclo->ciclo }}
-                                                            </td>
-                                                            <td class="text-end">
-                                                                <div class="form-check">
-                                                                    <input class="form-check-input @error('check_cursos') is-invalid @enderror" type="checkbox" wire:model="check_cursos" value="{{ $item->id_curso_programa_plan }}" />
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                    @empty
-                                                        <tr class="fs-6">
-                                                            <td colspan="5" class="text-center">
-                                                                <div class="text-muted py-5">
-                                                                    @if ($search == '')
-                                                                        No se encontraron resultados
-                                                                    @elseif($search)
-                                                                        No hay resultados de la busqueda "{{ $search }}"
-                                                                    @endif
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                    @endforelse
-                                                @endif
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            {{-- @endif --}}
-                        @endif
+                        <div class="col-12">
+                            <label for="pagos" class="required form-label">
+                                Cursos a Matricular
+                            </label>
+                            <div class="table-responsive">
+                                <table class="table table-hover align-middle table-rounded border mb-0 gy-5 gs-5">
+                                    <thead class="bg-light-warning">
+                                        <tr class="fw-bold fs-5 text-gray-900 border-bottom-2 border-gray-200">
+                                            <th>Codigo</th>
+                                            <th>Nombre del Curso</th>
+                                            <th class="text-center">Credito</th>
+                                            <th class="text-center">Ciclo</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="fw-semibold text-gray-700">
+                                        @forelse ($cursosPrematriculados as $item)
+                                            <tr class="fs-6 text-gray-700 fw-semibold">
+                                                <td>
+                                                    {{ $item->cursoProgramaPlan->curso->curso_codigo }}
+                                                </td>
+                                                <td>
+                                                    {{ $item->cursoProgramaPlan->curso->curso_nombre }}
+                                                </td>
+                                                <td align="center">
+                                                    {{ $item->cursoProgramaPlan->curso->curso_credito }}
+                                                </td>
+                                                <td align="center">
+                                                    CICLO {{ $item->cursoProgramaPlan->curso->ciclo->ciclo }}
+                                                </td>
+                                                <td class="text-end">
+                                                    <div class="form-check">
+                                                        <input
+                                                            type="checkbox"
+                                                            class="form-check-input @error('check_cursos') is-invalid @enderror"
+                                                            wire:model="check_cursos"
+                                                            value="{{ $item->id_curso_programa_plan }}"
+                                                        />
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @empty
+                                            <tr class="fs-6">
+                                                <td colspan="5" class="text-center">
+                                                    <div class="text-muted py-4">
+                                                        No se encontraron resultados
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @endforelse
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </form>
                 </div>
                 <div class="modal-footer">
