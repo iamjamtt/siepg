@@ -698,11 +698,19 @@ class Index extends Component
 
         // realizar la prematricula de los cursos
         foreach ($cursosPrematricula as $curso) {
-            $prematriculaCurso = new ModelPreMatriculaCurso();
+            $prematriculaCurso = ModelPreMatriculaCurso::query()
+                ->where('id_admitido', $alumno->id_admitido)
+                ->where('id_curso_programa_plan', $curso->id_curso_programa_plan)
+                ->where('id_ciclo', $id_ciclo)
+                ->where('estado', 1) // 1 = activo
+                ->first();
+            if (!$prematriculaCurso) {
+                $prematriculaCurso = new ModelPreMatriculaCurso();
+                $prematriculaCurso->estado = 1; // 1 = activo
+            }
             $prematriculaCurso->id_admitido = $alumno->id_admitido;
             $prematriculaCurso->id_curso_programa_plan = $curso->id_curso_programa_plan;
             $prematriculaCurso->id_ciclo = $id_ciclo;
-            $prematriculaCurso->estado = 1; // 1 = activo
             $prematriculaCurso->save();
         }
     }
