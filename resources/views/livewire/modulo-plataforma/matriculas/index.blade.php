@@ -79,7 +79,7 @@
                                                         </div>
                                                         <div class="col-7 col-md-8">
                                                             <span class="fw-bold text-gray-800">
-                                                                {{ $item->matricula_proceso }}
+                                                                {{ $item->admitido->programa_proceso->admision->admision }}
                                                             </span>
                                                         </div>
                                                     </div>
@@ -111,25 +111,6 @@
                                                     <div class="row">
                                                         <div class="col-4 col-md-3">
                                                             <span>
-                                                                Grupo
-                                                            </span>
-                                                        </div>
-                                                        <div class="col-1">
-                                                            <span>
-                                                                :
-                                                            </span>
-                                                        </div>
-                                                        <div class="col-7 col-md-8">
-                                                            <span class="fw-bold text-gray-800">
-                                                                Grupo {{ $item->programa_proceso_grupo->grupo_detalle }}
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-12">
-                                                    <div class="row">
-                                                        <div class="col-4 col-md-3">
-                                                            <span>
                                                                 Fecha de Matricula
                                                             </span>
                                                         </div>
@@ -140,27 +121,18 @@
                                                         </div>
                                                         <div class="col-7 col-md-8">
                                                             <span class="fw-bold text-gray-800">
-                                                                {{ date('d/m/Y', strtotime($item->matricula_fecha_creacion)) }}
+                                                                {{ date('d/m/Y', strtotime($item->fecha_matricula)) }}
                                                             </span>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="col-12 text-end">
-                                                    @if ($item->matricula_ficha_url)
-                                                        <a download="ficha-de-matricula" href="{{ asset($item->matricula_ficha_url) }}" class="btn btn-info">
-                                                            Descargar Ficha de Matricula
-                                                        </a>
-                                                    @else
-                                                        <button class="btn btn-info hover-scale fw-bold" wire:click="alerta_ficha_matricula({{ $item->id_matricula }})" wire:loading.attr="disabled">
-                                                            <div wire:loading.remove wire:target="alerta_ficha_matricula, ficha_matricula">
-                                                                Generar Ficha de Matricula
-                                                            </div>
-                                                            <div wire:loading wire:target="alerta_ficha_matricula, ficha_matricula">
-                                                                Generando...
-                                                                <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
-                                                            </div>
-                                                        </button>
-                                                    @endif
+                                                    <a
+                                                        href="#"
+                                                        class="btn btn-info"
+                                                    >
+                                                        Descargar Ficha de Matricula
+                                                    </a>
                                                 </div>
                                             </div>
                                         </div>
