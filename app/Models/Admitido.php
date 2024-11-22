@@ -66,4 +66,9 @@ class Admitido extends Model
             ->where('estado', 1)
             ->orderBy('id_matricula', 'desc');
     }
+
+    public function matriculas(){
+        return $this->hasMany(MatriculaNuevo::class,
+            'id_admitido','id_admitido');
+    }
 }

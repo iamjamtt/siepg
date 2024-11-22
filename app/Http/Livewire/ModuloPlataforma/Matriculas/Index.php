@@ -19,6 +19,10 @@ use App\Models\PrematriculaCurso;
 use App\Models\ProgramaProcesoGrupo;
 use Illuminate\Support\Facades\File;
 use App\Jobs\ProcessEnvioFichaMatricula;
+use App\Models\Matricula\Matricula as ModelMatricula;
+use App\Models\Matricula\MatriculaCurso as ModelMatriculaCurso;
+use App\Models\Matricula\PreMatriculaCurso as ModelPreMatriculaCurso;
+use App\Models\Programa;
 
 class Index extends Component
 {
@@ -30,6 +34,10 @@ class Index extends Component
     public $curso_prematricula; // variable para almacenar los cursos de la prematricula
     public $prematricula; // variable para almacenar la
     public $check_cursos = []; // variable para almacenar los checkbox de los cursos
+
+    //
+
+    public $alumno;
 
     protected $listeners = [
         'generar_matricula' => 'generar_matricula',
@@ -605,5 +613,97 @@ class Index extends Component
             'grupos' => $grupos,
             'matriculas' => $matriculas
         ]);
+    }
+
+    public function mount()
+    {
+        $usuario = auth('plataforma')->user();
+        $persona = Persona::find($usuario->id_persona);
+        $this->alumno = Admitido::query()
+            ->with('persona','programa_proceso')
+            ->where('id_persona', $persona->id_persona)
+            ->first();
+
+        // obtenemos el ciclo mayor
+        $id_ciclo = $this->obtenerCicloMayor($this->alumno->id_admitido);
+
+        // generamos la prematricula
+        $this->generarPrematricula ($id_ciclo, $this->alumno);
+
+        // primero verificamos si hay una gestion de matricula activa
+    }
+
+    public function obtenerCicloMayor($id_admitido)
+    {
+        $ciclo = ModelMatricula::query()
+            ->where('id_admitido', $id_admitido)
+            ->orderBy('id_matricula', 'desc')
+            ->first();
+        return $ciclo->ciclo ?? 0;
+    }
+
+    public function generarPrematricula($id_ciclo, $alumno)
+    {
+        $cursosPrematricula = collect();
+
+        // verificamos si el alumno tiene matriculas
+        $tieneMatricula = ModelMatricula::query()
+            ->where('id_admitido', $alumno->id_admitido)
+            ->where('estado', 1)
+            ->count() > 0;
+
+        if ($tieneMatricula) {
+            $matricula = ModelMatricula::query()
+                ->where('id_admitido', $alumno->id_admitido)
+                ->where('estado', 1)
+                ->first();
+            dd($matricula);
+        }
+
+        $programa = Programa::find($alumno->programa_proceso->programa_plan->programa->id_programa);
+        $totalCiclos = $programa->duracion_ciclos;
+        $id_ciclo = $id_ciclo + 1;
+        $id_ciclo = $id_ciclo > $totalCiclos ? $totalCiclos : $id_ciclo;
+
+        // obtemos los cursos del ciclo actual al que se va a matricular
+        $cursos = CursoProgramaPlan::query()
+            ->with([
+                'curso' => function ($query) use ($id_ciclo) {
+                    $query->where('id_ciclo', $id_ciclo);
+                },
+                'programa_plan'
+            ])
+            ->where('id_programa_plan', $alumno->programa_proceso->id_programa_plan)
+            ->get();
+
+        foreach ($cursos as $curso) {
+            // verificamos si el cursos que tiene prerequisito se aprobo
+            if ($curso->curso) {
+                if ($curso->curso->curso_prerequisito) {
+                    $matriculaCurso = ModelMatriculaCurso::query()
+                        ->with([
+                            'matricula' => function ($query) use ($alumno) {
+                                $query->where('id_admitido', $alumno->id_admitido);
+                            }
+                        ])
+                        ->where('id_curso_programa_plan', $curso->id_curso_programa_plan)
+                        ->where('estado', 0) // 0 = desaprobado
+                        ->first();
+                    dd($matriculaCurso);
+                } else {
+                    $cursosPrematricula->push($curso);
+                }
+            }
+        }
+
+        // realizar la prematricula de los cursos
+        foreach ($cursosPrematricula as $curso) {
+            $prematriculaCurso = new ModelPreMatriculaCurso();
+            $prematriculaCurso->id_admitido = $alumno->id_admitido;
+            $prematriculaCurso->id_curso_programa_plan = $curso->id_curso_programa_plan;
+            $prematriculaCurso->id_ciclo = $id_ciclo;
+            $prematriculaCurso->estado = 1; // 1 = activo
+            $prematriculaCurso->save();
+        }
     }
 }
