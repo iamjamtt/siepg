@@ -232,34 +232,22 @@ class Index extends Component
         $this->dispatchBrowserEvent('modal_matricula', ['action' => 'hide']);
     }
 
-    public function alerta_ficha_matricula($id_matricula)
+    public function enviarFichaMatricula($id_matricula)
     {
-        $this->id_matricula = $id_matricula;
-        $this->dispatchBrowserEvent('alerta_generar_matricula_temporizador', [
-            'title' => '¡Exito!',
-            'text' => 'Se ha generado su ficha de matrícula correctamente',
-            'icon' => 'success',
-            'confirmButtonText' => 'Aceptar',
-            'color' => 'success'
-        ]);
-    }
-
-    public function ficha_matricula()
-    {
-        // buscamos el admitido
-        $admitido = $this->admitido;
-
         // buscamos la matricula
-        $matricula = Matricula::find($this->id_matricula);
+        $matricula = ModelMatricula::query()
+            ->with('admitido', 'pago', 'cursos')
+            ->where('id_matricula', $id_matricula)
+            ->first();
 
-        // buscamos el pago
-        $pago = Pago::where('id_pago', $matricula->id_pago)->first();
+        if (!$matricula) {
+            abort(404, 'No se encontro el registro de la matricula');
+        }
 
-        // buscamos los cursos de la matricula
-        $cursos = MatriculaCurso::join('curso_programa_plan', 'curso_programa_plan.id_curso_programa_plan', 'matricula_curso.id_curso_programa_plan')
-            ->join('curso', 'curso.id_curso', 'curso_programa_plan.id_curso')
-            ->join('ciclo', 'ciclo.id_ciclo', 'curso.id_ciclo')
-            ->where('matricula_curso.id_matricula', $matricula->id_matricula)
+        $admitido = $matricula->admitido;
+        $pago = $matricula->pago;
+        $cursos = $matricula->cursos()
+            ->with('programaProcesoGrupo')
             ->get();
 
         $programa = null;
@@ -281,11 +269,9 @@ class Index extends Component
         $nombre = $admitido->persona->nombre_completo;
         $domicilio = $admitido->persona->direccion;
         $celular = $admitido->persona->celular;
-        $grupo = $matricula->programa_proceso_grupo->grupo_detalle;
+        $grupo = obtenerGrupoDeMatricula($matricula->id_matricula);
         $admision = $admitido->programa_proceso->admision->admision;
         $modalidad = $admitido->programa_proceso->programa_plan->programa->id_modalidad == 1 ? 'PRESENCIAL' : 'DISTANCIA';
-        $matricula_codigo = $matricula->matricula_codigo;
-        // dd($programa, $subprograma, $mencion, $fecha, $numero_operacion, $plan, $ciclo, $codigo, $nombre, $domicilio, $celular, $cursos, $grupo, $admision, $modalidad);
         $data = [
             'programa' => $programa,
             'subprograma' => $subprograma,
@@ -300,40 +286,25 @@ class Index extends Component
             'cursos' => $cursos,
             'grupo' => $grupo,
             'admision' => $admision,
-            'modalidad' => $modalidad
+            'modalidad' => $modalidad,
+            'matricula' => $matricula,
         ];
-
-        // Crear directorios para guardar los archivos
-        $base_path = 'Posgrado/';
-        $folders = [
-            $admision,
-            $admitido->persona->numero_documento,
-            'Expedientes'
-        ];
-
-        // Asegurar que se creen los directorios con los permisos correctos
-        $path = asignarPermisoFolders($base_path, $folders);
-
-        // Nombre del archivo
-        $nombre_pdf = Str::slug($nombre) . '-ficha-matricula-' . $matricula_codigo . '.pdf';
-        $nombre_db = $path . $nombre_pdf;
-
-        // Generar el PDF
-        Pdf::loadView('modulo-plataforma.matriculas.ficha-matricula', $data)->save(public_path($path . $nombre_pdf));
-
-        // registramos la url de la ficha de matricula
-        $matricula->matricula_ficha_url = $nombre_db;
-        $matricula->save();
-
-        // Asignar todos los permisos al archivo
-        chmod($nombre_db, 0777);
 
         // datos para el correo
         $nombre = ucwords(strtolower($admitido->persona->nombre_completo));
         $correo = $admitido->persona->correo;
 
         // enviar correo la ficha de matricula
-        ProcessEnvioFichaMatricula::dispatch($data, $path, $nombre_pdf, $nombre, $correo);
+        ProcessEnvioFichaMatricula::dispatch($data, $nombre, $correo);
+
+        // emitimos una alerta de que se esta enviando la ficha de matricula
+        $this->dispatchBrowserEvent('alerta_generar_matricula', [
+            'title' => '¡Exito!',
+            'text' => 'Se ha enviado la ficha de matrícula a su correo electrónico',
+            'icon' => 'success',
+            'confirmButtonText' => 'Aceptar',
+            'color' => 'success'
+        ]);
     }
 
     public function render()
