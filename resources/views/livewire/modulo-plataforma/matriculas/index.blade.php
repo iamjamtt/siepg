@@ -79,7 +79,7 @@
                                                         </div>
                                                         <div class="col-7 col-md-8">
                                                             <span class="fw-bold text-gray-800">
-                                                                {{ $item->admitido->programa_proceso->admision->admision }}
+                                                                {{ $item->admitido->programa_proceso->admision->admision_año }} - {{ $loop->iteration }}
                                                             </span>
                                                         </div>
                                                     </div>
