@@ -39,6 +39,7 @@ class Index extends Component
     //
 
     public $alumno;
+    public $gestion;
     public $id_ciclo;
     public $cursosPrematriculados;
 
@@ -69,22 +70,7 @@ class Index extends Component
 
     public function abrir_modal()
     {
-        // obtenemos el ciclo mayor
-        $id_ciclo = $this->obtenerCicloMayor($this->alumno->id_admitido);
-
-        $programa = Programa::find($this->alumno->programa_proceso->programa_plan->programa->id_programa);
-        $totalCiclos = $programa->duracion_ciclos;
-        $id_ciclo = $id_ciclo + 1;
-        $this->id_ciclo = $id_ciclo > $totalCiclos ? $totalCiclos : $id_ciclo;
-
-        // primero verificamos si hay una gestion de matricula activa
-        $gestion = MatriculaGestion::query()
-            ->where('id_programa_proceso', $this->alumno->id_programa_proceso)
-            ->where('id_ciclo', $id_ciclo)
-            ->where('matricula_gestion_estado', 1)
-            ->first();
-
-        if (!$gestion) {
+        if (!$this->gestion) {
             $this->dispatchBrowserEvent('alerta_generar_matricula', [
                 'title' => '¡Error!',
                 'text' => 'No existe una matrícula activa en estos momentos.',
@@ -96,7 +82,7 @@ class Index extends Component
         }
 
         // verificamos si estamos en fechas de matricula
-        if (!$this->verificarFechasMatriculaGestion($gestion)) {
+        if (!$this->verificarFechasMatriculaGestion($this->gestion)) {
             $this->dispatchBrowserEvent('alerta_generar_matricula', [
                 'title' => '¡Error!',
                 'text' => 'No se encuentra en fechas de matrícula.',
@@ -108,10 +94,10 @@ class Index extends Component
         }
 
         // generamos la prematricula
-        $this->generarPrematricula ($id_ciclo, $this->alumno);
+        $this->generarPrematricula ($this->id_ciclo, $this->alumno);
 
         // cargamos los cursos prematriculados
-        $this->cargarCursosPrematriculados($id_ciclo, $this->alumno->id_admitido);
+        $this->cargarCursosPrematriculados($this->id_ciclo, $this->alumno->id_admitido);
 
         // abrimos el modal
         $this->dispatchBrowserEvent('modal_matricula', ['action' => 'show']);
@@ -204,6 +190,7 @@ class Index extends Component
 
         // registrar matricula
         $matricula = new ModelMatricula();
+        $matricula->id_matricula_gestion = $this->gestion->id_matricula_gestion;
         $matricula->id_admitido = $this->alumno->id_admitido;
         $matricula->ciclo = $this->id_ciclo;
         $matricula->codigo = $codigo;
@@ -393,6 +380,21 @@ class Index extends Component
             abort(404, 'No se encontró el alumno');
         }
         $this->cursosPrematriculados = collect();
+
+        // obtenemos el ciclo mayor
+        $this->id_ciclo = $this->obtenerCicloMayor($this->alumno->id_admitido);
+
+        $programa = Programa::find($this->alumno->programa_proceso->programa_plan->programa->id_programa);
+        $totalCiclos = $programa->duracion_ciclos;
+        $this->id_ciclo = $this->id_ciclo + 1;
+        $this->id_ciclo = $this->id_ciclo > $totalCiclos ? $totalCiclos : $this->id_ciclo;
+
+        // primero verificamos si hay una gestion de matricula activa
+        $this->gestion = MatriculaGestion::query()
+            ->where('id_programa_proceso', $this->alumno->id_programa_proceso)
+            ->where('id_ciclo', $this->id_ciclo)
+            ->where('matricula_gestion_estado', 1)
+            ->first();
     }
 
     public function obtenerCicloMayor($id_admitido)
