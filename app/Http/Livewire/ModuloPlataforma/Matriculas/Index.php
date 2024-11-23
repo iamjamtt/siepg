@@ -192,10 +192,7 @@ class Index extends Component
         // obtener ultima matricula del admitido
         $ultimaMatricula = $this->alumno->ultimaMatriculaNuevo;
         if ($ultimaMatricula) {
-            $cursos = $ultimaMatricula->cursos()->with('programaProcesoGrupo')->get();
-            foreach ($cursos as $curso) {
-                //
-            }
+            $grupo = obtenerIdGrupoDeMatricula($ultimaMatricula->id_matricula);
         }
 
         // registrar matricula

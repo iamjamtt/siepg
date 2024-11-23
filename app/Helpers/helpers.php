@@ -562,4 +562,43 @@ function obtenerGrupoDeMatricula($id_matricula)
     return $grupo ?? '';
 }
 
+function obtenerIdGrupoDeMatricula($id_matricula)
+{
+    $matricula = ModelMatricula::query()
+        ->with('cursos')
+        ->where('id_matricula', $id_matricula)
+        ->first();
+
+    if (!$matricula) {
+        return '';
+    }
+
+    $cursos = $matricula->cursos()
+        ->with('programaProcesoGrupo')
+        ->get();
+
+    $grupo_counts = [];
+    foreach ($cursos as $curso) {
+        $id_grupo = $curso->programaProcesoGrupo->id_programa_proceso_grupo;
+        if (!isset($grupo_counts[$id_grupo])) {
+            $grupo_counts[$id_grupo] = 0;
+        }
+        $grupo_counts[$id_grupo]++;
+    }
+
+    $grupo = null;
+    foreach ($grupo_counts as $id_grupo => $count) {
+        if ($count >= 2) {
+            $grupo = $id_grupo;
+            break;
+        }
+    }
+
+    if ($grupo === null && !empty($grupo_counts)) {
+        $grupo = array_key_first($grupo_counts);
+    }
+
+    return $grupo ?? '';
+}
+
 //
