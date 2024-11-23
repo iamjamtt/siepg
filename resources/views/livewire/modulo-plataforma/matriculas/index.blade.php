@@ -127,13 +127,12 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-12 text-end">
-                                                    <a
-                                                        href="#"
-                                                        target="_blank"
+                                                    <button
+                                                        wire:click="enviarFichaMatricula({{ $item->id_matricula }})"
                                                         class="btn btn-info"
                                                     >
                                                         Enviar Ficha de Matricula al Correo
-                                                    </a>
+                                                    </button>
                                                     <a
                                                         href="{{ route('plataforma.matriculas-ficha', ['id_matricula' => $item->id_matricula]) }}"
                                                         target="_blank"
