@@ -42,6 +42,7 @@ class Index extends Component
     public $gestion;
     public $id_ciclo;
     public $cursosPrematriculados;
+    public int $creditosSeleccionados = 0;
 
     protected $listeners = [
         'generar_matricula' => 'generar_matricula',
@@ -55,6 +56,15 @@ class Index extends Component
             'check_pago' => 'required|array|min:1|max:1',
             'check_cursos' => 'nullable|array',
         ]);
+
+        $this->creditosSeleccionados = 0;
+        foreach ($this->check_cursos as $item) {
+            $curso = CursoProgramaPlan::query()
+                ->where('id_curso_programa_plan', $item)
+                ->with('curso')
+                ->first();
+            $this->creditosSeleccionados += $curso->curso->curso_credito;
+        }
     }
 
     public function limpiar_modal()

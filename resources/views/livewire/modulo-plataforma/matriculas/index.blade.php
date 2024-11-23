@@ -187,6 +187,21 @@
                 </div>
                 <div class="modal-body">
                     <form autocomplete="off" class="row g-3">
+                        <!-- alerta -->
+                        <div class="col-12">
+                            <div class="alert bg-light-primary border border-3 border-primary d-flex align-items-center p-5">
+                                <i class="ki-duotone ki-information-5 fs-2qx me-4 text-primary">
+                                    <i class="path1"></i>
+                                    <i class="path2"></i>
+                                    <i class="path3"></i>
+                                </i>
+                                <div class="d-flex flex-column">
+                                    <span class="fw-bold fs-5">
+                                        Recuerde que tiene un maximo de <b>22</b> creditos para matricularse.
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
                         @if ($matriculas->count() == 0)
                             @if ($grupos->count() > 0)
                                 <div class="col-md-12">
@@ -282,9 +297,14 @@
                             </div>
                         </div>
                         <div class="col-12">
-                            <label for="pagos" class="required form-label">
-                                Cursos a Matricular
-                            </label>
+                            <div class="d-flex justify-content-between">
+                                <label for="pagos" class="required form-label">
+                                    Cursos a Matricular
+                                </label>
+                                <span class="form-label">
+                                    Creditos seleccionados: <b>{{ $creditosSeleccionados ?? 0 }}</b>
+                                </span>
+                            </div>
                             <div class="table-responsive">
                                 <table class="table table-hover align-middle table-rounded border mb-0 gy-5 gs-5">
                                     <thead class="bg-light-warning">
