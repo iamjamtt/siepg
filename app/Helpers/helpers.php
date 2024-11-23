@@ -523,4 +523,43 @@ function obtenerContadorDeMatriculasPorGrupos($id_programa_proceso, $id_matricul
     return $contador;
 }
 
+function obtenerGrupoDeMatricula($id_matricula)
+{
+    $matricula = ModelMatricula::query()
+        ->with('cursos')
+        ->where('id_matricula', $id_matricula)
+        ->first();
+
+    if (!$matricula) {
+        return '';
+    }
+
+    $cursos = $matricula->cursos()
+        ->with('programaProcesoGrupo')
+        ->get();
+
+    $grupo_counts = [];
+    foreach ($cursos as $curso) {
+        $grupo_detalle = $curso->programaProcesoGrupo->grupo_detalle;
+        if (!isset($grupo_counts[$grupo_detalle])) {
+            $grupo_counts[$grupo_detalle] = 0;
+        }
+        $grupo_counts[$grupo_detalle]++;
+    }
+
+    $grupo = null;
+    foreach ($grupo_counts as $grupo_detalle => $count) {
+        if ($count >= 2) {
+            $grupo = $grupo_detalle;
+            break;
+        }
+    }
+
+    if ($grupo === null && !empty($grupo_counts)) {
+        $grupo = array_key_first($grupo_counts);
+    }
+
+    return $grupo ?? '';
+}
+
 //

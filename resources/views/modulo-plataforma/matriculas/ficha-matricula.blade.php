@@ -166,17 +166,17 @@
         <tbody>
             @foreach ($cursos as $item)
             <tr>
-                <td style="border: 1px solid; padding: 0.3rem; font-size: 0.8rem;" align="center">{{ $item->curso_codigo }}</td>
-                <td style="border: 1px solid; padding: 0.3rem; font-size: 0.8rem;">{{ $item->curso_nombre }}</td>
-                <td style="border: 1px solid; padding: 0.3rem; font-size: 0.8rem;" align="center">{{ $item->ciclo }}</td>
-                <td style="border: 1px solid; padding: 0.3rem; font-size: 0.8rem;" align="center">{{ $item->curso_credito }}</td>
+                <td style="border: 1px solid; padding: 0.3rem; font-size: 0.8rem;" align="center">{{ $item->cursoProgramaPlan->curso->curso_codigo }}</td>
+                <td style="border: 1px solid; padding: 0.3rem; font-size: 0.8rem;">{{ $item->cursoProgramaPlan->curso->curso_nombre }}</td>
+                <td style="border: 1px solid; padding: 0.3rem; font-size: 0.8rem;" align="center">{{ $item->cursoProgramaPlan->curso->ciclo->ciclo }}</td>
+                <td style="border: 1px solid; padding: 0.3rem; font-size: 0.8rem;" align="center">{{ $item->cursoProgramaPlan->curso->curso_credito }}</td>
             </tr>
             @endforeach
         </tbody>
         <tfoot>
             <tr>
                 <td colspan="3" align="right" style="border: 1px solid; padding: 0.3rem; font-weight: bold; margin-right: 10px"><em>TOTAL</em></td>
-                <td style="border: 1px solid; padding: 0.3rem; font-size: 0.8rem;" align="center">{{ $cursos->sum('curso_credito') }}</td>
+                <td style="border: 1px solid; padding: 0.3rem; font-size: 0.8rem;" align="center">{{ $cursos->sum('cursoProgramaPlan.curso.curso_credito') }}</td>
             </tr>
         </tfoot>
     </table>

@@ -128,10 +128,11 @@
                                                 </div>
                                                 <div class="col-12 text-end">
                                                     <a
-                                                        href="#"
+                                                        href="{{ route('plataforma.matriculas-ficha', ['id_matricula' => $item->id_matricula]) }}"
+                                                        target="_blank"
                                                         class="btn btn-info"
                                                     >
-                                                        Descargar Ficha de Matricula
+                                                        Descargar Ficha de Matricula (pdf)
                                                     </a>
                                                 </div>
                                             </div>
@@ -180,8 +181,8 @@
                 </div>
                 <div class="modal-body">
                     <form autocomplete="off" class="row g-3">
-                        {{-- @if ($matriculas->count() == 0)
-                            @if ($grupos->count() > 0) --}}
+                        @if ($matriculas->count() == 0)
+                            @if ($grupos->count() > 0)
                                 <div class="col-md-12">
                                     <label for="grupo" class="required form-label">
                                         Grupo
@@ -206,8 +207,8 @@
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
-                            {{-- @endif
-                        @endif --}}
+                            @endif
+                        @endif
                         <div class="col-12">
                             <label for="pagos" class="required form-label">
                                 Pagos
