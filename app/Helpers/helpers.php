@@ -13,6 +13,7 @@ use App\Models\Mensualidad;
 use App\Models\Pago;
 use App\Models\Persona;
 use App\Models\ProgramaProceso;
+use App\Models\Matricula\Matricula as ModelMatricula;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Str;
 
@@ -490,6 +491,36 @@ function calcularCicloEstudiante($id_admitido)
     }
 
     return $ciclo;
+}
+
+function obtenerContadorDeMatriculasPorGrupos($id_programa_proceso, $id_matricula_gestion, $id_programa_proceso_grupo)
+{
+    $matriculados = ModelMatricula::query()
+        ->with([
+            'admitido' => function($query) use ($id_programa_proceso) {
+                $query->with('persona', 'programa_proceso')
+                    ->where('id_programa_proceso', $id_programa_proceso);
+            },
+            'cursos'
+        ])
+        ->where('id_matricula_gestion', $id_matricula_gestion)
+        ->where('estado', 1)
+        ->get();
+    $contador = 0;
+    foreach($matriculados as $matriculado) {
+        if ($matriculado->admitido) {
+            $value = false;
+            foreach($matriculado->cursos as $curso) {
+                if ($curso->id_programa_proceso_grupo == $id_programa_proceso_grupo) {
+                    $value = true;
+                }
+            }
+            if ($value) {
+                $contador++;
+            }
+        }
+    }
+    return $contador;
 }
 
 //

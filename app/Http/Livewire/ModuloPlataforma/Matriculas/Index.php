@@ -434,7 +434,7 @@ class Index extends Component
                 ->where('id_admitido', $alumno->id_admitido)
                 ->where('estado', 1)
                 ->first();
-            dd($matricula);
+            // dd($matricula);
         }
 
         // obtemos los cursos del ciclo actual al que se va a matricular
@@ -461,7 +461,7 @@ class Index extends Component
                         ->where('id_curso_programa_plan', $curso->id_curso_programa_plan)
                         ->where('estado', 0) // 0 = desaprobado
                         ->first();
-                    dd($matriculaCurso);
+                    // dd($matriculaCurso);
                 } else {
                     $cursosPrematricula->push($curso);
                 }
@@ -483,7 +483,7 @@ class Index extends Component
             $prematriculaCurso->id_admitido = $alumno->id_admitido;
             $prematriculaCurso->id_curso_programa_plan = $curso->id_curso_programa_plan;
             $prematriculaCurso->id_ciclo = $id_ciclo;
-            $prematriculaCurso->save();
+            // $prematriculaCurso->save();
         }
     }
 

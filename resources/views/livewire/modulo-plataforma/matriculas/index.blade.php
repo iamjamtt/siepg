@@ -180,8 +180,8 @@
                 </div>
                 <div class="modal-body">
                     <form autocomplete="off" class="row g-3">
-                        @if ($matriculas->count() == 0)
-                            @if ($grupos->count() > 0)
+                        {{-- @if ($matriculas->count() == 0)
+                            @if ($grupos->count() > 0) --}}
                                 <div class="col-md-12">
                                     <label for="grupo" class="required form-label">
                                         Grupo
@@ -190,12 +190,14 @@
                                         <option></option>
                                         @foreach ($grupos as $item)
                                         @php
-                                            $contador_matriculados_grupos = App\Models\Matricula::query()
-                                                ->where('id_programa_proceso_grupo', $item->id_programa_proceso_grupo)
-                                                ->where('matricula_primer_ciclo', 1)
-                                                ->count();
+                                            $contador_matriculados_grupos = obtenerContadorDeMatriculasPorGrupos($alumno->id_programa_proceso, $gestion->id_matricula_gestion ?? 0, $item->id_programa_proceso_grupo);
                                         @endphp
-                                        <option value="{{ $item->id_programa_proceso_grupo }}" @if($item->grupo_cantidad <= $contador_matriculados_grupos) disabled @endif>
+                                        <option
+                                            value="{{ $item->id_programa_proceso_grupo }}"
+                                            @if ($contador_matriculados_grupos == $item->grupo_cantidad)
+                                                disabled
+                                            @endif
+                                        >
                                             GRUPO {{ $item->grupo_detalle }} - CUPOS: {{ $item->grupo_cantidad - $contador_matriculados_grupos }}
                                         </option>
                                         @endforeach
@@ -204,8 +206,8 @@
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
-                            @endif
-                        @endif
+                            {{-- @endif
+                        @endif --}}
                         <div class="col-12">
                             <label for="pagos" class="required form-label">
                                 Pagos
