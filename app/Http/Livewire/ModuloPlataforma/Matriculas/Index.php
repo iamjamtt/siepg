@@ -158,6 +158,18 @@ class Index extends Component
             return;
         }
 
+        // validar que el contador de creditos seleccionados no sea mayor a 22
+        if ($this->creditosSeleccionados > 22) {
+            $this->dispatchBrowserEvent('alerta_generar_matricula', [
+                'title' => '¡Error!',
+                'text' => 'No puede seleccionar más de 22 créditos para matricularse',
+                'icon' => 'error',
+                'confirmButtonText' => 'Aceptar',
+                'color' => 'danger'
+            ]);
+            return;
+        }
+
         $this->dispatchBrowserEvent('alerta_generar_matricula_2', [
             'title' => 'Confirmar matrícula',
             'text' => '¿Está seguro de generar la matrícula?',
