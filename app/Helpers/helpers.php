@@ -601,4 +601,22 @@ function obtenerIdGrupoDeMatricula($id_matricula)
     return $grupo ?? '';
 }
 
+function calcularPeriodo($id_matricula)
+{
+    $matricula = ModelMatricula::query()
+        ->with('matriculaGestion', 'admitido')
+        ->where('id_matricula', $id_matricula)
+        ->first();
+
+    if (!$matricula) {
+        return '';
+    }
+
+    $admision = $matricula->admitido->programa_proceso->admision;
+    $anio = $admision->admision_año;
+    $periodo = $matricula->admitido->matriculas()->count();
+
+    return $anio . ' - ' . $periodo;
+}
+
 //
