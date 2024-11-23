@@ -322,7 +322,6 @@ class Index extends Component
 
         $matriculas = $this->alumno->matriculas()
             ->where('estado', 1)
-            ->orderBy('id_matricula', 'desc')
             ->get();
 
         $pagos = Pago::query()
