@@ -200,7 +200,7 @@
         <footer>
             <div style="margin-top: 1.5rem; text-align: right;">
                 <span style="text-align: center; font-weight: 400; font-size: 0.7rem">
-                    Fecha de emisión: ___/___/___
+                    Fecha de emisión: {{ date('d/m/Y') }}
                 </span>
             </div>
             <div style="margin-top: 2.5rem; text-align: right;">
@@ -465,7 +465,7 @@
         <footer>
             <div style="margin-top: 1.5rem; text-align: right;">
                 <span style="text-align: center; font-weight: 400; font-size: 0.7rem">
-                    Fecha de emisión: ___/___/___
+                    Fecha de emisión: {{ date('d/m/Y') }}
                 </span>
             </div>
             <div style="margin-top: 2.5rem; text-align: right;">
@@ -745,7 +745,7 @@
             <footer>
                 <div style="margin-top: 1.5rem; text-align: right;">
                     <span style="text-align: center; font-weight: 400; font-size: 0.7rem">
-                        Fecha de emisión: ___/___/___
+                        Fecha de emisión: {{ date('d/m/Y') }}
                     </span>
                 </div>
                 <div style="margin-top: 2.5rem; text-align: right;">
@@ -1022,7 +1022,7 @@
             <footer>
                 <div style="margin-top: 1.5rem; text-align: right;">
                     <span style="text-align: center; font-weight: 400; font-size: 0.7rem">
-                        Fecha de emisión: ___/___/___
+                        Fecha de emisión: {{ date('d/m/Y') }}
                     </span>
                 </div>
                 <div style="margin-top: 2.5rem; text-align: right;">
