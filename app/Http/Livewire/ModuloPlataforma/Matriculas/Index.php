@@ -435,7 +435,17 @@ class Index extends Component
                 ->get();
 
             foreach ($cursosDesaprobados as $curso) {
-                $cursosPrematricula->push($curso->cursoProgramaPlan);
+                // verificamos si el curso desaprobado ya se aprobo
+                $seAprobo = ModelMatriculaCurso::query()
+                    ->where('id_curso_programa_plan', $curso->id_curso_programa_plan)
+                    ->whereHas('matricula', function ($query) use ($alumno) {
+                        $query->where('id_admitido', $alumno->id_admitido);
+                    })
+                    ->where('estado', 2) // 2 = aprobado
+                    ->count() > 0;
+                if (!$seAprobo) {
+                    $cursosPrematricula->push($curso->cursoProgramaPlan);
+                }
             }
         }
 
@@ -507,7 +517,7 @@ class Index extends Component
                 $prematriculaCurso->id_admitido = $alumno->id_admitido;
                 $prematriculaCurso->id_curso_programa_plan = $curso->id_curso_programa_plan;
                 $prematriculaCurso->id_ciclo = $id_ciclo;
-                $prematriculaCurso->save();
+                // $prematriculaCurso->save();
             }
         }
     }
