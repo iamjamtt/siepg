@@ -517,7 +517,7 @@ class Index extends Component
                 $prematriculaCurso->id_admitido = $alumno->id_admitido;
                 $prematriculaCurso->id_curso_programa_plan = $curso->id_curso_programa_plan;
                 $prematriculaCurso->id_ciclo = $id_ciclo;
-                // $prematriculaCurso->save();
+                $prematriculaCurso->save();
             }
         }
     }
