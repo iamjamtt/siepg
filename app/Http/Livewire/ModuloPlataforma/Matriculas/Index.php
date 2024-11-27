@@ -72,10 +72,12 @@ class Index extends Component
         $this->reset([
             'grupo',
             'check_pago',
-            'check_cursos'
+            'check_cursos',
+            'creditosSeleccionados'
         ]);
         $this->resetErrorBag();
         $this->resetValidation();
+        $this->cursosPrematriculados = collect();
     }
 
     public function abrir_modal()
@@ -250,6 +252,9 @@ class Index extends Component
 
         // cerramos el modal
         $this->dispatchBrowserEvent('modal_matricula', ['action' => 'hide']);
+
+        // reseteamos las variables
+        $this->limpiar_modal();
     }
 
     public function enviarFichaMatricula($id_matricula)
@@ -504,20 +509,55 @@ class Index extends Component
         if (!$tienePreMatricula) {
             // realizar la prematricula de los cursos
             foreach ($cursosPrematricula as $curso) {
+                // verificamos si el curso ya esta prematriculado con estado 0
                 $prematriculaCurso = ModelPreMatriculaCurso::query()
                     ->where('id_admitido', $alumno->id_admitido)
                     ->where('id_curso_programa_plan', $curso->id_curso_programa_plan)
                     ->where('id_ciclo', $id_ciclo)
-                    ->where('estado', 1) // 1 = activo
+                    ->where('estado', 0) // 0 = desaprobado
                     ->first();
-                if (!$prematriculaCurso) {
-                    $prematriculaCurso = new ModelPreMatriculaCurso();
-                    $prematriculaCurso->estado = 1; // 1 = activo
+                if ($prematriculaCurso) {
+                    // verificamos si el curso prematriculado con estado 0, esta pendiente de aprobacion
+                    $matriculaCurso = ModelMatriculaCurso::query()
+                        ->with([
+                            'matricula',
+                            'cursoProgramaPlan' => function ($query) use ($curso) {
+                                $query->with('curso');
+                            }
+                        ])
+                        ->whereHas('matricula', function ($query) use ($alumno) {
+                            $query->where('id_admitido', $alumno->id_admitido);
+                        })
+                        ->whereHas('cursoProgramaPlan', function ($query) use ($curso) {
+                            $query->where('id_curso_programa_plan', $curso->id_curso_programa_plan);
+                        })
+                        ->where('estado', 1) // 2 = aprobado
+                        ->first();
+                    if (!$matriculaCurso) {
+                        $prematriculaCurso = new ModelPreMatriculaCurso();
+                        $prematriculaCurso->estado = 1; // 1 = activo
+                        $prematriculaCurso->id_admitido = $alumno->id_admitido;
+                        $prematriculaCurso->id_curso_programa_plan = $curso->id_curso_programa_plan;
+                        $prematriculaCurso->id_ciclo = $id_ciclo;
+                        $prematriculaCurso->save();
+                    }
+                } else {
+                    // verificamos si el curso ya esta prematriculado
+                    $prematriculaCurso = ModelPreMatriculaCurso::query()
+                        ->where('id_admitido', $alumno->id_admitido)
+                        ->where('id_curso_programa_plan', $curso->id_curso_programa_plan)
+                        ->where('id_ciclo', $id_ciclo)
+                        ->where('estado', 1) // 1 = activo
+                        ->first();
+                    if (!$prematriculaCurso) {
+                        $prematriculaCurso = new ModelPreMatriculaCurso();
+                        $prematriculaCurso->estado = 1; // 1 = activo
+                    }
+                    $prematriculaCurso->id_admitido = $alumno->id_admitido;
+                    $prematriculaCurso->id_curso_programa_plan = $curso->id_curso_programa_plan;
+                    $prematriculaCurso->id_ciclo = $id_ciclo;
+                    $prematriculaCurso->save();
                 }
-                $prematriculaCurso->id_admitido = $alumno->id_admitido;
-                $prematriculaCurso->id_curso_programa_plan = $curso->id_curso_programa_plan;
-                $prematriculaCurso->id_ciclo = $id_ciclo;
-                $prematriculaCurso->save();
             }
         }
     }
