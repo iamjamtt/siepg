@@ -237,6 +237,11 @@ class PlataformaController extends Controller
         }
 
         $pago = $matricula->pago;
+
+        if (!$pago) {
+            abort(403, 'No se encontro el registro del pago');
+        }
+
         $cursos = $matricula->cursos()
             ->with('programaProcesoGrupo')
             ->get();
