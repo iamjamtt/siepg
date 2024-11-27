@@ -454,6 +454,31 @@ class Index extends Component
             }
         }
 
+        // obtemos los cursos de ciclos anteriores al que falta matricular
+        $cursos = CursoProgramaPlan::query()
+            ->with([
+                'curso',
+                'programa_plan'
+            ])
+            ->whereHas('curso', function ($query) use ($id_ciclo) {
+                $query->where('id_ciclo', '<', $id_ciclo);
+            })
+            ->where('id_programa_plan', $alumno->programa_proceso->id_programa_plan)
+            ->get();
+
+        foreach ($cursos as $curso) {
+            // verificamos si hay cursos que no estan en el historial de matriculas
+            $existe = ModelMatriculaCurso::query()
+                ->where('id_curso_programa_plan', $curso->id_curso_programa_plan)
+                ->whereHas('matricula', function ($query) use ($alumno) {
+                    $query->where('id_admitido', $alumno->id_admitido);
+                })
+                ->count() > 0;
+            if (!$existe) {
+                $cursosPrematricula->push($curso);
+            }
+        }
+
         // obtemos los cursos del ciclo actual al que se va a matricular
         $cursos = CursoProgramaPlan::query()
             ->with([
@@ -494,11 +519,29 @@ class Index extends Component
                         }
                     }
                 } else {
-                    $cursosPrematricula->push($curso);
+                    // verificamos si el curso se aprobo
+                    $matriculaCurso = ModelMatriculaCurso::query()
+                        ->with([
+                            'matricula',
+                            'cursoProgramaPlan' => function ($query) use ($curso) {
+                                $query->with('curso');
+                            }
+                        ])
+                        ->whereHas('matricula', function ($query) use ($alumno) {
+                            $query->where('id_admitido', $alumno->id_admitido);
+                        })
+                        ->whereHas('cursoProgramaPlan', function ($query) use ($curso) {
+                            $query->where('id_curso', $curso->curso->id_curso);
+                        })
+                        ->where('estado', 2) // 0 = aprobado
+                        ->first();
+                    if (!$matriculaCurso) {
+                        $cursosPrematricula->push($curso);
+                    }
                 }
             }
         }
-
+        
         // verificamos si el alumno tiene cursos de la prematricula
         $tienePreMatricula = ModelPreMatriculaCurso::query()
             ->where('id_admitido', $alumno->id_admitido)
