@@ -541,7 +541,7 @@ class Index extends Component
                 }
             }
         }
-        
+
         // verificamos si el alumno tiene cursos de la prematricula
         $tienePreMatricula = ModelPreMatriculaCurso::query()
             ->where('id_admitido', $alumno->id_admitido)
