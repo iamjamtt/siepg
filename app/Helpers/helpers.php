@@ -476,13 +476,7 @@ function calcularCicloEstudiante($id_admitido)
 
     $ciclosTotalesDelPrograma = $admitido->programa_proceso->programa_plan->programa->duracion_ciclos;
 
-    $cursos = $ultima_matricula->cursos;
-    // calcular el ciclo mayor de los cursos
-    foreach ($cursos as $curso) {
-        if ($curso->cursoProgramaPlan->curso->id_ciclo > $ciclo && $curso->cursoProgramaPlan->curso->estado == 2) {
-            $ciclo = $curso->cursoProgramaPlan->curso->id_ciclo;
-        }
-    }
+    $ciclo = $ultima_matricula->ciclo;
 
     if ($ciclo >= $ciclosTotalesDelPrograma) {
         $ciclo = $ciclosTotalesDelPrograma;
