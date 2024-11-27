@@ -3,7 +3,7 @@
 @section('content')
 @livewire('modulo-administrador.gestion-reingreso.individual.index')
 @endsection
-@section('scripts')
+@section('javascript')
     <script>
         window.addEventListener('modal', event => {
             $(event.detail.modal).modal(event.detail.action);
