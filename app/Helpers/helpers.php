@@ -400,22 +400,24 @@ function calcularMontoTotalCostoPorEnsenhanzaEstudiante($id_admitido)
         ->with('ultimaMatricula')
         ->find($id_admitido);
 
-    $ultima_matricula = $admitido->ultimaMatricula;
+    $ultima_matricula = $admitido->ultimaMatriculaNuevo;
 
     if (!$ultima_matricula) {
         return 0;
     }
 
-    $cursos = MatriculaCurso::query()
-        ->join('curso_programa_plan', 'matricula_curso.id_curso_programa_plan', '=', 'curso_programa_plan.id_curso_programa_plan')
-        ->join('curso', 'curso_programa_plan.id_curso', '=', 'curso.id_curso')
-        ->where('matricula_curso.id_matricula', $ultima_matricula->id_matricula)
+    $cursos = $ultima_matricula->cursos()
+        ->with([
+            'cursoProgramaPlan' => function ($query) {
+                $query->with('curso');
+            }
+        ])
         ->get();
 
     $creditos_totales = 0;
 
     foreach ($cursos as $curso) {
-        $creditos_totales += $curso->curso_credito;
+        $creditos_totales += $curso->cursoProgramaPlan->curso->curso_credito;
     }
 
     $costo_enseñanza = CostoEnseñanza::query()
@@ -434,17 +436,19 @@ function calcularMontoPagadoCostoPorEnsenhanzaEstudiante($id_admitido)
         ->with('ultimaMatricula')
         ->find($id_admitido);
 
-    $ultima_matricula = $admitido->ultimaMatricula;
+    $ultima_matricula = $admitido->ultimaMatriculaNuevo;
 
     if (!$ultima_matricula) {
         return 0;
     }
 
-    $mensualidades  = Mensualidad::query()
-        ->join('matricula', 'mensualidad.id_matricula', '=', 'matricula.id_matricula')
-        ->join('pago', 'mensualidad.id_pago', '=', 'pago.id_pago')
-        ->where('mensualidad.id_admitido', $id_admitido)
-        ->where('matricula.id_matricula', $ultima_matricula->id_matricula ? '=' : '!=', $ultima_matricula->id_matricula)
+    $mensualidades = Mensualidad::query()
+        ->with([
+            'matricula',
+            'pago'
+        ])
+        ->where('id_admitido', $id_admitido)
+        ->where('id_matricula', $ultima_matricula->id_matricula)
         ->get();
 
     $monto_pagado = 0;
@@ -465,7 +469,7 @@ function calcularCicloEstudiante($id_admitido)
     $ciclo = 0;
 
     $admitido = Admitido::query()
-        ->with('ultimaMatricula')
+        ->with('ultimaMatriculaNuevo')
         ->find($id_admitido);
 
     $ultima_matricula = $admitido->ultimaMatriculaNuevo;
