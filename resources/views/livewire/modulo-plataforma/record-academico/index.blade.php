@@ -46,7 +46,7 @@
                                     </td>
                                 </tr>
                             </table>
-                            <table>
+                            {{-- <table>
                                 <tr class="fs-6 fs-sm-5">
                                     <td class="w-95px w-sm-95px">
                                         <div class="d-flex align-items-center">
@@ -61,7 +61,7 @@
                                         {{ $ultima_matricula->programa_proceso_grupo->grupo_detalle }}
                                     </td>
                                 </tr>
-                            </table>
+                            </table> --}}
                         </div>
                     </div>
                     <div class="card px-5 py-4 mb-5">
@@ -150,25 +150,27 @@
                                         <tbody class="fw-semibold text-gray-700">
                                             @foreach ($cursos as $curso)
                                             @php
-                                                $data = App\Models\MatriculaCurso::join('matricula', 'matricula.id_matricula', '=', 'matricula_curso.id_matricula')
-                                                    ->join('programa_proceso_grupo', 'programa_proceso_grupo.id_programa_proceso_grupo', '=', 'matricula.id_programa_proceso_grupo')
-                                                    ->where('matricula_curso.id_curso_programa_plan', $curso->id_curso_programa_plan)
-                                                    ->where('matricula.id_admitido', $admitido->id_admitido)
-                                                    ->orderBy('matricula_curso.id_matricula_curso', 'desc')
+                                                // $data = App\Models\MatriculaCurso::join('matricula', 'matricula.id_matricula', '=', 'matricula_curso.id_matricula')
+                                                //     ->join('programa_proceso_grupo', 'programa_proceso_grupo.id_programa_proceso_grupo', '=', 'matricula.id_programa_proceso_grupo')
+                                                //     ->where('matricula_curso.id_curso_programa_plan', $curso->id_curso_programa_plan)
+                                                //     ->where('matricula.id_admitido', $admitido->id_admitido)
+                                                //     ->orderBy('matricula_curso.id_matricula_curso', 'desc')
+                                                //     ->first();
+                                                $matriculaCurso = App\Models\Matricula\MatriculaCurso::query()
+                                                    ->with([
+                                                        'matricula' => function($query) use ($admitido) {
+                                                            $query->where('id_admitido', $admitido->id_admitido);
+                                                        },
+                                                        'programaProcesoGrupo',
+                                                        'docente'
+                                                    ])
+                                                    ->where('id_curso_programa_plan', $curso->id_curso_programa_plan)
+                                                    ->whereHas('matricula', function($query) use ($admitido) {
+                                                        $query->where('id_admitido', $admitido->id_admitido);
+                                                    })
+                                                    ->orderBy('id_matricula_curso', 'desc')
                                                     ->first();
-                                                $docente = null;
-                                                if ($data) {
-                                                    $nota_matricula_curso = App\Models\NotaMatriculaCurso::where('id_matricula_curso', $data->id_matricula_curso)->first();
-                                                    if ($nota_matricula_curso) {
-                                                        $docente = App\Models\Docente::where('id_docente', $nota_matricula_curso->id_docente)->first();
-                                                        // if ($docente == null) {
-                                                        //     $docente = App\Models\DocenteCurso::where('id_curso_programa_plan', $data->id_curso_programa_plan)
-                                                        //         ->where('id_programa_proceso_grupo', $data->id_programa_proceso_grupo)
-                                                        //         ->first();
-                                                        //     $docente = $docente ? App\Models\Docente::where('id_docente', $docente->id_docente)->first() : null;
-                                                        // }
-                                                    }
-                                                }
+                                                $docente = $matriculaCurso ? ($matriculaCurso->docente ?? null) : null;
                                             @endphp
                                                 <tr class="border-bottom fs-6">
                                                     <td class="text-center">
@@ -186,40 +188,37 @@
                                                         </div>
                                                     </td>
                                                     <td class="text-center">
-                                                        {{ $data ? date('d/m/Y', strtotime($data->created_at)) : '---' }}
+                                                        {{ $matriculaCurso ? date('d/m/Y', strtotime($matriculaCurso->fecha_ingreso_nota)) : '---' }}
                                                     </td>
                                                     <td class="text-center">
-                                                        {{ $data ? $data->grupo_detalle : '---' }}
+                                                        {{ $matriculaCurso ? $matriculaCurso->programaProcesoGrupo->grupo_detalle : '---' }}
                                                     </td>
                                                     <td class="text-center">
                                                         {{ $curso->curso_credito }}
                                                     </td>
                                                     <td class="text-center">
-                                                        {{ $data ? $data->matricula_proceso : '---' }}
+                                                        {{ $matriculaCurso ? $matriculaCurso->periodo : '---' }}
                                                     </td>
                                                     <td class="text-center">
-                                                        {{ $nota_matricula_curso->nota_promedio_final ?? '---' }}
+                                                        {{ $matriculaCurso->nota_promedio_final ?? '---' }}
                                                     </td>
                                                     <td class="text-center">
-                                                        @if ($data)
-                                                            @if ($data->matricula_curso_estado == 1)
-                                                                <span class="badge badge-secondary fs-6 px-3 py-2">
-                                                                    PENDIENTE
-                                                                </span>
-                                                            @elseif ($data->matricula_curso_estado == 2 && $nota_matricula_curso->id_estado_cursos == 4)
-                                                                <span class="badge badge-secondary fs-6 px-3 py-2">
-                                                                    NSP
-                                                                </span>
-                                                            @elseif ($nota_matricula_curso->nota_promedio_final >= 14)
+                                                        @if ($matriculaCurso && $matriculaCurso->estado == 1)
+                                                            <span class="badge badge-secondary fs-6 px-3 py-2">
+                                                                PENDIENTE
+                                                            </span>
+                                                        @elseif ($matriculaCurso && $matriculaCurso->estado == 3)
+                                                            <span class="badge badge-secondary fs-6 px-3 py-2">
+                                                                NSP
+                                                            </span>
+                                                        @elseif ($matriculaCurso && $matriculaCurso->estado == 2)
                                                             <span class="badge badge-success fs-6 px-3 py-2">
-                                                                <span class="badge badge-success fs-6 px-3 py-2">
-                                                                    APROBADO
-                                                                </span>
-                                                            @else
-                                                                <span class="badge badge-danger fs-6 px-3 py-2">
-                                                                    DESAPROBADO
-                                                                </span>
-                                                            @endif
+                                                                APROBADO
+                                                            </span>
+                                                        @elseif ($matriculaCurso && $matriculaCurso->estado == 0)
+                                                            <span class="badge badge-danger fs-6 px-3 py-2">
+                                                                DESAPROBADO
+                                                            </span>
                                                         @else
                                                             <span class="badge badge-secondary fs-6 px-3 py-2">
                                                                 PENDIENTE
