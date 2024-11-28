@@ -644,7 +644,7 @@ class Index extends Component
         // si el pago es de concepto de mensualidad
         if ($pago->id_concepto_pago == 7) {
             // buscar la matricula del admitido
-            $matricula = Matricula::where('id_admitido', $admitido->id_admitido)->where('matricula_estado', 1)->orderBy('id_matricula', 'desc')->first();
+            $matricula = $this->admitido->ultimaMatriculaNuevo;
             // registrar mensualidad
             $mensualidad = new Mensualidad();
             $mensualidad->id_matricula = $matricula->id_matricula;
