@@ -682,13 +682,12 @@ class Index extends Component
         // verificar si el usuario logueado tiene una matricula activa
         $this->activarConceptosDeMatricula = $this->verificarSiHayMatriculaActiva($this->admitido->id_admitido);
 
+        $matricula_count = $this->admitido ? $this->admitido->matriculas()->where('estado', 1)->count() : 0;
+
         if ($admision) {
             $constancia_ingreso = ConstanciaIngreso::where('id_admitido', $this->admitido->id_admitido)->first(); // constancia de ingreso del usuario logueado
-
-            $matricula_count = Matricula::where('id_admitido', $this->admitido->id_admitido)->where('matricula_estado', 1)->count(); // matricula del usuario logueado
         } else {
             $constancia_ingreso = null;
-            $matricula_count = 0;
         }
         $canales_pagos = CanalPago::where('canal_pago_estado', 1)->get(); // canales de pago
         $conceptos_pagos = ConceptoPago::where('concepto_pago_estado', 1)->get(); // canales de pago
