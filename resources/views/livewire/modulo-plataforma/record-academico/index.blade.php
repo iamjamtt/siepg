@@ -188,7 +188,11 @@
                                                         </div>
                                                     </td>
                                                     <td class="text-center">
-                                                        {{ $matriculaCurso ? date('d/m/Y', strtotime($matriculaCurso->fecha_ingreso_nota)) : '---' }}
+                                                        @if ($matriculaCurso)
+                                                            {{ $matriculaCurso->fecha_ingreso_nota ? date('d/m/Y', strtotime($matriculaCurso->fecha_ingreso_nota)) : '---' }}
+                                                        @else
+                                                            ---
+                                                        @endif
                                                     </td>
                                                     <td class="text-center">
                                                         {{ $matriculaCurso ? $matriculaCurso->programaProcesoGrupo->grupo_detalle : '---' }}
