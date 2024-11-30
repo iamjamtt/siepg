@@ -693,4 +693,163 @@ function verificarTieneReingreso($id_admitido)
     return $tieneReingreso;
 }
 
+function calcularCA($admitido, $ciclo)
+{
+    $ca = 0;
+
+    $matriculaCursos = ModelMatriculaCurso::query()
+        ->with([
+            'matricula' => function ($query) use ($admitido) {
+                $query->where('id_admitido', $admitido->id_admitido);
+            },
+            'cursoProgramaPlan' => function ($query) use ($ciclo) {
+                $query->with([
+                    'curso' => function ($query) use ($ciclo) {
+                        $query->where('id_ciclo', $ciclo->id_ciclo);
+                    }
+                ]);
+            }
+        ])
+        ->where('estado', 2) // 1 = Pendiente, 2 = Aprobado, 3 = Nsp
+        ->whereHas('matricula', function ($query) use ($admitido) {
+            $query->where('id_admitido', $admitido->id_admitido);
+        })
+        ->whereHas('cursoProgramaPlan', function ($query) use ($ciclo) {
+            $query->whereHas('curso', function ($query) use ($ciclo) {
+                $query->where('id_ciclo', $ciclo->id_ciclo);
+            });
+        })
+        ->get();
+    foreach ($matriculaCursos as $matriculaCurso) {
+        $ca += $matriculaCurso->cursoProgramaPlan->curso->curso_credito;
+    }
+
+    return $ca;
+}
+
+function calcularCAA($admitido, $ciclo)
+{
+    $caa = 0;
+
+    $matriculaCursos = ModelMatriculaCurso::query()
+        ->with([
+            'matricula' => function ($query) use ($admitido) {
+                $query->where('id_admitido', $admitido->id_admitido);
+            },
+            'cursoProgramaPlan' => function ($query) use ($ciclo) {
+                $query->with([
+                    'curso' => function ($query) use ($ciclo) {
+                        $query->where('id_ciclo', '<=', $ciclo->id_ciclo);
+                    }
+                ]);
+            }
+        ])
+        ->where('estado', 2) // 1 = Pendiente, 2 = Aprobado, 3 = Nsp
+        ->whereHas('matricula', function ($query) use ($admitido) {
+            $query->where('id_admitido', $admitido->id_admitido);
+        })
+        ->whereHas('cursoProgramaPlan', function ($query) use ($ciclo) {
+            $query->whereHas('curso', function ($query) use ($ciclo) {
+                $query->where('id_ciclo', '<=', $ciclo->id_ciclo);
+            });
+        })
+        ->get();
+
+    foreach ($matriculaCursos as $matriculaCurso) {
+        $caa += $matriculaCurso->cursoProgramaPlan->curso->curso_credito;
+    }
+
+    return $caa;
+}
+
+function calcularPPA($admitido, $ciclo)
+{
+    $ppa = 0;
+    $ca = calcularCA($admitido, $ciclo);
+
+    $matriculaCursos = ModelMatriculaCurso::query()
+        ->with([
+            'matricula' => function ($query) use ($admitido) {
+                $query->where('id_admitido', $admitido->id_admitido);
+            },
+            'cursoProgramaPlan' => function ($query) use ($ciclo) {
+                $query->with([
+                    'curso' => function ($query) use ($ciclo) {
+                        $query->where('id_ciclo', $ciclo->id_ciclo);
+                    }
+                ]);
+            }
+        ])
+        ->where('estado', 2) // 1 = Pendiente, 2 = Aprobado, 3 = Nsp
+        ->whereHas('matricula', function ($query) use ($admitido) {
+            $query->where('id_admitido', $admitido->id_admitido);
+        })
+        ->whereHas('cursoProgramaPlan', function ($query) use ($ciclo) {
+            $query->whereHas('curso', function ($query) use ($ciclo) {
+                $query->where('id_ciclo', $ciclo->id_ciclo);
+            });
+        })
+        ->get();
+
+    foreach ($matriculaCursos as $matriculaCurso) {
+        $ppa += $matriculaCurso->cursoProgramaPlan->curso->curso_credito * $matriculaCurso->nota_promedio_final;
+    }
+
+    if ($ca == 0) {
+        return 0;
+    }
+
+    $ppa = $ppa / $ca;
+    $ppa = round($ppa, 2);
+
+    return $ppa;
+}
+
+function calcularPPS($admitido, $ciclo)
+{
+    $pps = 0;
+    $caa = calcularCAA($admitido, $ciclo);
+
+    $matriculaCursos = ModelMatriculaCurso::query()
+        ->with([
+            'matricula' => function ($query) use ($admitido) {
+                $query->where('id_admitido', $admitido->id_admitido);
+            },
+            'cursoProgramaPlan' => function ($query) use ($ciclo) {
+                $query->with([
+                    'curso' => function ($query) use ($ciclo) {
+                        $query->where('id_ciclo', '<=', $ciclo->id_ciclo);
+                    }
+                ]);
+            }
+        ])
+        ->where('estado', 2) // 1 = Pendiente, 2 = Aprobado, 3 = Nsp
+        ->whereHas('matricula', function ($query) use ($admitido) {
+            $query->where('id_admitido', $admitido->id_admitido);
+        })
+        ->whereHas('cursoProgramaPlan', function ($query) use ($ciclo) {
+            $query->whereHas('curso', function ($query) use ($ciclo) {
+                $query->where('id_ciclo', '<=', $ciclo->id_ciclo);
+            });
+        })
+        ->get();
+
+    foreach ($matriculaCursos as $matriculaCurso) {
+        $pps += $matriculaCurso->cursoProgramaPlan->curso->curso_credito * $matriculaCurso->nota_promedio_final;
+    }
+
+    if ($ciclo->id_ciclo == 2) {
+        // dd($pps);
+    }
+
+    if ($caa == 0) {
+        return 0;
+    }
+
+    $pps = $pps / $caa;
+    $pps = round($pps, 2);
+
+    return $pps;
+}
+
 //

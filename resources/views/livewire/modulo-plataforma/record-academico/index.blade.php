@@ -136,6 +136,16 @@
                                 <div class="table-responsive">
                                     <table class="table table-hover align-middle table-rounded border mb-0 gy-5 gs-5">
                                         <thead class="bg-light-warning">
+                                            <tr class="fw-bold fs-6 text-gray-900 border-bottom-2 border-gray-200 text-center bg-light">
+                                                <th>PPA: {{ calcularPPA($admitido, $item) }}</th>
+                                                <th>PPS: {{ calcularPPS($admitido, $item) }}</th>
+                                                <th></th>
+                                                <th>CA:</th>
+                                                <th>{{ calcularCA($admitido, $item) }}</th>
+                                                <th></th>
+                                                <th>CAA:</th>
+                                                <th>{{ calcularCAA($admitido, $item) }}</th>
+                                            </tr>
                                             <tr class="fw-bold fs-5 text-gray-900 border-bottom-2 border-gray-200 text-center">
                                                 <th>CODIGO</th>
                                                 <th class="col-4">CURSO</th>
@@ -150,12 +160,6 @@
                                         <tbody class="fw-semibold text-gray-700">
                                             @foreach ($cursos as $curso)
                                             @php
-                                                // $data = App\Models\MatriculaCurso::join('matricula', 'matricula.id_matricula', '=', 'matricula_curso.id_matricula')
-                                                //     ->join('programa_proceso_grupo', 'programa_proceso_grupo.id_programa_proceso_grupo', '=', 'matricula.id_programa_proceso_grupo')
-                                                //     ->where('matricula_curso.id_curso_programa_plan', $curso->id_curso_programa_plan)
-                                                //     ->where('matricula.id_admitido', $admitido->id_admitido)
-                                                //     ->orderBy('matricula_curso.id_matricula_curso', 'desc')
-                                                //     ->first();
                                                 $matriculaCurso = App\Models\Matricula\MatriculaCurso::query()
                                                     ->with([
                                                         'matricula' => function($query) use ($admitido) {
