@@ -60,9 +60,4 @@ class MatriculaCurso extends Model
     {
         return $this->belongsTo(Docente::class, 'id_docente', 'id_docente');
     }
-
-    public function matriculaCursos()
-    {
-        return $this->hasMany(MatriculaCurso::class, 'id_matricula', 'id_matricula');
-    }
 }
