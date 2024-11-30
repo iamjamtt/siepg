@@ -200,7 +200,7 @@
         <footer>
             <div style="margin-top: 1.5rem; text-align: right;">
                 <span style="text-align: center; font-weight: 400; font-size: 0.7rem">
-                    Fecha de emisión: ___/___/___
+                    Fecha de emisión: {{ date('d/m/Y') }}
                 </span>
             </div>
             <div style="margin-top: 2.5rem; text-align: right;">
@@ -255,7 +255,7 @@
                 <tbody>
                     @foreach ($matriculados as $item)
                     @php
-                        $notas = App\Models\NotaMatriculaCurso::where('id_matricula_curso', $item->id_matricula_curso)->first();
+                        $item->nota_promedio_final = round($item->nota_promedio_final);
                         $letras = array('Cero', 'Uno', 'Dos', 'Tres', 'Cuatro', 'Cinco', 'Seis', 'Siete', 'Ocho', 'Nueve', 'Diez', 'Once', 'Doce', 'Trece', 'Catorce', 'Quince', 'Dieciséis', 'Diecisiete', 'Dieciocho', 'Diecinueve', 'Veinte');
                     @endphp
                         <tr style="border: 1px solid black; padding: 4px; font-size: 0.5rem">
@@ -269,26 +269,26 @@
                                 {{ $item->nombre_completo }}
                             </td>
                             <td style="border: 1px solid black; padding: 4px;" align="center">
-                                {{ $notas->nota_evaluacion_permanente ? $notas->nota_evaluacion_permanente : '-' }}
+                                {{ $item->nota_evaluacion_permanente ? $item->nota_evaluacion_permanente : '-' }}
                             </td>
                             <td style="border: 1px solid black; padding: 4px;" align="center">
-                                {{ $notas->nota_evaluacion_medio_curso ? $notas->nota_evaluacion_medio_curso : '-' }}
+                                {{ $item->nota_evaluacion_medio_curso ? $item->nota_evaluacion_medio_curso : '-' }}
                             </td>
                             <td style="border: 1px solid black; padding: 4px;" align="center">
-                                {{ $notas->nota_evaluacion_final ? $notas->nota_evaluacion_final : '-' }}
+                                {{ $item->nota_evaluacion_final ? $item->nota_evaluacion_final : '-' }}
                             </td>
-                            <td style="border: 1px solid black; padding: 4px; {{ $notas->nota_promedio_final < 14 ? 'color: #ff0000;' : '' }}" align="center">
-                                @if ($notas->id_estado_cursos == 4)
+                            <td style="border: 1px solid black; padding: 4px; {{ $item->nota_promedio_final < 14 ? 'color: #ff0000;' : '' }}" align="center">
+                                @if ($item->estado == 3)
                                     NSP
                                 @else
-                                    {{ $notas->nota_promedio_final }}
+                                    {{ $item->nota_promedio_final }}
                                 @endif
                             </td>
-                            <td style="border: 1px solid black; padding: 4px; {{ $notas->nota_promedio_final < 14 ? 'color: #ff0000;' : '' }}">
-                                @if ($notas->id_estado_cursos == 4)
+                            <td style="border: 1px solid black; padding: 4px; {{ $item->nota_promedio_final < 14 ? 'color: #ff0000;' : '' }}">
+                                @if ($item->estado == 3)
                                     NSP
                                 @else
-                                    {{ $letras[$notas->nota_promedio_final] }}
+                                    {{ $letras[$item->nota_promedio_final] }}
                                 @endif
                             </td>
                         </tr>
@@ -465,7 +465,7 @@
         <footer>
             <div style="margin-top: 1.5rem; text-align: right;">
                 <span style="text-align: center; font-weight: 400; font-size: 0.7rem">
-                    Fecha de emisión: ___/___/___
+                    Fecha de emisión: {{ date('d/m/Y') }}
                 </span>
             </div>
             <div style="margin-top: 2.5rem; text-align: right;">
@@ -520,7 +520,7 @@
                 <tbody>
                     @foreach ($matriculados_adicional as $item)
                     @php
-                        $notas = App\Models\NotaMatriculaCurso::where('id_matricula_curso', $item->id_matricula_curso)->first();
+                        $item->nota_promedio_final = round($item->nota_promedio_final);
                         $letras = array('Cero', 'Uno', 'Dos', 'Tres', 'Cuatro', 'Cinco', 'Seis', 'Siete', 'Ocho', 'Nueve', 'Diez', 'Once', 'Doce', 'Trece', 'Catorce', 'Quince', 'Dieciséis', 'Diecisiete', 'Dieciocho', 'Diecinueve', 'Veinte');
                     @endphp
                         <tr style="border: 1px solid black; padding: 4px; font-size: 0.5rem">
@@ -534,26 +534,26 @@
                                 {{ $item->nombre_completo }}
                             </td>
                             <td style="border: 1px solid black; padding: 4px;" align="center">
-                                {{ $notas->nota_evaluacion_permanente ? $notas->nota_evaluacion_permanente : '-' }}
+                                {{ $item->nota_evaluacion_permanente ? $item->nota_evaluacion_permanente : '-' }}
                             </td>
                             <td style="border: 1px solid black; padding: 4px;" align="center">
-                                {{ $notas->nota_evaluacion_medio_curso ? $notas->nota_evaluacion_medio_curso : '-' }}
+                                {{ $item->nota_evaluacion_medio_curso ? $item->nota_evaluacion_medio_curso : '-' }}
                             </td>
                             <td style="border: 1px solid black; padding: 4px;" align="center">
-                                {{ $notas->nota_evaluacion_final ? $notas->nota_evaluacion_final : '-' }}
+                                {{ $item->nota_evaluacion_final ? $item->nota_evaluacion_final : '-' }}
                             </td>
-                            <td style="border: 1px solid black; padding: 4px; {{ $notas->nota_promedio_final < 14 ? 'color: #ff0000;' : '' }}" align="center">
-                                @if ($notas->id_estado_cursos == 4)
+                            <td style="border: 1px solid black; padding: 4px; {{ $item->nota_promedio_final < 14 ? 'color: #ff0000;' : '' }}" align="center">
+                                @if ($item->estado == 3)
                                     NSP
                                 @else
-                                    {{ $notas->nota_promedio_final }}
+                                    {{ $item->nota_promedio_final }}
                                 @endif
                             </td>
-                            <td style="border: 1px solid black; padding: 4px; {{ $notas->nota_promedio_final < 14 ? 'color: #ff0000;' : '' }}">
-                                @if ($notas->id_estado_cursos == 4)
+                            <td style="border: 1px solid black; padding: 4px; {{ $item->nota_promedio_final < 14 ? 'color: #ff0000;' : '' }}">
+                                @if ($item->estado == 3)
                                     NSP
                                 @else
-                                    {{ $letras[$notas->nota_promedio_final] }}
+                                    {{ $letras[$item->nota_promedio_final] }}
                                 @endif
                             </td>
                         </tr>
@@ -566,18 +566,11 @@
     @if ($tipo === 'reingreso')
         @foreach ($matriculados_reingreso as $item)
             @php
-                $matriculado_reingreso_admitido = App\Models\MatriculaCurso::join('matricula', 'matricula_curso.id_matricula', 'matricula.id_matricula')
-                        ->join('admitido', 'matricula.id_admitido', 'admitido.id_admitido')
-                        ->join('persona', 'admitido.id_persona', 'persona.id_persona')
-                        ->where('matricula_curso.id_curso_programa_plan', $item->id_curso_programa_plan)
-                        ->where('matricula.id_programa_proceso_grupo', $item->id_programa_proceso_grupo)
-                        ->where('matricula_curso.matricula_curso_activo', 1)
-                        ->where('matricula_curso.acta_adicional', 0)
-                        ->where('matricula_curso.acta_reingreso', 1)
-                        ->where('matricula_curso.acta_reincorporacion', 0)
-                        ->where('admitido.id_admitido', $item->id_admitido)
-                        ->first();
-                $reingreso = App\Models\Reingreso::where('id_admitido', $item->id_admitido)->first();
+                $item->nota_promedio_final = round($item->nota_promedio_final);
+                $reingreso = App\Models\Reingreso::query()
+                    ->where('id_admitido', $item->id_admitido)
+                    ->orderBy('reingreso_fecha_creacion', 'desc')
+                    ->first();
             @endphp
             <header>
                 <table class="table" style="width:100%; padding-right: 0rem; padding-left: 0rem; padding-bottom: 0rem; padding-top: 0rem;">
@@ -745,7 +738,7 @@
             <footer>
                 <div style="margin-top: 1.5rem; text-align: right;">
                     <span style="text-align: center; font-weight: 400; font-size: 0.7rem">
-                        Fecha de emisión: ___/___/___
+                        Fecha de emisión: {{ date('d/m/Y') }}
                     </span>
                 </div>
                 <div style="margin-top: 2.5rem; text-align: right;">
@@ -798,7 +791,6 @@
                 </thead>
                 <tbody>
                     @php
-                        $notas = App\Models\NotaMatriculaCurso::where('id_matricula_curso', $matriculado_reingreso_admitido->id_matricula_curso)->first();
                         $letras = array('Cero', 'Uno', 'Dos', 'Tres', 'Cuatro', 'Cinco', 'Seis', 'Siete', 'Ocho', 'Nueve', 'Diez', 'Once', 'Doce', 'Trece', 'Catorce', 'Quince', 'Dieciséis', 'Diecisiete', 'Dieciocho', 'Diecinueve', 'Veinte');
                     @endphp
                     <tr style="border: 1px solid black; padding: 4px; font-size: 0.5rem">
@@ -806,32 +798,32 @@
                             1
                         </td>
                         <td style="border: 1px solid black; padding: 4px;" align="center">
-                            {{ $matriculado_reingreso_admitido->admitido_codigo }}
+                            {{ $item->admitido_codigo }}
                         </td>
                         <td style="border: 1px solid black; padding: 4px;">
-                            {{ $matriculado_reingreso_admitido->nombre_completo }}
+                            {{ $item->nombre_completo }}
                         </td>
                         <td style="border: 1px solid black; padding: 4px;" align="center">
-                            {{ $notas->nota_evaluacion_permanente ? $notas->nota_evaluacion_permanente : '-' }}
+                            {{ $item->nota_evaluacion_permanente ? $item->nota_evaluacion_permanente : '-' }}
                         </td>
                         <td style="border: 1px solid black; padding: 4px;" align="center">
-                            {{ $notas->nota_evaluacion_medio_curso ? $notas->nota_evaluacion_medio_curso : '-' }}
+                            {{ $item->nota_evaluacion_medio_curso ? $item->nota_evaluacion_medio_curso : '-' }}
                         </td>
                         <td style="border: 1px solid black; padding: 4px;" align="center">
-                            {{ $notas->nota_evaluacion_final ? $notas->nota_evaluacion_final : '-' }}
+                            {{ $item->nota_evaluacion_final ? $item->nota_evaluacion_final : '-' }}
                         </td>
-                        <td style="border: 1px solid black; padding: 4px; {{ $notas->nota_promedio_final < 14 ? 'color: #ff0000;' : '' }}" align="center">
-                            @if ($notas->id_estado_cursos == 4)
+                        <td style="border: 1px solid black; padding: 4px; {{ $item->nota_promedio_final < 14 ? 'color: #ff0000;' : '' }}" align="center">
+                            @if ($item->estado == 3)
                                 NSP
                             @else
-                                {{ $notas->nota_promedio_final }}
+                                {{ $item->nota_promedio_final }}
                             @endif
                         </td>
-                        <td style="border: 1px solid black; padding: 4px; {{ $notas->nota_promedio_final < 14 ? 'color: #ff0000;' : '' }}">
-                            @if ($notas->id_estado_cursos == 4)
+                        <td style="border: 1px solid black; padding: 4px; {{ $item->nota_promedio_final < 14 ? 'color: #ff0000;' : '' }}">
+                            @if ($item->estado == 3)
                                 NSP
                             @else
-                                {{ $letras[$notas->nota_promedio_final] }}
+                                {{ $letras[$item->nota_promedio_final] }}
                             @endif
                         </td>
                     </tr>
@@ -841,20 +833,13 @@
     @endif
 
     @if ($tipo === 'incorporacion')
-        @foreach ($matriculados_reincorporacion as $item)
+        @foreach ($matriculados_incorporacion as $item)
             @php
-                $matriculado_reincorporacion_admitido = App\Models\MatriculaCurso::join('matricula', 'matricula_curso.id_matricula', 'matricula.id_matricula')
-                        ->join('admitido', 'matricula.id_admitido', 'admitido.id_admitido')
-                        ->join('persona', 'admitido.id_persona', 'persona.id_persona')
-                        ->where('matricula_curso.id_curso_programa_plan', $item->id_curso_programa_plan)
-                        ->where('matricula.id_programa_proceso_grupo', $item->id_programa_proceso_grupo)
-                        ->where('matricula_curso.matricula_curso_activo', 1)
-                        ->where('matricula_curso.acta_adicional', 0)
-                        ->where('matricula_curso.acta_reingreso', 0)
-                        ->where('matricula_curso.acta_reincorporacion', 1)
-                        ->where('admitido.id_admitido', $item->id_admitido)
-                        ->first();
-                $reincorporacion = App\Models\Reincorporacion::where('id_admitido', $item->id_admitido)->first();
+                $item->nota_promedio_final = round($item->nota_promedio_final);
+                $reincorporacion = App\Models\Reincorporacion::query()
+                    ->where('id_admitido', $item->id_admitido)
+                    ->orderBy('created_at', 'desc')
+                    ->first();
             @endphp
             <header>
                 <table class="table" style="width:100%; padding-right: 0rem; padding-left: 0rem; padding-bottom: 0rem; padding-top: 0rem;">
@@ -1022,7 +1007,7 @@
             <footer>
                 <div style="margin-top: 1.5rem; text-align: right;">
                     <span style="text-align: center; font-weight: 400; font-size: 0.7rem">
-                        Fecha de emisión: ___/___/___
+                        Fecha de emisión: {{ date('d/m/Y') }}
                     </span>
                 </div>
                 <div style="margin-top: 2.5rem; text-align: right;">
@@ -1075,7 +1060,6 @@
                 </thead>
                 <tbody>
                     @php
-                        $notas = App\Models\NotaMatriculaCurso::where('id_matricula_curso', $matriculado_reincorporacion_admitido->id_matricula_curso)->first();
                         $letras = array('Cero', 'Uno', 'Dos', 'Tres', 'Cuatro', 'Cinco', 'Seis', 'Siete', 'Ocho', 'Nueve', 'Diez', 'Once', 'Doce', 'Trece', 'Catorce', 'Quince', 'Dieciséis', 'Diecisiete', 'Dieciocho', 'Diecinueve', 'Veinte');
                     @endphp
                     <tr style="border: 1px solid black; padding: 4px; font-size: 0.5rem">
@@ -1083,32 +1067,32 @@
                             1
                         </td>
                         <td style="border: 1px solid black; padding: 4px;" align="center">
-                            {{ $matriculado_reincorporacion_admitido->admitido_codigo }}
+                            {{ $item->admitido_codigo }}
                         </td>
                         <td style="border: 1px solid black; padding: 4px;">
-                            {{ $matriculado_reincorporacion_admitido->nombre_completo }}
+                            {{ $item->nombre_completo }}
                         </td>
                         <td style="border: 1px solid black; padding: 4px;" align="center">
-                            {{ $notas->nota_evaluacion_permanente ? $notas->nota_evaluacion_permanente : '-' }}
+                            {{ $item->nota_evaluacion_permanente ? $item->nota_evaluacion_permanente : '-' }}
                         </td>
                         <td style="border: 1px solid black; padding: 4px;" align="center">
-                            {{ $notas->nota_evaluacion_medio_curso ? $notas->nota_evaluacion_medio_curso : '-' }}
+                            {{ $item->nota_evaluacion_medio_curso ? $item->nota_evaluacion_medio_curso : '-' }}
                         </td>
                         <td style="border: 1px solid black; padding: 4px;" align="center">
-                            {{ $notas->nota_evaluacion_final ? $notas->nota_evaluacion_final : '-' }}
+                            {{ $item->nota_evaluacion_final ? $item->nota_evaluacion_final : '-' }}
                         </td>
-                        <td style="border: 1px solid black; padding: 4px; {{ $notas->nota_promedio_final < 14 ? 'color: #ff0000;' : '' }}" align="center">
-                            @if ($notas->id_estado_cursos == 4)
+                        <td style="border: 1px solid black; padding: 4px; {{ $item->nota_promedio_final < 14 ? 'color: #ff0000;' : '' }}" align="center">
+                            @if ($item->estado == 3)
                                 NSP
                             @else
-                                {{ $notas->nota_promedio_final }}
+                                {{ $item->nota_promedio_final }}
                             @endif
                         </td>
-                        <td style="border: 1px solid black; padding: 4px; {{ $notas->nota_promedio_final < 14 ? 'color: #ff0000;' : '' }}">
-                            @if ($notas->id_estado_cursos == 4)
+                        <td style="border: 1px solid black; padding: 4px; {{ $item->nota_promedio_final < 14 ? 'color: #ff0000;' : '' }}">
+                            @if ($item->estado == 3)
                                 NSP
                             @else
-                                {{ $letras[$notas->nota_promedio_final] }}
+                                {{ $letras[$item->nota_promedio_final] }}
                             @endif
                         </td>
                     </tr>

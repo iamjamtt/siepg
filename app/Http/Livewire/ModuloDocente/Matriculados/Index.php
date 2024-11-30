@@ -287,17 +287,16 @@ class Index extends Component
         $ciclo = $curso_model->ciclo->ciclo;
         $grupo = $programa_proceso_grupo->grupo_detalle;
 
-
-        $matriculados = MatriculaCurso::query()
-            ->join('matricula', 'matricula_curso.id_matricula', 'matricula.id_matricula')
-            ->join('admitido', 'matricula.id_admitido', 'admitido.id_admitido')
+        $matriculados = ModelMatriculaCurso::query()
+            ->join('tbl_matricula', 'tbl_matricula_curso.id_matricula', 'tbl_matricula.id_matricula')
+            ->join('admitido', 'tbl_matricula.id_admitido', 'admitido.id_admitido')
             ->join('persona', 'admitido.id_persona', 'persona.id_persona')
-            ->where('matricula_curso.id_curso_programa_plan', $docente_curso->id_curso_programa_plan)
-            ->where('matricula.id_programa_proceso_grupo', $docente_curso->id_programa_proceso_grupo)
-            ->where('matricula_curso.matricula_curso_activo', 1)
-            ->where('matricula_curso.acta_adicional', 0)
-            ->where('matricula_curso.acta_reingreso', 0)
-            ->where('matricula_curso.acta_reincorporacion', 0)
+            ->where('tbl_matricula_curso.id_curso_programa_plan', $docente_curso->id_curso_programa_plan)
+            ->where('tbl_matricula_curso.id_programa_proceso_grupo', $docente_curso->id_programa_proceso_grupo)
+            ->where('tbl_matricula_curso.activo', 1)
+            ->where('tbl_matricula_curso.es_acta_adicional', 0)
+            ->where('tbl_matricula_curso.es_acta_reingreso', 0)
+            ->where('tbl_matricula_curso.es_acta_incorporacion', 0)
             ->orderBy('persona.nombre_completo', 'asc')
             ->get();
         $data_regular = [
@@ -333,16 +332,16 @@ class Index extends Component
             $acta_docente->save();
         }
 
-        $matriculados_adicional = MatriculaCurso::query()
-            ->join('matricula', 'matricula_curso.id_matricula', 'matricula.id_matricula')
-            ->join('admitido', 'matricula.id_admitido', 'admitido.id_admitido')
+        $matriculados_adicional = ModelMatriculaCurso::query()
+            ->join('tbl_matricula', 'tbl_matricula_curso.id_matricula', 'tbl_matricula.id_matricula')
+            ->join('admitido', 'tbl_matricula.id_admitido', 'admitido.id_admitido')
             ->join('persona', 'admitido.id_persona', 'persona.id_persona')
-            ->where('matricula_curso.id_curso_programa_plan', $docente_curso->id_curso_programa_plan)
-            ->where('matricula.id_programa_proceso_grupo', $docente_curso->id_programa_proceso_grupo)
-            ->where('matricula_curso.matricula_curso_activo', 1)
-            ->where('matricula_curso.acta_adicional', 1)
-            ->where('matricula_curso.acta_reingreso', 0)
-            ->where('matricula_curso.acta_reincorporacion', 0)
+            ->where('tbl_matricula_curso.id_curso_programa_plan', $docente_curso->id_curso_programa_plan)
+            ->where('tbl_matricula_curso.id_programa_proceso_grupo', $docente_curso->id_programa_proceso_grupo)
+            ->where('tbl_matricula_curso.activo', 1)
+            ->where('tbl_matricula_curso.es_acta_adicional', 1)
+            ->where('tbl_matricula_curso.es_acta_reingreso', 0)
+            ->where('tbl_matricula_curso.es_acta_incorporacion', 0)
             ->orderBy('persona.nombre_completo', 'asc')
             ->get();
         $data_adicional = [
@@ -378,16 +377,16 @@ class Index extends Component
             $acta_docente->save();
         }
 
-        $matriculados_reingreso = MatriculaCurso::query()
-            ->join('matricula', 'matricula_curso.id_matricula', 'matricula.id_matricula')
-            ->join('admitido', 'matricula.id_admitido', 'admitido.id_admitido')
+        $matriculados_reingreso = ModelMatriculaCurso::query()
+            ->join('tbl_matricula', 'tbl_matricula_curso.id_matricula', 'tbl_matricula.id_matricula')
+            ->join('admitido', 'tbl_matricula.id_admitido', 'admitido.id_admitido')
             ->join('persona', 'admitido.id_persona', 'persona.id_persona')
-            ->where('matricula_curso.id_curso_programa_plan', $docente_curso->id_curso_programa_plan)
-            ->where('matricula.id_programa_proceso_grupo', $docente_curso->id_programa_proceso_grupo)
-            ->where('matricula_curso.matricula_curso_activo', 1)
-            ->where('matricula_curso.acta_adicional', 0)
-            ->where('matricula_curso.acta_reingreso', 1)
-            ->where('matricula_curso.acta_reincorporacion', 0)
+            ->where('tbl_matricula_curso.id_curso_programa_plan', $docente_curso->id_curso_programa_plan)
+            ->where('tbl_matricula_curso.id_programa_proceso_grupo', $docente_curso->id_programa_proceso_grupo)
+            ->where('tbl_matricula_curso.activo', 1)
+            ->where('tbl_matricula_curso.es_acta_adicional', 0)
+            ->where('tbl_matricula_curso.es_acta_reingreso', 1)
+            ->where('tbl_matricula_curso.es_acta_incorporacion', 0)
             ->orderBy('persona.nombre_completo', 'asc')
             ->get();
         $data_reingreso = [
@@ -423,20 +422,20 @@ class Index extends Component
             $acta_docente->save();
         }
 
-        $matriculados_reincorporacion = MatriculaCurso::query()
-            ->join('matricula', 'matricula_curso.id_matricula', 'matricula.id_matricula')
-            ->join('admitido', 'matricula.id_admitido', 'admitido.id_admitido')
+        $matriculados_incorporacion = ModelMatriculaCurso::query()
+            ->join('tbl_matricula', 'tbl_matricula_curso.id_matricula', 'tbl_matricula.id_matricula')
+            ->join('admitido', 'tbl_matricula.id_admitido', 'admitido.id_admitido')
             ->join('persona', 'admitido.id_persona', 'persona.id_persona')
-            ->where('matricula_curso.id_curso_programa_plan', $docente_curso->id_curso_programa_plan)
-            ->where('matricula.id_programa_proceso_grupo', $docente_curso->id_programa_proceso_grupo)
-            ->where('matricula_curso.matricula_curso_activo', 1)
-            ->where('matricula_curso.acta_adicional', 0)
-            ->where('matricula_curso.acta_reingreso', 0)
-            ->where('matricula_curso.acta_reincorporacion', 1)
+            ->where('tbl_matricula_curso.id_curso_programa_plan', $docente_curso->id_curso_programa_plan)
+            ->where('tbl_matricula_curso.id_programa_proceso_grupo', $docente_curso->id_programa_proceso_grupo)
+            ->where('tbl_matricula_curso.activo', 1)
+            ->where('tbl_matricula_curso.es_acta_adicional', 0)
+            ->where('tbl_matricula_curso.es_acta_reingreso', 0)
+            ->where('tbl_matricula_curso.es_acta_incorporacion', 1)
             ->orderBy('persona.nombre_completo', 'asc')
             ->get();
-        $data_reincorporacion = [
-            'matriculados_reincorporacion' => $matriculados_reincorporacion,
+        $data_incorporacion = [
+            'matriculados_incorporacion' => $matriculados_incorporacion,
             'programa' => $programa,
             'subprograma' => $subprograma,
             'mencion' => $mencion,
@@ -450,13 +449,13 @@ class Index extends Component
             'admision_año' => $admision_año,
             'tipo' => 'incorporacion'
         ];
-        if ($matriculados_reincorporacion->count() > 0) {
+        if ($matriculados_incorporacion->count() > 0) {
             $nombre_pdf = 'acta-notas-incorporacion-' . date('dmYHis') . '-' . Str::slug($docente, '-') . '.pdf';
             $path = 'Posgrado/Docente/Actas/';
             if (!File::isDirectory(public_path($path))) {
                 File::makeDirectory(public_path($path), 0755, true, true);
             }
-            Pdf::loadView('modulo-docente.acta-evaluacion.ficha-acta-evaluacion', $data_reincorporacion)->save(public_path($path . $nombre_pdf));
+            Pdf::loadView('modulo-docente.acta-evaluacion.ficha-acta-evaluacion', $data_incorporacion)->save(public_path($path . $nombre_pdf));
 
             // registrar en la db el acta de notas
             $acta_docente = new ActaDocente();
