@@ -177,32 +177,21 @@
                                     </thead>
                                     <tbody>
                                         @forelse ($matriculados as $item)
-                                            @php
-                                                $nota_curso = App\Models\NotaMatriculaCurso::where('id_matricula_curso', $item->id_matricula_curso)->first();
-                                            @endphp
                                             <tr class="fs-6 text-gray-800" wire:key="{{ $item->id_matricula_curso }}">
                                                 <td class="fw-bold">
                                                     {{ $loop->iteration }}
                                                 </td>
                                                 <td>
-                                                    {{ $item->admitido_codigo }}
+                                                    {{ $item->matricula->admitido->admitido_codigo }}
                                                 </td>
                                                 <td>
-                                                    {{ $item->nombre_completo }}
+                                                    {{ $item->matricula->admitido->persona->nombre_completo }}
                                                 </td>
                                                 <td align="center">
-                                                    @if ($nota_curso)
-                                                        @if ($nota_curso->nota_evaluacion_permanente !== null)
-                                                            <span class="fw-bold fs-5">
-                                                                {{ number_format($nota_curso->nota_evaluacion_permanente) }} pts.
-                                                            </span>
-                                                        @else
-                                                            @if ($modo == 'hide')
-                                                                -
-                                                            @elseif ($modo == 'show')
-                                                                <input type="number" class="form-control w-100px @error('notas') is-invalid @enderror @error('notas.' . $item->id_matricula_curso . '.nota1') is-invalid @enderror @if($this->esNotaValida($item->id_matricula_curso, 'nota3')) is-valid @endif" wire:model.lazy="notas.{{ $item->id_matricula_curso }}.nota1">
-                                                            @endif
-                                                        @endif
+                                                    @if ($item->nota_evaluacion_permanente !== null)
+                                                        <span class="fw-bold fs-5">
+                                                            {{ number_format($item->nota_evaluacion_permanente) }} pts.
+                                                        </span>
                                                     @else
                                                         @if ($modo == 'hide')
                                                             -
@@ -212,18 +201,10 @@
                                                     @endif
                                                 </td>
                                                 <td align="center">
-                                                    @if ($nota_curso)
-                                                        @if ($nota_curso->nota_evaluacion_medio_curso !== null)
-                                                            <span class="fw-bold fs-5">
-                                                                {{ number_format($nota_curso->nota_evaluacion_medio_curso) }} pts.
-                                                            </span>
-                                                        @else
-                                                            @if ($modo == 'hide')
-                                                                -
-                                                            @elseif ($modo == 'show')
-                                                                <input type="number" class="form-control w-100px @error('notas') is-invalid @enderror @error('notas.' . $item->id_matricula_curso . '.nota2') is-invalid @enderror @if($this->esNotaValida($item->id_matricula_curso, 'nota3')) is-valid @endif" wire:model.lazy="notas.{{ $item->id_matricula_curso }}.nota2">
-                                                            @endif
-                                                        @endif
+                                                    @if ($item->nota_evaluacion_medio_curso !== null)
+                                                        <span class="fw-bold fs-5">
+                                                            {{ number_format($item->nota_evaluacion_medio_curso) }} pts.
+                                                        </span>
                                                     @else
                                                         @if ($modo == 'hide')
                                                             -
@@ -233,18 +214,10 @@
                                                     @endif
                                                 </td>
                                                 <td align="center">
-                                                    @if ($nota_curso)
-                                                        @if ($nota_curso->nota_evaluacion_final !== null)
-                                                            <span class="fw-bold fs-5">
-                                                                {{ number_format($nota_curso->nota_evaluacion_final) }} pts.
-                                                            </span>
-                                                        @else
-                                                            @if ($modo == 'hide')
-                                                                -
-                                                            @elseif ($modo == 'show')
-                                                                <input type="number" class="form-control w-100px @error('notas') is-invalid @enderror @error('notas.' . $item->id_matricula_curso . '.nota3') is-invalid @enderror @if($this->esNotaValida($item->id_matricula_curso, 'nota3')) is-valid @endif" wire:model.lazy="notas.{{ $item->id_matricula_curso }}.nota3">
-                                                            @endif
-                                                        @endif
+                                                    @if ($item->nota_evaluacion_final !== null)
+                                                        <span class="fw-bold fs-5">
+                                                            {{ number_format($item->nota_evaluacion_final) }} pts.
+                                                        </span>
                                                     @else
                                                         @if ($modo == 'hide')
                                                             -
@@ -254,44 +227,30 @@
                                                     @endif
                                                 </td>
                                                 <td align="center">
-                                                    @if ($nota_curso)
-                                                        @if ($nota_curso->nota_promedio_final !== null)
-                                                            <span class="fw-bold fs-5">
-                                                                {{ number_format($nota_curso->nota_promedio_final) }} pts.
-                                                            </span>
-                                                        @else
-                                                            -
-                                                        @endif
+                                                    @if ($item->nota_promedio_final !== null)
+                                                        <span class="fw-bold fs-5">
+                                                            {{ number_format($item->nota_promedio_final) }} pts.
+                                                        </span>
                                                     @else
                                                         -
                                                     @endif
                                                 </td>
                                                 <td align="center">
-                                                    @if ($nota_curso)
-                                                        @if ($nota_curso->id_estado_cursos == 1)
-                                                            <span class="badge badge-success fs-6 px-3 py-2">
-                                                                {{ $nota_curso->estado_cursos->estado_cursos }}
-                                                            </span>
-                                                        @elseif ($nota_curso->id_estado_cursos == 2)
-                                                            <span class="badge badge-danger fs-6 px-3 py-2">
-                                                                {{ $nota_curso->estado_cursos->estado_cursos }}
-                                                            </span>
-                                                        @elseif ($nota_curso->id_estado_cursos == 3)
-                                                            <span class="badge badge-danger fs-6 px-3 py-2">
-                                                                {{ $nota_curso->estado_cursos->estado_cursos }}
-                                                            </span>
-                                                        @elseif ($nota_curso->id_estado_cursos == 4)
-                                                            <span class="badge badge-danger fs-6 px-3 py-2">
-                                                                {{ $nota_curso->estado_cursos->estado_cursos }}
-                                                            </span>
-                                                        @else
-                                                            <span class="badge badge-warning fs-6 px-3 py-2">
-                                                                Por evaluar
-                                                            </span>
-                                                        @endif
+                                                    @if ($item->estado == 2)
+                                                        <span class="badge badge-success fs-6 px-3 py-2">
+                                                            Aprobado
+                                                        </span>
+                                                    @elseif ($item->estado == 0)
+                                                        <span class="badge badge-danger fs-6 px-3 py-2">
+                                                            Desaprobado
+                                                        </span>
+                                                    @elseif ($item->estado == 3)
+                                                        <span class="badge badge-danger fs-6 px-3 py-2">
+                                                            Nsp
+                                                        </span>
                                                     @else
                                                         <span class="badge badge-warning fs-6 px-3 py-2">
-                                                            Por evaluar
+                                                            Pendiente
                                                         </span>
                                                     @endif
                                                 </td>
@@ -335,13 +294,13 @@
                                         @empty
                                             @if ($search != '')
                                                 <tr>
-                                                    <td colspan="8" class="text-center text-muted">
+                                                    <td colspan="9" class="text-center text-muted">
                                                         No se encontraron resultados para la busqueda "{{ $search }}"
                                                     </td>
                                                 </tr>
                                             @else
                                                 <tr>
-                                                    <td colspan="8" class="text-center text-muted">
+                                                    <td colspan="9" class="text-center text-muted">
                                                         No hay registros
                                                     </td>
                                                 </tr>
@@ -357,46 +316,3 @@
         </div>
     </div>
 </div>
-{{-- @push('scripts')
-    <script>
-        // filtro_proceso select2
-        $(document).ready(function() {
-            $('#filtro_proceso').select2({
-                placeholder: 'Seleccione',
-                allowClear: true,
-                width: '100%',
-                selectOnClose: true,
-                language: {
-                    noResults: function() {
-                        return "No se encontraron resultados";
-                    },
-                    searching: function() {
-                        return "Buscando..";
-                    }
-                }
-            });
-            $('#filtro_proceso').on('change', function() {
-                @this.set('filtro_proceso', this.value);
-            });
-            Livewire.hook('message.processed', (message, component) => {
-                $('#filtro_proceso').select2({
-                    placeholder: 'Seleccione',
-                    allowClear: true,
-                    width: '100%',
-                    selectOnClose: true,
-                    language: {
-                        noResults: function() {
-                            return "No se encontraron resultados";
-                        },
-                        searching: function() {
-                            return "Buscando..";
-                        }
-                    }
-                });
-                $('#filtro_proceso').on('change', function() {
-                    @this.set('filtro_proceso', this.value);
-                });
-            });
-        });
-    </script>
-@endpush --}}

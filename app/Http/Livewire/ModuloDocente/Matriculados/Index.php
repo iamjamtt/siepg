@@ -17,6 +17,7 @@ use App\Models\ProgramaProcesoGrupo;
 use Illuminate\Support\Facades\File;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\reporte\moduloDocente\matriculados\listaMatriculadosExport;
+use App\Models\Matricula\MatriculaCurso as ModelMatriculaCurso;
 
 class Index extends Component
 {
@@ -38,6 +39,9 @@ class Index extends Component
     public $matriculados;
     public $notas = [];
     public $modo = 'hide';
+
+    public int $matriculados_count = 0;
+    public int $matriculados_finalizados_count = 0;
 
     public $search = '';
 
@@ -84,23 +88,8 @@ class Index extends Component
 
     public function modo_ingresar_notas()
     {
-        $matriculados_count = MatriculaCurso::join('matricula', 'matricula_curso.id_matricula', 'matricula.id_matricula')
-                        ->join('admitido', 'matricula.id_admitido', 'admitido.id_admitido')
-                        ->join('persona', 'admitido.id_persona', 'persona.id_persona')
-                        ->where('matricula_curso.id_curso_programa_plan', $this->id_curso_programa_plan)
-                        ->where('matricula.id_programa_proceso_grupo', $this->id_programa_proceso_grupo)
-                        ->count();
-
-        $matriculados_finalizados_count = MatriculaCurso::join('matricula', 'matricula_curso.id_matricula', 'matricula.id_matricula')
-                        ->join('admitido', 'matricula.id_admitido', 'admitido.id_admitido')
-                        ->join('persona', 'admitido.id_persona', 'persona.id_persona')
-                        ->where('matricula_curso.id_curso_programa_plan', $this->id_curso_programa_plan)
-                        ->where('matricula.id_programa_proceso_grupo', $this->id_programa_proceso_grupo)
-                        ->where('matricula_curso.matricula_curso_estado', 2)
-                        ->count();
-
         // emitir alerta de que todas las notas ya fueron ingresadas
-        if ( $matriculados_count == $matriculados_finalizados_count )
+        if ( $this->matriculados_count == $this->matriculados_finalizados_count )
         {
             $this->dispatchBrowserEvent('alerta_matriculados', [
                 'title' => '¡Alerta!',
@@ -144,26 +133,21 @@ class Index extends Component
         ]);
     }
 
-    public function alerta_asignar_nsp(MatriculaCurso $matricula_curso)
+    public function alerta_asignar_nsp(ModelMatriculaCurso $matricula_curso)
     {
         $this->matricula_curso = $matricula_curso;
         $this->id_matricula_curso = $matricula_curso->id_matricula_curso;
-        $this->nota_matricula_curso = NotaMatriculaCurso::where('id_matricula_curso', $matricula_curso->id_matricula_curso)->first();
 
-        if ( $this->nota_matricula_curso )
-        {
-            if ( $this->nota_matricula_curso->id_estado_cursos == 4 )
-            {
-                // emitimos la alerta para mostrar mensaje sobre que el alumno ya fue asignado su nsp
-                $this->dispatchBrowserEvent('alerta_matriculados', [
-                    'title' => '¡Atención!',
-                    'text' => 'El estudiante ya fue asignado su NSP.',
-                    'icon' => 'warning',
-                    'confirmButtonText' => 'Aceptar',
-                    'color' => 'warning'
-                ]);
-                return;
-            }
+        if ( $this->matricula_curso->estado = 3 ) {
+            // emitimos la alerta para mostrar mensaje sobre que el alumno ya fue asignado su nsp
+            $this->dispatchBrowserEvent('alerta_matriculados', [
+                'title' => '¡Atención!',
+                'text' => 'El estudiante ya fue asignado su NSP.',
+                'icon' => 'warning',
+                'confirmButtonText' => 'Aceptar',
+                'color' => 'warning'
+            ]);
+            return;
         }
 
         // emitir alerta para asignar nsp
@@ -181,33 +165,12 @@ class Index extends Component
 
     public function asignar_nsp()
     {
-        if ($this->nota_matricula_curso)
-        {
-            $this->nota_matricula_curso->nota_evaluacion_permanente = 0;
-            $this->nota_matricula_curso->nota_evaluacion_medio_curso = 0;
-            $this->nota_matricula_curso->nota_evaluacion_final = 0;
-            $this->nota_matricula_curso->nota_promedio_final = 0;
-            $this->nota_matricula_curso->id_estado_cursos = 4;
-            $this->nota_matricula_curso->id_docente = $this->docente_curso->id_docente;
-            $this->nota_matricula_curso->save();
-        }
-        else
-        {
-            $this->nota_matricula_curso = new NotaMatriculaCurso();
-            $this->nota_matricula_curso->id_matricula_curso = $this->id_matricula_curso;
-            $this->nota_matricula_curso->nota_evaluacion_permanente = 0;
-            $this->nota_matricula_curso->nota_evaluacion_medio_curso = 0;
-            $this->nota_matricula_curso->nota_evaluacion_final = 0;
-            $this->nota_matricula_curso->nota_promedio_final = 0;
-            $this->nota_matricula_curso->nota_matricula_curso_fecha_creacion = date('Y-m-d H:i:s');
-            $this->nota_matricula_curso->nota_matricula_curso_estado = 1;
-            $this->nota_matricula_curso->id_estado_cursos = 4;
-            $this->nota_matricula_curso->id_docente = $this->docente_curso->id_docente;
-            $this->nota_matricula_curso->save();
-        }
-
-        // cambiamos el estado de la matricula_curso a finalizado
-        $this->matricula_curso->matricula_curso_estado = 2; // 2 = curso finalizado
+        $this->matricula_curso->nota_evaluacion_permanente = 0;
+        $this->matricula_curso->nota_evaluacion_medio_curso = 0;
+        $this->matricula_curso->nota_evaluacion_final = 0;
+        $this->matricula_curso->nota_promedio_final = 0;
+        $this->matricula_curso->id_docente = $this->docente_curso->id_docente;
+        $this->matricula_curso->estado = 3;
         $this->matricula_curso->save();
 
         $this->finalizar_curso();
@@ -233,20 +196,14 @@ class Index extends Component
     public function guardar_notas()
     {
         // obtenemos los que tienen nsp
-        $matriculados_nsp = MatriculaCurso::join('matricula', 'matricula_curso.id_matricula', 'matricula.id_matricula')
-                        ->join('admitido', 'matricula.id_admitido', 'admitido.id_admitido')
-                        ->join('persona', 'admitido.id_persona', 'persona.id_persona')
-                        ->join('nota_matricula_curso', 'matricula_curso.id_matricula_curso', 'nota_matricula_curso.id_matricula_curso')
-                        ->where('matricula_curso.id_curso_programa_plan', $this->id_curso_programa_plan)
-                        ->where('matricula.id_programa_proceso_grupo', $this->id_programa_proceso_grupo)
-                        ->where('matricula_curso.id_admision', $this->id_admision)
-                        ->where('matricula_curso.matricula_curso_activo', 1)
-                        ->where('nota_matricula_curso.id_estado_cursos', 4)
-                        ->orderBy('persona.nombre_completo', 'asc')
-                        ->get();
+        $countMatriculadosNsp = ModelMatriculaCurso::query()
+                        ->where('id_curso_programa_plan', $this->id_curso_programa_plan)
+                        ->where('id_programa_proceso_grupo', $this->id_programa_proceso_grupo)
+                        ->where('estado', 3)
+                        ->where('activo', 1)
+                        ->count();
 
-        $count_matriculados_nsp = count($matriculados_nsp);
-        $count_matriculados_sin_notas = count($this->matriculados) - $count_matriculados_nsp;
+        $count_matriculados_sin_notas = $this->matriculados_count - $countMatriculadosNsp;
 
         // validar si todos los campos de notas están vacíos y mostrar alerta
         $this->validate([
@@ -263,34 +220,14 @@ class Index extends Component
         // registrar las notas en la tabla nota_matricula_curso
         foreach ($this->notas as $key => $item)
         {
-            $nota_matricula_curso = new NotaMatriculaCurso();
-            $nota_matricula_curso->id_matricula_curso = $key;
-            $nota_matricula_curso->nota_evaluacion_permanente = $item['nota1'];
-            $nota_matricula_curso->nota_evaluacion_medio_curso = $item['nota2'];
-            $nota_matricula_curso->nota_evaluacion_final = $item['nota3'];
-            $promedio_final = ($item['nota1'] + $item['nota2'] + $item['nota3']) / 3;
-            $nota_matricula_curso->nota_promedio_final = $promedio_final;
-            $nota_matricula_curso->nota_matricula_curso_fecha_creacion = date('Y-m-d H:i:s');
-            $nota_matricula_curso->nota_matricula_curso_estado = 1;
-            if ( $promedio_final >= 14 )
-            {
-                $nota_matricula_curso->id_estado_cursos = 1;
-            }
-            else if ( $promedio_final >= 10 && $promedio_final < 13.5)
-            {
-                $nota_matricula_curso->id_estado_cursos = 2;
-            }
-            else
-            {
-                $nota_matricula_curso->id_estado_cursos = 3;
-            }
-            $nota_matricula_curso->id_docente = $this->docente_curso->id_docente;
-            $nota_matricula_curso->save();
-
-            // cambiamos el estado de la matricula_curso a finalizado
-            $matricula_curso = MatriculaCurso::find($key);
-            $matricula_curso->matricula_curso_estado = 2; // 2 = curso finalizado
-            $matricula_curso->save();
+            $matriculaCurso = ModelMatriculaCurso::find($key);
+            $matriculaCurso->id_docente = $this->docente_curso->id_docente;
+            $matriculaCurso->nota_evaluacion_permanente = $item['nota1'];
+            $matriculaCurso->nota_evaluacion_medio_curso = $item['nota2'];
+            $matriculaCurso->nota_evaluacion_final = $item['nota3'];
+            $matriculaCurso->nota_promedio_final = calcularPromedio($item['nota1'], $item['nota2'], $item['nota3']);
+            $matriculaCurso->estado = $matriculaCurso->nota_promedio_final >= 14 ? 2 : 0;
+            $matriculaCurso->save();
         }
 
         $this->finalizar_curso();
@@ -310,23 +247,8 @@ class Index extends Component
 
     public function finalizar_curso()
     {
-        $matriculados_count = MatriculaCurso::join('matricula', 'matricula_curso.id_matricula', 'matricula.id_matricula')
-                        ->join('admitido', 'matricula.id_admitido', 'admitido.id_admitido')
-                        ->join('persona', 'admitido.id_persona', 'persona.id_persona')
-                        ->where('matricula_curso.id_curso_programa_plan', $this->id_curso_programa_plan)
-                        ->where('matricula.id_programa_proceso_grupo', $this->id_programa_proceso_grupo)
-                        ->count();
-
-        $matriculados_finalizados_count = MatriculaCurso::join('matricula', 'matricula_curso.id_matricula', 'matricula.id_matricula')
-                        ->join('admitido', 'matricula.id_admitido', 'admitido.id_admitido')
-                        ->join('persona', 'admitido.id_persona', 'persona.id_persona')
-                        ->where('matricula_curso.id_curso_programa_plan', $this->id_curso_programa_plan)
-                        ->where('matricula.id_programa_proceso_grupo', $this->id_programa_proceso_grupo)
-                        ->where('matricula_curso.matricula_curso_estado', 2)
-                        ->count();
-
         // emitir alerta de que todas las notas ya fueron ingresadas
-        if ( $matriculados_count == $matriculados_finalizados_count )
+        if ( $this->matriculados_count == $this->matriculados_finalizados_count )
         {
             // cambiamos el estado del curso del docente a finalizado
             $this->docente_curso = DocenteCurso::find($this->id_docente_curso);
@@ -588,40 +510,33 @@ class Index extends Component
 
     public function render()
     {
-        $this->matriculados = MatriculaCurso::join('matricula', 'matricula_curso.id_matricula', 'matricula.id_matricula')
-                        ->join('admitido', 'matricula.id_admitido', 'admitido.id_admitido')
-                        ->join('persona', 'admitido.id_persona', 'persona.id_persona')
-                        ->where('matricula_curso.id_curso_programa_plan', $this->id_curso_programa_plan)
-                        ->where('matricula.id_programa_proceso_grupo', $this->id_programa_proceso_grupo)
-                        ->where('matricula_curso.id_admision', $this->id_admision)
-                        ->where('matricula_curso.matricula_curso_activo', 1)
-                        ->where(function ($query) {
-                            $query->where('persona.nombre_completo', 'like', '%'.$this->search.'%')
-                                ->orWhere('admitido.admitido_codigo', 'like', '%'.$this->search.'%');
-                        })
-                        ->orderBy('persona.nombre_completo', 'asc')
-                        // ->paginate(50);
-                        ->get();
+        $this->matriculados = ModelMatriculaCurso::query()
+            ->with([
+                'matricula' => function ($query) {
+                    $query->with([
+                        'admitido' => function ($query) {
+                            $query->with([
+                                'persona' => function ($query) {
+                                    $query->where('nombre_completo', 'like', '%'.$this->search.'%');
+                                }
+                            ]);
+                        }
+                    ]);
+                }
+            ])
+            ->where('id_curso_programa_plan', $this->id_curso_programa_plan)
+            ->where('id_programa_proceso_grupo', $this->id_programa_proceso_grupo)
+            ->where('activo', 1)
+            ->whereHas('matricula.admitido.persona', function ($query) {
+                $query->where('nombre_completo', 'like', '%'.$this->search.'%');
+            })
+            ->get();
 
-        $matriculados_count = MatriculaCurso::join('matricula', 'matricula_curso.id_matricula', 'matricula.id_matricula')
-                        ->join('admitido', 'matricula.id_admitido', 'admitido.id_admitido')
-                        ->join('persona', 'admitido.id_persona', 'persona.id_persona')
-                        ->where('matricula_curso.id_curso_programa_plan', $this->id_curso_programa_plan)
-                        ->where('matricula.id_programa_proceso_grupo', $this->id_programa_proceso_grupo)
-                        ->where('matricula_curso.matricula_curso_activo', 1)
-                        ->count();
-
-        $matriculados_finalizados_count = MatriculaCurso::join('matricula', 'matricula_curso.id_matricula', 'matricula.id_matricula')
-                        ->join('admitido', 'matricula.id_admitido', 'admitido.id_admitido')
-                        ->join('persona', 'admitido.id_persona', 'persona.id_persona')
-                        ->where('matricula_curso.id_curso_programa_plan', $this->id_curso_programa_plan)
-                        ->where('matricula.id_programa_proceso_grupo', $this->id_programa_proceso_grupo)
-                        ->where('matricula_curso.matricula_curso_activo', 1)
-                        ->where('matricula_curso.matricula_curso_estado', 2)
-                        ->count();
+        $this->matriculados_count = cantidadAlumnosMatriculadosCurso($this->id_curso_programa_plan, $this->id_programa_proceso_grupo);
+        $this->matriculados_finalizados_count = cantidadAlumnosMatriculadosCursoFinalizado($this->id_curso_programa_plan, $this->id_programa_proceso_grupo);
 
         // verificar si ya se agregaron todas las notas
-        if ( $matriculados_count == $matriculados_finalizados_count )
+        if ( $this->matriculados_count == $this->matriculados_finalizados_count )
         {
             $this->modo = 'hide';
         }
@@ -645,9 +560,6 @@ class Index extends Component
         }
 
         return view('livewire.modulo-docente.matriculados.index', [
-            // 'matriculados' => $matriculados,
-            'matriculados_count' => $matriculados_count,
-            'matriculados_finalizados_count' => $matriculados_finalizados_count,
             'acta_docente' => $acta_docente,
             'mostrar_acta' => $mostrar_acta
         ]);

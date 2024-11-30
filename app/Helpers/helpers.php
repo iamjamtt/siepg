@@ -14,6 +14,7 @@ use App\Models\Pago;
 use App\Models\Persona;
 use App\Models\ProgramaProceso;
 use App\Models\Matricula\Matricula as ModelMatricula;
+use App\Models\Matricula\MatriculaCurso as ModelMatriculaCurso;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Str;
 
@@ -615,6 +616,40 @@ function calcularPeriodo($id_matricula)
     $periodo = $matricula->admitido->matriculas()->count();
 
     return $anio . ' - ' . $periodo;
+}
+
+function cantidadAlumnosMatriculadosCurso($id_curso_programa_plan, $id_programa_proceso_grupo)
+{
+    return ModelMatriculaCurso::query()
+        ->where('id_curso_programa_plan', $id_curso_programa_plan)
+        ->where('id_programa_proceso_grupo', $id_programa_proceso_grupo)
+        ->where('activo', 1)
+        ->count();
+}
+
+function cantidadAlumnosMatriculadosCursoFinalizado($id_curso_programa_plan, $id_programa_proceso_grupo)
+{
+    return ModelMatriculaCurso::query()
+        ->where('id_curso_programa_plan', $id_curso_programa_plan)
+        ->where('id_programa_proceso_grupo', $id_programa_proceso_grupo)
+        ->where('estado', '!=', 1)
+        ->where('activo', 1)
+        ->count();
+}
+
+function calcularPromedio($nota1, $nota2, $nota3)
+{
+    // nota1 = 14, nota2 = 13, nota3 = 14 => 13.67
+    // redondear a entero => 14 (aprobado)
+    // si es menor a 13.45 => 13 (reprobado)
+    $promedio = ($nota1 + $nota2 + $nota3) / 3;
+    $promedio = round($promedio, 2);
+    if ($promedio < 13.50) {
+        $promedio = round($promedio, 0, PHP_ROUND_HALF_DOWN); // redondear hacia abajo
+    } else {
+        $promedio = round($promedio, 0, PHP_ROUND_HALF_UP); // redondear hacia arriba
+    }
+    return $promedio;
 }
 
 //
