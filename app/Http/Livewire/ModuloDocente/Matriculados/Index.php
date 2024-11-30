@@ -293,6 +293,7 @@ class Index extends Component
             ->join('persona', 'admitido.id_persona', 'persona.id_persona')
             ->where('tbl_matricula_curso.id_curso_programa_plan', $docente_curso->id_curso_programa_plan)
             ->where('tbl_matricula_curso.id_programa_proceso_grupo', $docente_curso->id_programa_proceso_grupo)
+            ->where('tbl_matricula_curso.id_docente', $docente_model->id_docente)
             ->where('tbl_matricula_curso.activo', 1)
             ->where('tbl_matricula_curso.es_acta_adicional', 0)
             ->where('tbl_matricula_curso.es_acta_reingreso', 0)
@@ -338,6 +339,7 @@ class Index extends Component
             ->join('persona', 'admitido.id_persona', 'persona.id_persona')
             ->where('tbl_matricula_curso.id_curso_programa_plan', $docente_curso->id_curso_programa_plan)
             ->where('tbl_matricula_curso.id_programa_proceso_grupo', $docente_curso->id_programa_proceso_grupo)
+            ->where('tbl_matricula_curso.id_docente', $docente_model->id_docente)
             ->where('tbl_matricula_curso.activo', 1)
             ->where('tbl_matricula_curso.es_acta_adicional', 1)
             ->where('tbl_matricula_curso.es_acta_reingreso', 0)
@@ -383,6 +385,7 @@ class Index extends Component
             ->join('persona', 'admitido.id_persona', 'persona.id_persona')
             ->where('tbl_matricula_curso.id_curso_programa_plan', $docente_curso->id_curso_programa_plan)
             ->where('tbl_matricula_curso.id_programa_proceso_grupo', $docente_curso->id_programa_proceso_grupo)
+            ->where('tbl_matricula_curso.id_docente', $docente_model->id_docente)
             ->where('tbl_matricula_curso.activo', 1)
             ->where('tbl_matricula_curso.es_acta_adicional', 0)
             ->where('tbl_matricula_curso.es_acta_reingreso', 1)
@@ -428,6 +431,7 @@ class Index extends Component
             ->join('persona', 'admitido.id_persona', 'persona.id_persona')
             ->where('tbl_matricula_curso.id_curso_programa_plan', $docente_curso->id_curso_programa_plan)
             ->where('tbl_matricula_curso.id_programa_proceso_grupo', $docente_curso->id_programa_proceso_grupo)
+            ->where('tbl_matricula_curso.id_docente', $docente_model->id_docente)
             ->where('tbl_matricula_curso.activo', 1)
             ->where('tbl_matricula_curso.es_acta_adicional', 0)
             ->where('tbl_matricula_curso.es_acta_reingreso', 0)
@@ -465,6 +469,17 @@ class Index extends Component
             $acta_docente->acta_docente_estado = 1;
             $acta_docente->es_reincorporacion = 1;
             $acta_docente->save();
+        }
+
+        $matriculasCursos = ModelMatriculaCurso::query()
+            ->where('id_curso_programa_plan', $docente_curso->id_curso_programa_plan)
+            ->where('id_programa_proceso_grupo', $docente_curso->id_programa_proceso_grupo)
+            ->where('id_docente', $docente_model->id_docente)
+            ->where('activo', 1)
+            ->get();
+        foreach ($matriculasCursos as $item) {
+            $item->fecha_ingreso_nota = date('Y-m-d');
+            $item->save();
         }
 
         // mostrar alerta de que se generó el acta de notas
