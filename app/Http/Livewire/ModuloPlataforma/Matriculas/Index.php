@@ -105,6 +105,20 @@ class Index extends Component
             return;
         }
 
+        // verificamos si pago su costo por enseñanza de la matricula
+        $monto_total = calcularMontoTotalCostoPorEnsenhanzaEstudiante($this->alumno->id_admitido);
+        $monto_pagado = calcularMontoPagadoCostoPorEnsenhanzaEstudiante($this->alumno->id_admitido);
+        if ($monto_total > $monto_pagado) {
+            $this->dispatchBrowserEvent('alerta_generar_matricula', [
+                'title' => '¡Error!',
+                'text' => 'No se puede matricular, aún no ha pagado el costo por enseñanza de la matrícula. Usted debe el monto de S/. ' . number_format($monto_total - $monto_pagado, 2) . ' soles.',
+                'icon' => 'error',
+                'confirmButtonText' => 'Aceptar',
+                'color' => 'danger'
+            ]);
+            return;
+        }
+
         // generamos la prematricula
         $this->generarPrematricula ($this->id_ciclo, $this->alumno);
 
@@ -207,6 +221,16 @@ class Index extends Component
         $ultimaMatricula = $this->alumno->ultimaMatriculaNuevo;
         if ($ultimaMatricula) {
             $grupo = obtenerIdGrupoDeMatricula($ultimaMatricula->id_matricula);
+
+            // desactivar los cursos de la matricula anterior
+            $cursos = $ultimaMatricula->cursos()
+                ->where('activo', 1)
+                ->get();
+
+            foreach ($cursos as $curso) {
+                $curso->activo = 0;
+                $curso->save();
+            }
         }
 
         // registrar matricula
