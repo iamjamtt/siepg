@@ -494,13 +494,13 @@ class Index extends Component
 
     public function exportar_excel_lista_matriculados()
     {
-        $matriculados = MatriculaCurso::join('matricula', 'matricula_curso.id_matricula', 'matricula.id_matricula')
-            ->join('admitido', 'matricula.id_admitido', 'admitido.id_admitido')
+        $matriculados = ModelMatriculaCurso::query()
+            ->join('tbl_matricula', 'tbl_matricula_curso.id_matricula', 'tbl_matricula.id_matricula')
+            ->join('admitido', 'tbl_matricula.id_admitido', 'admitido.id_admitido')
             ->join('persona', 'admitido.id_persona', 'persona.id_persona')
-            ->where('matricula_curso.id_curso_programa_plan', $this->id_curso_programa_plan)
-            ->where('matricula.id_programa_proceso_grupo', $this->id_programa_proceso_grupo)
-            ->where('matricula_curso.id_admision', $this->id_admision)
-            ->where('matricula_curso.matricula_curso_activo', 1)
+            ->where('tbl_matricula_curso.id_curso_programa_plan', $this->id_curso_programa_plan)
+            ->where('tbl_matricula_curso.id_programa_proceso_grupo', $this->id_programa_proceso_grupo)
+            ->where('tbl_matricula_curso.activo', 1)
             ->orderBy('persona.nombre_completo', 'asc')
             ->get();
         $nombre_programa = $this->programa->programa . 'EN '. $this->programa->subprograma . ($this->programa->mencion ? ' CON MENCION EN ' . $this->programa->mencion : '');
