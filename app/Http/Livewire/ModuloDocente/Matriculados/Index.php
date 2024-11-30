@@ -247,11 +247,13 @@ class Index extends Component
 
     public function finalizar_curso()
     {
+        $matriculados_count = cantidadAlumnosMatriculadosCurso($this->id_curso_programa_plan, $this->id_programa_proceso_grupo);
+        $matriculados_finalizados_count = cantidadAlumnosMatriculadosCursoFinalizado($this->id_curso_programa_plan, $this->id_programa_proceso_grupo);
+
         // emitir alerta de que todas las notas ya fueron ingresadas
-        if ( $this->matriculados_count == $this->matriculados_finalizados_count )
+        if ( $matriculados_count == $matriculados_finalizados_count )
         {
             // cambiamos el estado del curso del docente a finalizado
-            $this->docente_curso = DocenteCurso::find($this->id_docente_curso);
             $this->docente_curso->docente_curso_estado = 2; // 2 = curso finalizado
             $this->docente_curso->save();
         }
