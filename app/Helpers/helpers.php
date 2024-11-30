@@ -15,6 +15,7 @@ use App\Models\Persona;
 use App\Models\ProgramaProceso;
 use App\Models\Matricula\Matricula as ModelMatricula;
 use App\Models\Matricula\MatriculaCurso as ModelMatriculaCurso;
+use App\Models\Reingreso;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Str;
 
@@ -680,6 +681,16 @@ function calcularCreditosAcumulados($id_admitido)
 
     $admitido->creditos_acumulados = $creditos_acumulados;
     $admitido->save();
+}
+
+function verificarTieneReingreso($id_admitido)
+{
+    $tieneReingreso = Reingreso::query()
+        ->where('id_admitido', $id_admitido)
+        ->where('reingreso_estado', 1)
+        ->exists();
+
+    return $tieneReingreso;
 }
 
 //

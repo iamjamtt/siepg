@@ -232,6 +232,7 @@ class Index extends Component
             $matriculaCurso->id_programa_proceso_grupo = $grupo;
             $matriculaCurso->id_docente = null;
             $matriculaCurso->periodo = calcularPeriodo($matricula->id_matricula);
+            $matriculaCurso->es_acta_reingreso = verificarTieneReingreso($this->alumno->id_admitido) ? 1 : 0;
             $matriculaCurso->save();
         }
 
