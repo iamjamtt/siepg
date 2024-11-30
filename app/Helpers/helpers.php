@@ -652,4 +652,34 @@ function calcularPromedio($nota1, $nota2, $nota3)
     return $promedio;
 }
 
+function calcularCreditosAcumulados($id_admitido)
+{
+    $matriculaCursos = ModelMatriculaCurso::query()
+        ->with([
+            'matricula' => function ($query) use ($id_admitido) {
+                $query->where('id_admitido', $id_admitido);
+            },
+            'cursoProgramaPlan' => function ($query) {
+                $query->with('curso');
+            }
+        ])
+        ->where('estado', 2) // 1 = Pendiente, 2 = Aprobado, 3 = Nsp
+        ->whereHas('matricula', function ($query) use ($id_admitido) {
+            $query->where('id_admitido', $id_admitido);
+        })
+        ->get();
+
+    $creditos_acumulados = 0;
+
+    foreach ($matriculaCursos as $matriculaCurso) {
+        $creditos_acumulados += $matriculaCurso->cursoProgramaPlan->curso->curso_credito;
+    }
+
+    $admitido = Admitido::query()
+        ->find($id_admitido);
+
+    $admitido->creditos_acumulados = $creditos_acumulados;
+    $admitido->save();
+}
+
 //

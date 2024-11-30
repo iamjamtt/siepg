@@ -226,6 +226,9 @@ class Index extends Component
             $matriculaCurso->nota_promedio_final = calcularPromedio($item['nota1'], $item['nota2'], $item['nota3']);
             $matriculaCurso->estado = $matriculaCurso->nota_promedio_final >= 14 ? 2 : 0;
             $matriculaCurso->save();
+
+            // calcular creditos acumulados
+            calcularCreditosAcumulados($matriculaCurso->matricula->id_admitido);
         }
 
         $this->finalizar_curso();
