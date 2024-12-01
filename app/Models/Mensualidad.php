@@ -19,6 +19,7 @@ class Mensualidad extends Model
         'id_admitido',
         'mensualidad_fecha_creacion',
         'mensualidad_estado',
+        'id_matricula_old'
     ];
 
     public $timestamps = false;
