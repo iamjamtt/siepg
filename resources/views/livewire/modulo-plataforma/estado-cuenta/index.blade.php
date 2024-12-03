@@ -174,22 +174,22 @@
                                                 Pago por enseñanza 00{{  $loop->iteration }}
                                             </td>
                                             <td>
-                                                {{ $item->pago_operacion }}
+                                                {{ $item->pago->pago_operacion }}
                                             </td>
                                             <td>
-                                                S/. {{ number_format($item->pago_monto, 2, ',', '.') }}
+                                                S/. {{ number_format($item->pago->pago_monto, 2, ',', '.') }}
                                             </td>
                                             <td>
-                                                {{ date('d/m/Y', strtotime($item->mensualidad_fecha_creacion)) }}
+                                                {{ date('d/m/Y', strtotime($item->pago->mensualidad_fecha_creacion)) }}
                                             </td>
                                             <td>
-                                                @if ($item->pago_verificacion == 1)
+                                                @if ($item->pago->pago_verificacion == 1)
                                                     <span class="badge badge-warning fs-6 px-3 py-2">Pendiente</span>
-                                                @elseif ($item->pago_verificacion == 2)
+                                                @elseif ($item->pago->pago_verificacion == 2)
                                                     <span class="badge badge-success fs-6 px-3 py-2">Pagado</span>
-                                                @elseif ($item->pago_verificacion == 0 && $item->pago_estado == 0)
+                                                @elseif ($item->pago->pago_verificacion == 0 && $item->pago->pago_estado == 0)
                                                     <span class="badge badge-danger fs-6 px-3 py-2">Rechazado</span>
-                                                @elseif ($item->pago_verificacion == 0)
+                                                @elseif ($item->pago->pago_verificacion == 0)
                                                     <span class="badge badge-danger fs-6 px-3 py-2">Observado</span>
                                                 @endif
                                             </td>
