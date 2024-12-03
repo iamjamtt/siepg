@@ -26,9 +26,16 @@ use App\Http\Controllers\ModuloAdministrador\ConceptoPagoController;
 use App\Http\Controllers\ModuloAdministrador\InscripcionPagoController;
 use App\Http\Controllers\ModuloAdministrador\TipoSeguimientoController;
 use App\Http\Controllers\ModuloAdministrador\UsuarioTrabajadorController;
+use App\Models\ActaDocente;
 use App\Models\Docente;
+use App\Models\Matricula as MatriculaOld;
+use App\Models\Matricula\Matricula;
+use App\Models\Matricula\MatriculaCurso;
+use App\Models\Mensualidad;
+use App\Models\NotaMatriculaCurso;
 use App\Models\Trabajador;
 use App\Models\Usuario;
+use Illuminate\Support\Facades\DB;
 
 //Vista del Dashboard. El inicio la parte administrativa del sistema
 Route::get('/', [DashboardController::class, 'dashboard'])->middleware(['auth.usuario', 'verificar.usuario.administrador'])->name('administrador.dashboard');
@@ -257,4 +264,127 @@ Route::get('/configurar-correo-docentes', function () {
         'message' => 'Correos de los docentes configurados'
     ]);
 })->middleware(['auth.usuario', 'verificar.usuario.administrador'])->name('administrador.configurar-correo-docentes');
+
+// Rutas para la migracion de las tablas de matricula, etc.
+
+Route::get('/migrar-matriculas', function() {
+
+    try {
+        DB::beginTransaction();
+
+        $matriculasOld = MatriculaOld::all();
+
+        foreach ($matriculasOld as $itemMatriculaOld) {
+            // registramos los datos de la matriculaOld a la nueva tabla
+            $matricula = new Matricula();
+            $matricula->id_matricula_gestion = null;
+            $matricula->id_admitido = $itemMatriculaOld->id_admitido;
+            $matricula->ciclo = $itemMatriculaOld->matricula_estado == 1 ? 1 : 0;
+            $matricula->codigo = $itemMatriculaOld->matricula_codigo;
+            $matricula->fecha_matricula = date('Y-m-d', strtotime($itemMatriculaOld->matricula_fecha_creacion));
+            $matricula->creditos_disponibles = 22;
+            $matricula->id_pago = $itemMatriculaOld->id_pago;
+            $matricula->estado = 1;
+            $matricula->save();
+
+            // obtenemos los cursos de la matriculaOld
+            $matriculaCursosOld = $itemMatriculaOld->matriculaCursos;
+
+            foreach ($matriculaCursosOld as $itemMatriculaCursoOld) {
+                // obtenemos la ultima nota de la matricula cursoOld
+                $notaMatriculaCursoOld = NotaMatriculaCurso::query()
+                    ->where('id_matricula_curso', $itemMatriculaCursoOld->id_matricula_curso)
+                    ->orderBy('id_nota_matricula_curso', 'desc')
+                    ->first();
+
+                // registramos los datos de la matricula cursoOld a la nueva tabla
+                $matriculaCurso = new MatriculaCurso();
+                $matriculaCurso->id_matricula = $matricula->id_matricula;
+                $matriculaCurso->id_curso_programa_plan = $itemMatriculaCursoOld->id_curso_programa_plan;
+                $matriculaCurso->id_programa_proceso_grupo = $itemMatriculaCursoOld->id_programa_proceso_grupo;
+                $matriculaCurso->id_docente = $notaMatriculaCursoOld ? $notaMatriculaCursoOld->id_docente : null;
+                $matriculaCurso->periodo = $itemMatriculaOld->matricula_proceso;
+                $matriculaCurso->es_acta_adicional = $itemMatriculaCursoOld->acta_adicional;
+                $matriculaCurso->es_acta_reingreso = $itemMatriculaCursoOld->acta_reingreso;
+                $matriculaCurso->es_acta_incorporacion = $itemMatriculaCursoOld->acta_reincorporacion;
+                $matriculaCurso->nota_evaluacion_permanente = $notaMatriculaCursoOld ? $notaMatriculaCursoOld->nota_evaluacion_permanente : null;
+                $matriculaCurso->nota_evaluacion_medio_curso = $notaMatriculaCursoOld ? $notaMatriculaCursoOld->nota_evaluacion_medio_curso : null;
+                $matriculaCurso->nota_evaluacion_final = $notaMatriculaCursoOld ? $notaMatriculaCursoOld->nota_evaluacion_final : null;
+                $matriculaCurso->nota_promedio_final = $notaMatriculaCursoOld ? $notaMatriculaCursoOld->nota_promedio_final : null;
+                $matriculaCurso->nota_observacion = $notaMatriculaCursoOld ? $notaMatriculaCursoOld->nota_observacion : null;
+
+                // verificamos si el docente ya ingreso las notas para obtener la fecha de ingreso de notas segun el acta docente
+                $fechaIngresoNota = $notaMatriculaCursoOld ? date('Y-m-d', strtotime($notaMatriculaCursoOld->created_at)) : null;
+                if ($matriculaCurso->id_docente) {
+                    $actaDocente = ActaDocente::query()
+                        ->with([
+                            'docente_curso' => function ($query) use ($matriculaCurso) {
+                                $query->with([
+                                    'docente' => function ($query) use ($matriculaCurso) {
+                                        $query->with('trabajador')
+                                            ->where('id_docente', $matriculaCurso->id_docente);
+                                    },
+                                    'curso_programa_plan' => function ($query) use ($matriculaCurso) {
+                                        $query->with('curso')
+                                            ->where('id_curso_programa_plan', $matriculaCurso->id_curso_programa_plan);
+                                    }
+                                ]);
+                            }
+                        ])
+                        ->whereHas('docente_curso', function ($query) use ($matriculaCurso) {
+                            $query->where('id_docente', $matriculaCurso->id_docente)
+                                ->where('id_curso_programa_plan', $matriculaCurso->id_curso_programa_plan);
+                        })
+                        ->first();
+
+                    $fechaIngresoNota = $actaDocente ? date('Y-m-d', strtotime($actaDocente->acta_docente_fecha_creacion)) : null;
+                }
+
+                $matriculaCurso->fecha_ingreso_nota = $fechaIngresoNota;
+
+                // verificamos el estado de la matricula curso segun la tabla estado_cursos de la matriculaOld
+                if ($notaMatriculaCursoOld) {
+                    if ($notaMatriculaCursoOld->id_estado_cursos == 1) {
+                        $matriculaCurso->estado = 2;
+                    } else if ($notaMatriculaCursoOld->id_estado_cursos == 2) {
+                        $matriculaCurso->estado = 0;
+                    } else if ($notaMatriculaCursoOld->id_estado_cursos == 3) {
+                        $matriculaCurso->estado = 0;
+                    } else if ($notaMatriculaCursoOld->id_estado_cursos == 4) {
+                        $matriculaCurso->estado = 3;
+                    }
+                } else {
+                    $matriculaCurso->estado = 1;
+                }
+
+                $matriculaCurso->activo = $itemMatriculaCursoOld->matricula_curso_activo;
+                $matriculaCurso->save();
+            }
+
+            // registramos los nuevos id de las matriculas en la tabla mensualidad
+            $mensualidades = Mensualidad::query()
+                ->where('id_matricula_old', $itemMatriculaOld->id_matricula)
+                ->get();
+
+            foreach ($mensualidades as $mensualidad) {
+                $mensualidad->id_matricula = $matricula->id_matricula;
+                $mensualidad->save();
+            }
+
+            // calculamos los creditos acumulados del estudiante
+            calcularCreditosAcumulados($itemMatriculaOld->id_admitido);
+        }
+
+        DB::commit();
+    } catch (\Exception $e) {
+        DB::rollBack();
+        dd($e);
+    }
+
+    return response()->json([
+        'message' => 'Matriculas migradas'
+    ]);
+})->middleware(['auth.usuario', 'verificar.usuario.administrador'])->name('administrador.migrar-matriculas');
+
+
 //

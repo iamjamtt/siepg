@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Matricula extends Model
@@ -44,6 +45,11 @@ class Matricula extends Model
     public function pago()
     {
         return $this->belongsTo(Pago::class, 'id_pago');
+    }
+
+    public function matriculaCursos(): HasMany
+    {
+        return $this->hasMany(MatriculaCurso::class, 'id_matricula');
     }
 
     // protected static function boot() {
