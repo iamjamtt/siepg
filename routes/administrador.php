@@ -301,7 +301,7 @@ Route::get('/migrar-matriculas', function() {
                 $matriculaCurso = new MatriculaCurso();
                 $matriculaCurso->id_matricula = $matricula->id_matricula;
                 $matriculaCurso->id_curso_programa_plan = $itemMatriculaCursoOld->id_curso_programa_plan;
-                $matriculaCurso->id_programa_proceso_grupo = $itemMatriculaCursoOld->id_programa_proceso_grupo;
+                $matriculaCurso->id_programa_proceso_grupo = $itemMatriculaOld->id_programa_proceso_grupo;
                 $matriculaCurso->id_docente = $notaMatriculaCursoOld ? $notaMatriculaCursoOld->id_docente : null;
                 $matriculaCurso->periodo = $itemMatriculaOld->matricula_proceso;
                 $matriculaCurso->es_acta_adicional = $itemMatriculaCursoOld->acta_adicional;
