@@ -17,11 +17,11 @@
                     </li>
                 </ul>
             </div>
-            <div class="d-flex align-items-center gap-2 gap-lg-3">
+            {{-- <div class="d-flex align-items-center gap-2 gap-lg-3">
                 <a href="{{ route('plataforma.estado-cuenta-ficha', ['id_admitido' => $admitido->id_admitido]) }}" target="_blank" class="btn fw-bold btn-primary">
                     Descargar Estado de Cuenta
                 </a>
-            </div>
+            </div> --}}
         </div>
     </div>
     <div id="kt_app_content" class="app-content flex-column-fluid">
