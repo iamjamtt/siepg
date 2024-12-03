@@ -132,7 +132,7 @@ class Index extends Component
     //Limpiamos los filtros
     public function resetear_filtro()
     {
-        $this->reset('tipoProgramaFiltro', 'filtro_tipo_programa', 'modalidadFiltro', 'filtro_modalidad', 'facultadFiltro', 'filtro_facultad', 'sedeFiltro', 'filtro_facultad');
+        $this->reset('tipoProgramaFiltro', 'filtro_tipo_programa', 'modalidadFiltro', 'filtro_modalidad', 'facultadFiltro', 'filtro_facultad', 'sedeFiltro', 'filtro_sede');
     }
 
     //Asignamos los filtros

@@ -5,7 +5,9 @@ namespace App\Http\Livewire\ModuloAdministrador\GestionReingreso\Individual;
 use App\Models\Admitido;
 use App\Models\CursoProgramaPlan;
 use App\Models\Matricula;
+use App\Models\Matricula\Matricula as ModelMatricula;
 use App\Models\MatriculaCurso;
+use App\Models\Matricula\MatriculaCurso as ModelMatriculaCurso;
 use App\Models\NotaMatriculaCurso;
 use App\Models\ProgramaPlan;
 use App\Models\ProgramaProceso;
@@ -38,6 +40,8 @@ class Index extends Component
     public $nsp = [];
     public $resolucion;
     public $resolucion_file;
+
+    public array $selects = [];
 
     protected $queryString = [ // para que la paginacion se mantenga con el buscador
         'search' => ['except' => '', 'as' => 's'],
@@ -124,8 +128,9 @@ class Index extends Component
         }
 
         if ($this->paso == 2) {
-            // validamos si el array de notas esta vacio
-            if (count($this->notas) == 0) {
+
+            // validamos si el array selects esta vacio
+            if (count($this->selects) == 0) {
                 $this->dispatchBrowserEvent('alerta-basica', [
                     'title' => '¡Error!',
                     'text' => 'Debe ingresar al menos una nota, para continuar con el proceso de reingreso.',
@@ -136,9 +141,32 @@ class Index extends Component
                 return;
             }
 
+            // validamos si se selecciono nsp pero sin su fecha de nota
+            $hayNsp = false;
+            foreach ($this->selects as $key => $item) {
+                // verificamos si existe nsp y no tiene fecha de nota en el array
+                if (isset($item['nsp']) && $item['nsp'] == $key && !isset($item['fecha_nota'])) {
+                    $hayNsp = true;
+                    break;
+                }
+            }
+            if ($hayNsp) {
+                $this->dispatchBrowserEvent('alerta-basica', [
+                    'title' => '¡Error!',
+                    'text' => 'Debe ingresar la fecha de la nota de NSP, para continuar con el proceso de reingreso.',
+                    'icon' => 'error',
+                    'confirmButtonText' => 'Aceptar',
+                    'color' => 'danger'
+                ]);
+                return;
+            }
+
             $this->validate([
-                'notas' => 'required|array|min:1',
-                'notas.*' => 'nullable|numeric|min:0|max:20',
+                'selects.*' => 'required|array|min:1',
+                'selects.*.nota' => 'nullable|numeric|min:0|max:20',
+                'selects.*.periodo' => 'nullable|string',
+                'selects.*.fecha_nota' => 'nullable|date',
+                'selects.*.nsp' => 'nullable',
             ]);
         }
 
@@ -224,10 +252,10 @@ class Index extends Component
         $codigo = 'M' . date('Y') . str_pad(1, 5, "0", STR_PAD_LEFT);
 
         // obtener el ultimo registro de matricula
-        $matricula = Matricula::orderBy('id_matricula', 'desc')->first();
+        $matricula = ModelMatricula::orderBy('id_matricula', 'desc')->first();
 
-        if ( $matricula ) {
-            $codigo = $matricula->matricula_codigo;
+        if ($matricula) {
+            $codigo = $matricula->codigo;
             $codigo = substr($codigo, 5);
             $codigo = (int)$codigo + 1;
             $codigo = 'M' . date('Y') . str_pad($codigo, 5, "0", STR_PAD_LEFT);
@@ -235,109 +263,44 @@ class Index extends Component
             $codigo = 'M' . date('Y') . str_pad(1, 5, "0", STR_PAD_LEFT);
         }
 
-        // buscamos las matriculas del admitido
-        $matriculas = Matricula::where('id_admitido', $estudiante->id_admitido)->where('matricula_estado', 1)->get();
+        $grupo = $this->grupo;
 
         // obtener ultima matricula del admitido
-        $ultima_matricula_admitido = Matricula::where('id_admitido', $estudiante->id_admitido)->orderBy('id_matricula', 'desc')->first();
-        $grup_antiguo = $ultima_matricula_admitido ? $ultima_matricula_admitido->id_programa_proceso_grupo : null;
+        $ultimaMatricula = $estudiante->ultimaMatriculaNuevo;
+        if ($ultimaMatricula) {
+            $grupo = obtenerIdGrupoDeMatricula($ultimaMatricula->id_matricula);
+        }
 
         // registrar matricula
-        $matricula = new Matricula();
-        $matricula->matricula_codigo = $codigo;
-        if ($matriculas->count() == 0) {
-            $matricula->matricula_proceso = $estudiante->programa_proceso->admision->admision_año . ' - ' . 0;
-        } else {
-            $matricula->matricula_proceso = $estudiante->programa_proceso->admision->admision_año . ' - ' . ($matriculas->count() + 1);
-        }
-        $matricula->matricula_year = date('Y-m-d');
-        $matricula->matricula_fecha_creacion = date('Y-m-d H:i:s');
-        $matricula->matricula_estado = 1;
+        $matricula = new ModelMatricula();
+        $matricula->id_matricula_gestion = null;
         $matricula->id_admitido = $estudiante->id_admitido;
-        if ( $matriculas->count() == 0 ) {
-            $matricula->id_programa_proceso_grupo = $this->grupo;
-        } else {
-            $matricula->id_programa_proceso_grupo = $grup_antiguo;
-        }
+        $matricula->ciclo = 0;
+        $matricula->codigo = $codigo;
+        $matricula->fecha_matricula = date('Y-m-d');
         $matricula->id_pago = null;
-        if ( $matriculas->count() == 0 ) {
-            $matricula->matricula_primer_ciclo = 1; // si es la primera matricula del admitido
-        }
         $matricula->save();
 
-        // registramos los cursos de la matricula cero (0)
-        foreach ( $this->notas as $key => $item )
-        {
-            $matricula_curso = new MatriculaCurso();
-            $matricula_curso->id_matricula = $matricula->id_matricula;
-            $matricula_curso->id_curso_programa_plan = $key;
-            $matricula_curso->id_admision = $estudiante->programa_proceso->id_admision;
-            $matricula_curso->id_programa_proceso_grupo = $this->grupo;
-            $matricula_curso->matricula_curso_fecha_creacion = date('Y-m-d H:i:s');
-            $matricula_curso->matricula_curso_estado = 1;
-            $matricula_curso->matricula_curso_activo = 0;
-            $matricula_curso->save();
-        }
-
-        // registramos las notas de los cursos de la matricula cero (0)
-        foreach ( $this->notas as $key => $item )
-        {
-            // convertimos la nota en entero
-            $item = (int)$item;
-            $matricula_curso = MatriculaCurso::where('id_matricula', $matricula->id_matricula)->where('id_curso_programa_plan', $key)->first();
-            $nota = new NotaMatriculaCurso();
-            $nota->id_matricula_curso = $matricula_curso->id_matricula_curso;
-            $nota->nota_promedio_final = $item;
-            $nota->nota_matricula_curso_fecha_creacion = date('Y-m-d H:i:s');
-            $nota->nota_matricula_curso_estado = 1;
-            if ( $item >= 14 ) {
-                $nota->id_estado_cursos = 1;
-                // cambiamos el estado de la matricula_curso a finalizado
-                $matricula_curso->matricula_curso_estado = 2; // 2 = curso finalizado
-            } else if ( $item >= 10 && $item < 14) {
-                $nota->id_estado_cursos = 2;
-                // cambiamos el estado de la matricula_curso a finalizado
-                $matricula_curso->matricula_curso_estado = 0; // 2 = curso finalizado
-            } else {
-                $nota->id_estado_cursos = 3;
-                // cambiamos el estado de la matricula_curso a finalizado
-                $matricula_curso->matricula_curso_estado = 0; // 2 = curso finalizado
+        // registramos los cursos de la matricula
+        foreach ($this->selects as $key => $item) {
+            // convertimos la nota a float
+            $nota = isset($item['nota']) ? (float)$item['nota'] : 0;
+            $estado = $nota >= 14 ? 2 : 0;
+            if (isset($item['nsp']) && $item['nsp'] == $key) {
+                $nota = 0;
+                $estado = 3;
             }
-            $nota->id_docente = null;
-            $nota->save();
-
-            $matricula_curso->save();
-        }
-
-        // registramos los cursos con nsp
-        foreach ( $this->nsp as $key => $item )
-        {
-            $matricula_curso = new MatriculaCurso();
-            $matricula_curso->id_matricula = $matricula->id_matricula;
-            $matricula_curso->id_curso_programa_plan = $key;
-            $matricula_curso->id_admision = $estudiante->programa_proceso->id_admision;
-            $matricula_curso->id_programa_proceso_grupo = $this->grupo;
-            $matricula_curso->matricula_curso_fecha_creacion = date('Y-m-d H:i:s');
-            $matricula_curso->matricula_curso_estado = 1;
-            $matricula_curso->matricula_curso_activo = 0;
-            $matricula_curso->save();
-        }
-
-        // registramos las notas de los cursos con nsp
-        foreach ( $this->nsp as $key => $item )
-        {
-            $matricula_curso = MatriculaCurso::where('id_matricula', $matricula->id_matricula)->where('id_curso_programa_plan', $key)->first();
-            $matricula_curso->matricula_curso_estado = 2; // 2 = curso finalizado
-            $matricula_curso->save();
-            $nota = new NotaMatriculaCurso();
-            $nota->id_matricula_curso = $matricula_curso->id_matricula_curso;
-            $nota->nota_promedio_final = 0;
-            $nota->nota_matricula_curso_fecha_creacion = date('Y-m-d H:i:s');
-            $nota->nota_matricula_curso_estado = 2;
-            $nota->id_estado_cursos = 4;
-            $nota->id_docente = null;
-            $nota->save();
-
+            $matriculaCurso = new ModelMatriculaCurso();
+            $matriculaCurso->id_matricula = $matricula->id_matricula;
+            $matriculaCurso->id_curso_programa_plan = $key;
+            $matriculaCurso->id_programa_proceso_grupo = $grupo;
+            $matriculaCurso->id_docente = null;
+            $matriculaCurso->periodo = isset($item['periodo']) ? $item['periodo'] : calcularPeriodo($matricula->id_matricula);
+            $matriculaCurso->nota_promedio_final = $nota;
+            $matriculaCurso->fecha_ingreso_nota = date('Y-m-d');
+            $matriculaCurso->estado = $estado;
+            $matriculaCurso->activo = 0;
+            $matriculaCurso->save();
         }
 
         // cerrar modal

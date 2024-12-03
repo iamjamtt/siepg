@@ -8,6 +8,7 @@ use App\Models\Ciclo;
 use App\Models\Persona;
 use App\Models\Admitido;
 use App\Models\Matricula;
+use App\Models\Matricula\Matricula as ModelMatricula;
 use App\Models\Mensualidad;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -215,5 +216,81 @@ class PlataformaController extends Controller
     public function evaluacion_docente()
     {
         return view('modulo-plataforma.evaluacion-docente.index');
+    }
+
+    public function fichaMatricula($id_matricula)
+    {
+        // buscamos la matricula
+        $matricula = ModelMatricula::query()
+            ->with('admitido', 'pago', 'cursos')
+            ->where('id_matricula', $id_matricula)
+            ->first();
+
+        if (!$matricula) {
+            abort(404, 'No se encontro el registro de la matricula');
+        }
+
+        $admitido = $matricula->admitido;
+
+        if (auth('plataforma')->user()->id_persona != $admitido->id_persona) {
+            abort(403, 'Acceso no autorizado');
+        }
+
+        $pago = $matricula->pago;
+
+        if (!$pago) {
+            abort(403, 'No se encontro el registro del pago');
+        }
+
+        $cursos = $matricula->cursos()
+            ->with('programaProcesoGrupo')
+            ->get();
+
+        $programa = null;
+        $subprograma = null;
+        $mencion = null;
+        if ($admitido->programa_proceso->programa_plan->programa->mencion == null) {
+            $programa = $admitido->programa_proceso->programa_plan->programa->programa;
+            $subprograma = $admitido->programa_proceso->programa_plan->programa->subprograma;
+            $mencion = null;
+        } else {
+            $programa = $admitido->programa_proceso->programa_plan->programa->programa;
+            $subprograma = $admitido->programa_proceso->programa_plan->programa->subprograma;
+            $mencion = $admitido->programa_proceso->programa_plan->programa->mencion;
+        }
+        $fecha = date('d/m/Y', strtotime($pago->pago_fecha));
+        $numero_operacion = $pago->pago_operacion;
+        $plan = $admitido->programa_proceso->programa_plan->plan->plan;
+        $codigo = $admitido->admitido_codigo;
+        $nombre = $admitido->persona->nombre_completo;
+        $domicilio = $admitido->persona->direccion;
+        $celular = $admitido->persona->celular;
+        $grupo = obtenerGrupoDeMatricula($matricula->id_matricula);
+        $admision = $admitido->programa_proceso->admision->admision;
+        $modalidad = $admitido->programa_proceso->programa_plan->programa->id_modalidad == 1 ? 'PRESENCIAL' : 'DISTANCIA';
+        $data = [
+            'programa' => $programa,
+            'subprograma' => $subprograma,
+            'mencion' => $mencion,
+            'fecha' => $fecha,
+            'numero_operacion' => $numero_operacion,
+            'plan' => $plan,
+            'codigo' => $codigo,
+            'nombre' => $nombre,
+            'domicilio' => $domicilio,
+            'celular' => $celular,
+            'cursos' => $cursos,
+            'grupo' => $grupo,
+            'admision' => $admision,
+            'modalidad' => $modalidad,
+            'matricula' => $matricula,
+        ];
+
+        // Generar el PDF
+        $matriciculaPdf = Pdf::loadView('modulo-plataforma.matriculas.ficha-matricula', $data)
+            ->setPaper('a4', 'portrait')
+            ->stream('ficha-matricula.pdf');
+
+        return $matriciculaPdf;
     }
 }

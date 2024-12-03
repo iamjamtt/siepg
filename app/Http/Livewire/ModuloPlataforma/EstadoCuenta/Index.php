@@ -96,16 +96,29 @@ class Index extends Component
 
     public function render()
     {
-        $mensualidades  = Mensualidad::join('matricula', 'mensualidad.id_matricula', '=', 'matricula.id_matricula')
-            ->join('pago', 'mensualidad.id_pago', '=', 'pago.id_pago')
-            ->where('mensualidad.id_admitido', $this->admitido->id_admitido)
-            ->where('matricula.id_matricula', $this->data_matricula ? '=' : '!=', $this->data_matricula)
-            ->where(function ($query) {
-                $query->where('pago.pago_operacion', 'like', "%{$this->search}%")
-                    ->orWhere('mensualidad.id_mensualidad', 'like', "%{$this->search}%");
-            })
-            ->orderBy('mensualidad.id_mensualidad', 'asc')
+        $id_matricula = $this->data_matricula;
+
+        // $mensualidades = Mensualidad::join('matricula', 'mensualidad.id_matricula', '=', 'matricula.id_matricula')
+        //     ->join('pago', 'mensualidad.id_pago', '=', 'pago.id_pago')
+        //     ->where('mensualidad.id_admitido', $this->admitido->id_admitido)
+        //     ->where('matricula.id_matricula', $this->data_matricula ? '=' : '!=', $this->data_matricula)
+        //     ->where(function ($query) {
+        //         $query->where('pago.pago_operacion', 'like', "%{$this->search}%")
+        //             ->orWhere('mensualidad.id_mensualidad', 'like', "%{$this->search}%");
+        //     })
+        //     ->orderBy('mensualidad.id_mensualidad', 'asc')
+        //     ->paginate(10);
+
+        $mensualidades = Mensualidad::query()
+            ->with([
+                'matricula',
+                'pago'
+            ])
+            ->where('id_admitido', $this->admitido->id_admitido)
+            ->where('id_matricula', $id_matricula)
+            ->orderBy('id_mensualidad', 'asc')
             ->paginate(10);
+
 
         $monto_total = calcularMontoTotalCostoPorEnsenhanzaEstudiante($this->admitido->id_admitido);
         $monto_pagado = calcularMontoPagadoCostoPorEnsenhanzaEstudiante($this->admitido->id_admitido);

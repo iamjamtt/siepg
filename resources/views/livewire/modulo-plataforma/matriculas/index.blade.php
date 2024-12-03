@@ -15,14 +15,12 @@
                     <li class="breadcrumb-item text-muted">Gestión de Matricula</li>
                 </ul>
             </div>
-            @if ($admitido)
-                @if ($admitido->admitido_estado == 1)
-                    <div class="d-flex align-items-center gap-2 gap-lg-3">
-                        <button type="button" class="btn fw-bold btn-primary" wire:click="abrir_modal">
-                            Generar Matricula
-                        </button>
-                    </div>
-                @endif
+            @if ($alumno->admitido_estado == 1)
+                <div class="d-flex align-items-center gap-2 gap-lg-3">
+                    <button type="button" class="btn fw-bold btn-primary" wire:click="abrir_modal" wire:loading.attr="disabled" wire:target="abrir_modal">
+                        Generar Matricula
+                    </button>
+                </div>
             @endif
         </div>
     </div>
@@ -81,7 +79,7 @@
                                                         </div>
                                                         <div class="col-7 col-md-8">
                                                             <span class="fw-bold text-gray-800">
-                                                                {{ $item->matricula_proceso }}
+                                                                {{ $item->admitido->programa_proceso->admision->admision_año }} - {{ $loop->iteration }}
                                                             </span>
                                                         </div>
                                                     </div>
@@ -113,25 +111,6 @@
                                                     <div class="row">
                                                         <div class="col-4 col-md-3">
                                                             <span>
-                                                                Grupo
-                                                            </span>
-                                                        </div>
-                                                        <div class="col-1">
-                                                            <span>
-                                                                :
-                                                            </span>
-                                                        </div>
-                                                        <div class="col-7 col-md-8">
-                                                            <span class="fw-bold text-gray-800">
-                                                                Grupo {{ $item->programa_proceso_grupo->grupo_detalle }}
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-12">
-                                                    <div class="row">
-                                                        <div class="col-4 col-md-3">
-                                                            <span>
                                                                 Fecha de Matricula
                                                             </span>
                                                         </div>
@@ -142,27 +121,25 @@
                                                         </div>
                                                         <div class="col-7 col-md-8">
                                                             <span class="fw-bold text-gray-800">
-                                                                {{ date('d/m/Y', strtotime($item->matricula_fecha_creacion)) }}
+                                                                {{ date('d/m/Y', strtotime($item->fecha_matricula)) }}
                                                             </span>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="col-12 text-end">
-                                                    @if ($item->matricula_ficha_url)
-                                                        <a download="ficha-de-matricula" href="{{ asset($item->matricula_ficha_url) }}" class="btn btn-info">
-                                                            Descargar Ficha de Matricula
-                                                        </a>
-                                                    @else
-                                                        <button class="btn btn-info hover-scale fw-bold" wire:click="alerta_ficha_matricula({{ $item->id_matricula }})" wire:loading.attr="disabled">
-                                                            <div wire:loading.remove wire:target="alerta_ficha_matricula, ficha_matricula">
-                                                                Generar Ficha de Matricula
-                                                            </div>
-                                                            <div wire:loading wire:target="alerta_ficha_matricula, ficha_matricula">
-                                                                Generando...
-                                                                <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
-                                                            </div>
-                                                        </button>
-                                                    @endif
+                                                    <button
+                                                        wire:click="enviarFichaMatricula({{ $item->id_matricula }})"
+                                                        class="btn btn-info"
+                                                    >
+                                                        Enviar Ficha de Matricula al Correo
+                                                    </button>
+                                                    <a
+                                                        href="{{ route('plataforma.matriculas-ficha', ['id_matricula' => $item->id_matricula]) }}"
+                                                        target="_blank"
+                                                        class="btn btn-info"
+                                                    >
+                                                        Descargar Ficha de Matricula (pdf)
+                                                    </a>
                                                 </div>
                                             </div>
                                         </div>
@@ -209,9 +186,24 @@
                     </div>
                 </div>
                 <div class="modal-body">
-                    <form autocomplete="off" class="row g-5">
+                    <form autocomplete="off" class="row g-3">
+                        <!-- alerta -->
+                        <div class="col-12">
+                            <div class="alert bg-light-primary border border-3 border-primary d-flex align-items-center p-5">
+                                <i class="ki-duotone ki-information-5 fs-2qx me-4 text-primary">
+                                    <i class="path1"></i>
+                                    <i class="path2"></i>
+                                    <i class="path3"></i>
+                                </i>
+                                <div class="d-flex flex-column">
+                                    <span class="fw-bold fs-5">
+                                        Recuerde que tiene un maximo de <b>22</b> creditos para matricularse.
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
                         @if ($matriculas->count() == 0)
-                            @if ($grupos)
+                            @if ($grupos->count() > 0)
                                 <div class="col-md-12">
                                     <label for="grupo" class="required form-label">
                                         Grupo
@@ -220,9 +212,14 @@
                                         <option></option>
                                         @foreach ($grupos as $item)
                                         @php
-                                            $contador_matriculados_grupos = App\Models\Matricula::where('id_programa_proceso_grupo', $item->id_programa_proceso_grupo)->where('matricula_primer_ciclo', 1)->count();
+                                            $contador_matriculados_grupos = obtenerContadorDeMatriculasPorGrupos($alumno->id_programa_proceso, $gestion->id_matricula_gestion ?? 0, $item->id_programa_proceso_grupo);
                                         @endphp
-                                        <option value="{{ $item->id_programa_proceso_grupo }}" @if($item->grupo_cantidad <= $contador_matriculados_grupos) disabled @endif>
+                                        <option
+                                            value="{{ $item->id_programa_proceso_grupo }}"
+                                            @if ($contador_matriculados_grupos == $item->grupo_cantidad)
+                                                disabled
+                                            @endif
+                                        >
                                             GRUPO {{ $item->grupo_detalle }} - CUPOS: {{ $item->grupo_cantidad - $contador_matriculados_grupos }}
                                         </option>
                                         @endforeach
@@ -242,10 +239,10 @@
                                     <thead class="bg-light-warning">
                                         <tr class="fw-bold fs-5 text-gray-900 border-bottom-2 border-gray-200">
                                             <th>Concepto Pago</th>
-                                            <th>Operacion</th>
-                                            <th>Monto</th>
-                                            <th>Fecha</th>
-                                            <th>Estado</th>
+                                            <th class="text-center">Operacion</th>
+                                            <th class="text-center">Monto</th>
+                                            <th class="text-center">Fecha</th>
+                                            <th class="text-center">Estado</th>
                                             <th></th>
                                         </tr>
                                     </thead>
@@ -255,16 +252,16 @@
                                             <td>
                                                 {{ $item->concepto_pago->concepto_pago }}
                                             </td>
-                                            <td>
+                                            <td class="text-center">
                                                 {{ $item->pago_operacion }}
                                             </td>
-                                            <td>
+                                            <td class="text-center">
                                                 S/. {{ number_format($item->pago_monto, 2, ',', '.') }}
                                             </td>
-                                            <td>
+                                            <td class="text-center">
                                                 {{ date('d/m/Y', strtotime($item->pago_fecha)) }}
                                             </td>
-                                            <td>
+                                            <td class="text-center">
                                                 @if ($item->pago_verificacion == 1)
                                                     <span class="badge badge-warning fs-6 px-3 py-2">Pendiente</span>
                                                 @elseif ($item->pago_verificacion == 2)
@@ -277,19 +274,20 @@
                                             </td>
                                             <td class="text-end">
                                                 <div class="form-check">
-                                                    <input class="form-check-input @error('check_pago') is-invalid @enderror" type="checkbox" wire:model="check_pago" value="{{ $item->id_pago }}" />
+                                                    <input
+                                                        type="checkbox"
+                                                        class="form-check-input @error('check_pago') is-invalid @enderror"
+                                                        wire:model="check_pago"
+                                                        value="{{ $item->id_pago }}"
+                                                    />
                                                 </div>
                                             </td>
                                         </tr>
                                         @empty
                                         <tr class="fs-6">
-                                            <td colspan="7" class="text-center">
-                                                <div class="text-muted py-5">
-                                                    @if ($search == '')
-                                                        No se encontraron resultados
-                                                    @elseif($search)
-                                                        No hay resultados de la busqueda "{{ $search }}"
-                                                    @endif
+                                            <td colspan="6" class="text-center">
+                                                <div class="text-muted py-4">
+                                                    No se encontraron resultados
                                                 </div>
                                             </td>
                                         </tr>
@@ -298,68 +296,65 @@
                                 </table>
                             </div>
                         </div>
-                        @if ($matriculas->count() != 0)
-                            {{-- @php
-                                $matricula = App\Models\Matricula::where('id_admitido', $admitido->id_admitido)->where('id_ciclo', $ciclo_admitido->id_ciclo)->first();
-                            @endphp
-                            @if ($matricula == null) --}}
-                                <div class="col-12">
-                                    <label for="pagos" class="required form-label">
-                                        Cursos a Matricular
-                                    </label>
-                                    <div class="table-responsive">
-                                        <table class="table table-hover align-middle table-rounded border mb-0 gy-5 gs-5">
-                                            <thead class="bg-light-warning">
-                                                <tr class="fw-bold fs-5 text-gray-900 border-bottom-2 border-gray-200">
-                                                    <th>Codigo</th>
-                                                    <th>Nombre del Curso</th>
-                                                    <th>Credito</th>
-                                                    <th>Ciclo</th>
-                                                    <th></th>
-                                                </tr>
-                                            </thead>
-                                            <tbody class="fw-semibold text-gray-700">
-                                                @if ($curso_prematricula)
-                                                    @forelse ($curso_prematricula as $item)
-                                                        <tr class="fs-6 text-gray-700 fw-semibold">
-                                                            <td>
-                                                                {{ $item->curso_programa_plan->curso->curso_codigo }}
-                                                            </td>
-                                                            <td>
-                                                                {{ $item->curso_programa_plan->curso->curso_nombre }}
-                                                            </td>
-                                                            <td>
-                                                                {{ $item->curso_programa_plan->curso->curso_credito }}
-                                                            </td>
-                                                            <td>
-                                                                CICLO {{ $item->curso_programa_plan->curso->ciclo->ciclo }}
-                                                            </td>
-                                                            <td class="text-end">
-                                                                <div class="form-check">
-                                                                    <input class="form-check-input @error('check_cursos') is-invalid @enderror" type="checkbox" wire:model="check_cursos" value="{{ $item->id_curso_programa_plan }}" />
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                    @empty
-                                                        <tr class="fs-6">
-                                                            <td colspan="5" class="text-center">
-                                                                <div class="text-muted py-5">
-                                                                    @if ($search == '')
-                                                                        No se encontraron resultados
-                                                                    @elseif($search)
-                                                                        No hay resultados de la busqueda "{{ $search }}"
-                                                                    @endif
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                    @endforelse
-                                                @endif
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            {{-- @endif --}}
-                        @endif
+                        <div class="col-12">
+                            <div class="d-flex justify-content-between">
+                                <label for="pagos" class="required form-label">
+                                    Cursos a Matricular
+                                </label>
+                                <span class="form-label">
+                                    Creditos seleccionados: <b>{{ $creditosSeleccionados ?? 0 }}</b>
+                                </span>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-hover align-middle table-rounded border mb-0 gy-5 gs-5">
+                                    <thead class="bg-light-warning">
+                                        <tr class="fw-bold fs-5 text-gray-900 border-bottom-2 border-gray-200">
+                                            <th>Codigo</th>
+                                            <th>Nombre del Curso</th>
+                                            <th class="text-center">Credito</th>
+                                            <th class="text-center">Ciclo</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="fw-semibold text-gray-700">
+                                        @forelse ($cursosPrematriculados as $item)
+                                            <tr class="fs-6 text-gray-700 fw-semibold">
+                                                <td>
+                                                    {{ $item->cursoProgramaPlan->curso->curso_codigo }}
+                                                </td>
+                                                <td>
+                                                    {{ $item->cursoProgramaPlan->curso->curso_nombre }}
+                                                </td>
+                                                <td align="center">
+                                                    {{ $item->cursoProgramaPlan->curso->curso_credito }}
+                                                </td>
+                                                <td align="center">
+                                                    CICLO {{ $item->cursoProgramaPlan->curso->ciclo->ciclo }}
+                                                </td>
+                                                <td class="text-end">
+                                                    <div class="form-check">
+                                                        <input
+                                                            type="checkbox"
+                                                            class="form-check-input @error('check_cursos') is-invalid @enderror"
+                                                            wire:model="check_cursos"
+                                                            value="{{ $item->id_curso_programa_plan }}"
+                                                        />
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @empty
+                                            <tr class="fs-6">
+                                                <td colspan="5" class="text-center">
+                                                    <div class="text-muted py-4">
+                                                        No se encontraron resultados
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @endforelse
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </form>
                 </div>
                 <div class="modal-footer">

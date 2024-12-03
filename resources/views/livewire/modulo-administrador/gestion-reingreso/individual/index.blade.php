@@ -254,7 +254,7 @@
         </div>
     </div>
     <div wire:ignore.self class="modal fade" tabindex="-1" id="modal_reingreso">
-        <div class="modal-dialog @if($paso == 2) modal-lg @endif">
+        <div class="modal-dialog @if($paso == 2) modal-xl @else modal-lg @endif">
             <div class="modal-content">
                 <div class="modal-header">
                     <h2 class="modal-title">
@@ -463,6 +463,8 @@
                                             <th>Cursos - Ciclo {{ $ciclo }}</th>
                                             <th></th>
                                             <th class="text-center" class="col-md-2">Nota</th>
+                                            <th class="text-center">Periodo</th>
+                                            <th class="text-center">Fech. Nota</th>
                                             <th class="text-center">NSP</th>
                                         </tr>
                                     </thead>
@@ -470,7 +472,7 @@
                                         @forelse ($cursos->where('curso.id_ciclo', $ciclo) as $item)
                                             <tr wire:key="{{ $item->id_curso_programa_plan }}">
                                                 <td align="center" class="fw-bold fs-6">
-                                                    {{ $item->id_curso }}
+                                                    {{ $loop->iteration }}
                                                 </td>
                                                 <td align="center" class="fs-6">
                                                     {{ $item->curso_codigo }}
@@ -482,11 +484,60 @@
                                                     ->
                                                 </td>
                                                 <td class="fs-6">
-                                                    <input type="text" class="form-control form-control-sm @error('notas.'.$item->id_curso_programa_plan) is-invalid @enderror" wire:model="notas.{{ $item->id_curso_programa_plan }}"/>
+                                                    {{-- <input
+                                                        type="text"
+                                                        class="form-control form-control-sm @error('notas.'.$item->id_curso_programa_plan) is-invalid @enderror"
+                                                        wire:model="notas.{{ $item->id_curso_programa_plan }}"
+                                                    /> --}}
+                                                    <input
+                                                        type="number"
+                                                        class="form-control form-control-sm @error('selects.'.$item->id_curso_programa_plan.'.nota') is-invalid @enderror"
+                                                        id="selects.{{ $item->id_curso_programa_plan }}.nota"
+                                                        wire:model="selects.{{ $item->id_curso_programa_plan }}.nota"
+                                                    />
+                                                </td>
+                                                <td align="center" class="fs-6">
+                                                    {{-- <input
+                                                        type="text"
+                                                        class="form-control form-control-sm @error('notas.'.$item->id_curso_programa_plan) is-invalid @enderror"
+                                                        wire:model="notas.{{ $item->id_curso_programa_plan }}"
+                                                    /> --}}
+                                                    <input
+                                                        type="text"
+                                                        class="form-control form-control-sm @error('selects.'.$item->id_curso_programa_plan.'.periodo') is-invalid @enderror"
+                                                        id="selects.{{ $item->id_curso_programa_plan }}.periodo"
+                                                        wire:model="selects.{{ $item->id_curso_programa_plan }}.periodo"
+                                                    />
+                                                </td>
+                                                <td align="center" class="fs-6">
+                                                    {{-- <input
+                                                        type="date"
+                                                        class="form-control form-control-sm @error('notas.'.$item->id_curso_programa_plan) is-invalid @enderror"
+                                                        wire:model="notas.{{ $item->id_curso_programa_plan }}"
+                                                    /> --}}
+                                                    <input
+                                                        type="date"
+                                                        class="form-control form-control-sm @error('selects.'.$item->id_curso_programa_plan.'.fecha_nota') is-invalid @enderror"
+                                                        id="selects.{{ $item->id_curso_programa_plan }}.fecha_nota"
+                                                        wire:model="selects.{{ $item->id_curso_programa_plan }}.fecha_nota"
+                                                    />
                                                 </td>
                                                 <td class="fs-6">
                                                     <div class="form-check">
-                                                        <input class="form-check-input @error('nsp.'.$item->id_curso_programa_plan) is-invalid @enderror" type="checkbox" wire:model="nsp.{{ $item->id_curso_programa_plan }}" value="{{ $item->id_curso_programa_plan }}" id="nsp.{{ $item->id_curso_programa_plan }}" />
+                                                        {{-- <input
+                                                            class="form-check-input @error('nsp.'.$item->id_curso_programa_plan) is-invalid @enderror"
+                                                            type="checkbox"
+                                                            wire:model="nsp.{{ $item->id_curso_programa_plan }}"
+                                                            value="{{ $item->id_curso_programa_plan }}"
+                                                            id="nsp.{{ $item->id_curso_programa_plan }}"
+                                                        /> --}}
+                                                        <input
+                                                            class="form-check-input @error('selects.'.$item->id_curso_programa_plan.'.nsp') is-invalid @enderror"
+                                                            type="checkbox"
+                                                            wire:model="selects.{{ $item->id_curso_programa_plan }}.nsp"
+                                                            value="{{ $item->id_curso_programa_plan }}"
+                                                            id="selects.{{ $item->id_curso_programa_plan }}.nsp"
+                                                        />
                                                     </div>
                                                 </td>
                                             </tr>

@@ -36,6 +36,8 @@ class Index extends Component
     public $button_modal = 'Registrar Pago'; // variable para el boton del modal de registro
     public $terminos_condiciones_pagos = false; // variable para los terminos y condiciones de los pagos
 
+    public bool $activarConceptosDeMatricula = false; // variable para activar la matricula
+
     // variables para el filtro
     public $search = '';
     public $filtro_concepto_pago; // variable para el filtro de concepto de pago
@@ -312,9 +314,15 @@ class Index extends Component
                         }
                     }
                     // validamos si la fecha de pago por concepto de matricula esta dentro de las fechas establecidas
-                    $admision = Admision::where('admision_estado', 1)->first();
+                    $matriculaGestion = MatriculaGestion::query()
+                        ->where('id_programa_proceso', $admitido->id_programa_proceso)
+                        ->where('id_admision', $admitido->programa_proceso->id_admision)
+                        ->where('id_ciclo', calcularCicloEstudiante($admitido->id_admitido))
+                        ->where('matricula_gestion_estado', 1)
+                        ->orderBy('id_matricula_gestion', 'desc')
+                        ->first();
                     if ($this->concepto_pago == 3 || $this->concepto_pago == 4) {
-                        if ($this->fecha_pago < $admision->admision_fecha_inicio_matricula || $this->fecha_pago > $admision->admision_fecha_fin_matricula) {
+                        if ($this->fecha_pago < $matriculaGestion->matricula_gestion_fecha_inicio || $this->fecha_pago > $matriculaGestion->matricula_gestion_fecha_fin) {
                             $this->dispatchBrowserEvent('alerta_pago_plataforma', [
                                 'title' => '¡Error!',
                                 'text' => 'La fecha de pago ingresada no se encuentra dentro del rango de fechas de matrícula.',
@@ -326,7 +334,7 @@ class Index extends Component
                         }
                     }
                     if ($this->concepto_pago == 5 || $this->concepto_pago == 6) {
-                        if ($this->fecha_pago < $admision->admision_fecha_inicio_matricula_extemporanea || $this->fecha_pago > $admision->admision_fecha_fin_matricula_extemporanea) {
+                        if ($this->fecha_pago < $matriculaGestion->matricula_gestion_fecha_extemporanea_inicio || $this->fecha_pago > $matriculaGestion->matricula_gestion_fecha_extemporanea_fin) {
                             $this->dispatchBrowserEvent('alerta_pago_plataforma', [
                                 'title' => '¡Error!',
                                 'text' => 'La fecha de pago ingresada no se encuentra dentro del rango de fechas de matrícula extemporánea.',
@@ -338,8 +346,8 @@ class Index extends Component
                         }
                     }
                     // validar si el pago a registrar pertenece a la matricula extemporanea
-                    $fecha_matricula_extemporanea_inicio = Admision::where('admision_estado', 1)->first()->admision_fecha_inicio_matricula_extemporanea;
-                    $fecha_matricula_extemporanea_fin = Admision::where('admision_estado', 1)->first()->admision_fecha_fin_matricula_extemporanea;
+                    $fecha_matricula_extemporanea_inicio = $matriculaGestion->matricula_gestion_fecha_extemporanea_inicio;
+                    $fecha_matricula_extemporanea_fin = $matriculaGestion->matricula_gestion_fecha_extemporanea_fin;
                     if ($this->concepto_pago != 5 || $this->concepto_pago != 6) {
                         if ($this->concepto_pago == 3 || $this->concepto_pago == 4) {
                             if ($this->fecha_pago >= $fecha_matricula_extemporanea_inicio && $this->fecha_pago <= $fecha_matricula_extemporanea_fin) {
@@ -377,6 +385,53 @@ class Index extends Component
                         'color' => 'danger'
                     ]);
                     return;
+                }
+            }
+
+            // validamos si el monto de pago pertenece a la matricula extemporanea de acuerdo a las fechas establecidas en la gestion de matricula
+            $matriculaGestion = $this->getMatriculaGestion($admitido->id_admitido);
+            if ($this->concepto_pago == 3 || $this->concepto_pago == 5) {
+                if ($matriculaGestion) {
+                    $fechaInicio = $matriculaGestion->matricula_gestion_fecha_inicio;
+                    $fechaFin = $matriculaGestion->matricula_gestion_fecha_fin;
+                    $fechaInicioExtemporanea = $matriculaGestion->matricula_gestion_fecha_extemporanea_inicio;
+                    $fechaFinExtemporanea = $matriculaGestion->matricula_gestion_fecha_extemporanea_fin;
+                    if ($this->fecha_pago >= $fechaInicio && $this->fecha_pago <= $fechaFin) {
+                        // en rango de fecha de matricula
+                        // validamos el monto de pago de matricula es segun el concepto de pago
+                        if ($this->concepto_pago != 3) {
+                            $this->dispatchBrowserEvent('alerta_pago_plataforma', [
+                                'title' => '¡Error!',
+                                'text' => 'El concepto de pago seleccionado no corresponde a la fecha de matrícula, por favor seleccione el concepto de pago correcto.',
+                                'icon' => 'error',
+                                'confirmButtonText' => 'Aceptar',
+                                'color' => 'danger'
+                            ]);
+                            return;
+                        }
+                    } else if ($this->fecha_pago >= $fechaInicioExtemporanea && $this->fecha_pago <= $fechaFinExtemporanea) {
+                        // en rango de fecha de matricula extemporanea
+                        // validamos el monto de pago de matricula es segun el concepto de pago
+                        if ($this->concepto_pago != 5) {
+                            $this->dispatchBrowserEvent('alerta_pago_plataforma', [
+                                'title' => '¡Error!',
+                                'text' => 'El concepto de pago seleccionado no corresponde a la fecha de matrícula extemporánea, por favor seleccione el concepto de pago correcto.',
+                                'icon' => 'error',
+                                'confirmButtonText' => 'Aceptar',
+                                'color' => 'danger'
+                            ]);
+                            return;
+                        }
+                    } else {
+                        $this->dispatchBrowserEvent('alerta_pago_plataforma', [
+                            'title' => '¡Error!',
+                            'text' => 'La fecha de pago ingresada no se encuentra dentro del rango de fechas de matrícula.',
+                            'icon' => 'error',
+                            'confirmButtonText' => 'Aceptar',
+                            'color' => 'danger'
+                        ]);
+                        return;
+                    }
                 }
             }
         } else {
@@ -589,7 +644,7 @@ class Index extends Component
         // si el pago es de concepto de mensualidad
         if ($pago->id_concepto_pago == 7) {
             // buscar la matricula del admitido
-            $matricula = Matricula::where('id_admitido', $admitido->id_admitido)->where('matricula_estado', 1)->orderBy('id_matricula', 'desc')->first();
+            $matricula = $this->admitido->ultimaMatriculaNuevo;
             // registrar mensualidad
             $mensualidad = new Mensualidad();
             $mensualidad->id_matricula = $matricula->id_matricula;
@@ -623,31 +678,16 @@ class Index extends Component
         $inscripcion_ultima = Inscripcion::where('id_persona', $persona->id_persona)->orderBy('id_inscripcion', 'desc')->first(); // inscripcion del usuario logueado
         $evaluacion = $this->admitido ? Evaluacion::where('id_evaluacion', $this->admitido->id_evaluacion)->first() : $inscripcion_ultima->evaluacion()->orderBy('id_evaluacion', 'desc')->first(); // evaluacion de la inscripcion del usuario logueado
         $admision = $this->admitido ? $this->admitido->programa_proceso->admision : null; // admision del admitido del usuario logueado
-        $activar_matricula = false; // variable para activar la matricula
+
+        // verificar si el usuario logueado tiene una matricula activa
+        $this->activarConceptosDeMatricula = $this->verificarSiHayMatriculaActiva($this->admitido->id_admitido);
+
+        $matricula_count = $this->admitido ? $this->admitido->matriculas()->where('estado', 1)->count() : 0;
+
         if ($admision) {
             $constancia_ingreso = ConstanciaIngreso::where('id_admitido', $this->admitido->id_admitido)->first(); // constancia de ingreso del usuario logueado
-
-            $matricula_count = Matricula::where('id_admitido', $this->admitido->id_admitido)->where('matricula_estado', 1)->count(); // matricula del usuario logueado
-
-            $matricula_gestion = MatriculaGestion::where('id_programa_proceso', $this->admitido->id_programa_proceso)
-                ->where('matricula_gestion_estado', 1)
-                ->orderBy('id_matricula_gestion', 'desc')
-                ->first(); // gestion de matricula actual
-
-            if ($matricula_gestion) {
-                if ($matricula_gestion->matricula_gestion_fecha_inicio <= date('Y-m-d') && $matricula_gestion->matricula_gestion_fecha_extemporanea_fin >= date('Y-m-d')) {
-                    $activar_matricula = true;
-                }
-            }
-
-            if ($admision->admision_fecha_inicio_matricula <= date('Y-m-d') && $admision->admision_fecha_fin_matricula_extemporanea >= date('Y-m-d')) {
-                $activar_matricula = true;
-            }
         } else {
             $constancia_ingreso = null;
-            $matricula_count = 0;
-            $matricula_gestion = null;
-            $activar_matricula = false;
         }
         $canales_pagos = CanalPago::where('canal_pago_estado', 1)->get(); // canales de pago
         $conceptos_pagos = ConceptoPago::where('concepto_pago_estado', 1)->get(); // canales de pago
@@ -659,9 +699,40 @@ class Index extends Component
             'conceptos_pagos' => $conceptos_pagos,
             'admision' => $admision,
             'constancia_ingreso' => $constancia_ingreso,
-            'matricula_count' => $matricula_count,
-            'matricula_gestion' => $matricula_gestion,
-            'activar_matricula' => $activar_matricula, // variable para activar la matricula
+            'matricula_count' => $matricula_count
         ]);
+    }
+
+    public function getMatriculaGestion($id_admitido)
+    {
+        $admitido = Admitido::find($id_admitido);
+
+        $matriculaGestion = MatriculaGestion::query()
+            ->where('id_programa_proceso', $admitido->id_programa_proceso)
+            ->where('id_admision', $admitido->programa_proceso->id_admision)
+            ->where('id_ciclo', calcularCicloEstudiante($id_admitido))
+            ->where('matricula_gestion_estado', 1)
+            ->orderBy('id_matricula_gestion', 'desc')
+            ->first();
+
+        return $matriculaGestion;
+    }
+
+    public function verificarSiHayMatriculaActiva($id_admitido)
+    {
+        $matriculaGestion = $this->getMatriculaGestion($id_admitido);
+
+        if ($matriculaGestion) {
+            if (
+                $matriculaGestion->matricula_gestion_fecha_inicio <= date('Y-m-d') &&
+                $matriculaGestion->matricula_gestion_fecha_extemporanea_fin >= date('Y-m-d')
+            ) {
+                return true;
+            }
+        } else {
+            return false;
+        }
+
+        return false;
     }
 }

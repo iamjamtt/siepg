@@ -32,7 +32,7 @@ class Index extends Component
                 $query->where('ciclo_programa', 0)
                     ->orWhere('ciclo_programa', $this->programa->programa_tipo);
             })->orderBy('id_ciclo', 'asc')->get(); // ciclos del usuario logueado
-        $this->ultima_matricula = Matricula::where('id_admitido', $this->admitido->id_admitido)->orderBy('id_matricula', 'desc')->first(); // ultima matricula del usuario logueado
+        $this->ultima_matricula = $this->admitido->ultimaMatriculaNuevo; // ultima matricula del usuario logueado
     }
 
     public function render()

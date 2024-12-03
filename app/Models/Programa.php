@@ -24,6 +24,8 @@ class Programa extends Model
         'id_sede',
         'programa_tipo',
         'programa_estado',
+        'duracion_ciclos',
+        'creditos_totales'
     ];
 
     public $timestamps = false;

@@ -241,6 +241,22 @@
                     </div>
                 </div>
 
+                {{-- Gestión de Matriculas --}}
+                <div class="menu-item">
+                    <a class="menu-link {{ $route === 'administrador.matriculas' ? 'active border-3 border-start border-primary' : '' }}"
+                        href="{{ route('administrador.matriculas') }}">
+                        <span class="menu-icon">
+                            <span
+                                class="svg-icon svg-icon-2  {{ $route === 'administrador.matriculas' ? 'text-primary' : '' }}">
+                                <i class="ki-outline ki-folder fs-2"></i>
+                            </span>
+                        </span>
+                        <span class="menu-title fs-4">
+                            Gestión de Matriculas
+                        </span>
+                    </a>
+                </div>
+
                 {{-- Configuración --}}
                 <div data-kt-menu-trigger="click"
                     class="menu-item menu-accordion {{ $route === 'administrador.programa' || $route === 'administrador.plan' || $route === 'administrador.sede' || $route === 'administrador.expediente' || $route === 'administrador.tipo-seguimiento' ? 'active show border-2 border-start border-gray-300 rounded' : '' }}">

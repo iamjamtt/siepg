@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Matricula\Matricula;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -18,6 +19,7 @@ class Mensualidad extends Model
         'id_admitido',
         'mensualidad_fecha_creacion',
         'mensualidad_estado',
+        'id_matricula_old'
     ];
 
     public $timestamps = false;

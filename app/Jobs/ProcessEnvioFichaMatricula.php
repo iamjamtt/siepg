@@ -15,16 +15,14 @@ class ProcessEnvioFichaMatricula implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected $data, $path, $filename, $nombre, $correo;
+    protected $data, $nombre, $correo;
 
     /**
      * Create a new job instance.
      */
-    public function __construct($data, $path, $filename, $nombre, $correo)
+    public function __construct($data, $nombre, $correo)
     {
         $this->data = $data;
-        $this->path = $path;
-        $this->filename = $filename;
         $this->nombre = $nombre;
         $this->correo = $correo;
     }
@@ -35,7 +33,6 @@ class ProcessEnvioFichaMatricula implements ShouldQueue
     public function handle(): void
     {
         // generar pdf
-        $nombre_pdf = $this->filename;
         $pdf = PDF::loadView('modulo-plataforma.matriculas.ficha-matricula', $this->data);
         $pdf_email = $pdf->output();
 
@@ -44,6 +41,8 @@ class ProcessEnvioFichaMatricula implements ShouldQueue
             'correo' => $this->correo,
             'nombre' => $this->nombre
         ];
+
+        $nombre_pdf = 'Ficha de Matrícula - Escuela de Posgrado.pdf';
 
         Mail::send('modulo-plataforma.matriculas.email', $detalle, function ($message) use ($detalle, $pdf_email, $nombre_pdf) {
             $message->to($detalle['correo'])

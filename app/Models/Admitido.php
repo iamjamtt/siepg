@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Matricula\Matricula as MatriculaNuevo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -22,6 +23,7 @@ class Admitido extends Model
         'admitido_estado',
         'admitido_alerta',
         'es_traslado_externo',
+        'creditos_acumulados',
     ];
 
     public $timestamps = false;
@@ -55,5 +57,18 @@ class Admitido extends Model
             'id_admitido','id_admitido')
             ->where('matricula_estado', 1)
             ->orderBy('id_matricula', 'desc');
+    }
+
+    public function ultimaMatriculaNuevo()
+    {
+        return $this->hasOne(MatriculaNuevo::class,
+            'id_admitido','id_admitido')
+            ->where('estado', 1)
+            ->orderBy('id_matricula', 'desc');
+    }
+
+    public function matriculas(){
+        return $this->hasMany(MatriculaNuevo::class,
+            'id_admitido','id_admitido');
     }
 }
