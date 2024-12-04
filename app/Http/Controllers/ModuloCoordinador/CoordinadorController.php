@@ -307,8 +307,10 @@ class CoordinadorController extends Controller
             ->join('programa_proceso', 'programa_proceso.id_programa_proceso', '=', 'admitido.id_programa_proceso')
             ->join('programa_plan', 'programa_plan.id_programa_plan', '=', 'programa_proceso.id_programa_plan')
             ->join('programa', 'programa.id_programa', '=', 'programa_plan.id_programa')
+            ->join('pago', 'pago.id_pago', '=', 'tbl_matricula.id_pago')
+            ->where('programa_proceso.id_programa_proceso', $id_programa_proceso)
             //->where('id_programa_proceso_grupo', $id_grupo)
-            ->where('tbl_matricula.matricula_estado', 1)
+            ->where('tbl_matricula.estado', 1)
             ->orderBy('persona.nombre_completo', 'asc')
             ->get();
         $programa = $programa_proceso->programa . ' EN ' . $programa_proceso->subprograma . ($programa_proceso->mencion ? ' CON MENCION EN ' . $programa_proceso->mencion : '');
@@ -318,20 +320,21 @@ class CoordinadorController extends Controller
 
         $mayor = 0;
         foreach ($matriculados as $matriculado) {
-            $mensualiadad = Mensualidad::where('id_matricula', $matriculado->id_matricula)
-            ->where('id_admitido', $matriculado->id_admitido)
-            ->where('mensualidad_estado', 1)
-            ->get();
-            $mayor = count($mensualiadad) > $mayor ? count($mensualiadad) : $mayor;
-
             ///
             $grupo = obtenerGrupoDeMatricula($matriculado->id_matricula);
             $grupoDetalle = ProgramaProcesoGrupo::query()
-                ->where('id_programa_proceso_grupo', $grupo)
+                ->where('id_programa_proceso_grupo', $id_grupo)
                 ->first()
                 ->grupo_detalle;
             if ($grupo == $grupoDetalle) {
                 $matriculadosNew->push($matriculado);
+
+                ///
+                $mensualiadad = Mensualidad::where('id_matricula', $matriculado->id_matricula)
+                ->where('id_admitido', $matriculado->id_admitido)
+                ->where('mensualidad_estado', 1)
+                ->get();
+                $mayor = count($mensualiadad) > $mayor ? count($mensualiadad) : $mayor;
             }
         }
 
