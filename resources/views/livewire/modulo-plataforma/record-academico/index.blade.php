@@ -208,7 +208,11 @@
                                                         {{ $matriculaCurso ? $matriculaCurso->periodo : '---' }}
                                                     </td>
                                                     <td class="text-center">
-                                                        {{ $matriculaCurso->nota_promedio_final ?? '---' }}
+                                                        @if ($matriculaCurso && $matriculaCurso->nota_promedio_final)
+                                                            {{ number_format($matriculaCurso->nota_promedio_final, 0) }}
+                                                        @else
+                                                            ---
+                                                        @endif
                                                     </td>
                                                     <td class="text-center">
                                                         @if ($matriculaCurso && $matriculaCurso->estado == 1)

@@ -76,7 +76,12 @@
                                     @forelse ($usuarios as $item)
                                         <tr>
                                             <td align="center" class="fw-bold fs-5">{{ $item->id_usuario }}</td>
-                                            <td>{{ $item->usuario_nombre }}</td>
+                                            <td>
+                                                <div class="d-flex flex-column gap-1">
+                                                    <span class="fw-bold fs-6">{{ $item->usuario_nombre }}</span>
+                                                    <span class="text-muted">{{ $item?->trabajador_tipo_trabajador?->trabajador->trabajador_numero_documento ?? '' }}</span>
+                                                </div>
+                                            </td>
                                             <td>{{ $item->usuario_correo }}</td>
                                             <td align="center">
                                                 @if ($item->usuario_estado == 1)

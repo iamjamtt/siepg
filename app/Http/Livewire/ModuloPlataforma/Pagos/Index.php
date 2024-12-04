@@ -321,44 +321,46 @@ class Index extends Component
                         ->where('matricula_gestion_estado', 1)
                         ->orderBy('id_matricula_gestion', 'desc')
                         ->first();
-                    if ($this->concepto_pago == 3 || $this->concepto_pago == 4) {
-                        if ($this->fecha_pago < $matriculaGestion->matricula_gestion_fecha_inicio || $this->fecha_pago > $matriculaGestion->matricula_gestion_fecha_fin) {
-                            $this->dispatchBrowserEvent('alerta_pago_plataforma', [
-                                'title' => '¡Error!',
-                                'text' => 'La fecha de pago ingresada no se encuentra dentro del rango de fechas de matrícula.',
-                                'icon' => 'error',
-                                'confirmButtonText' => 'Aceptar',
-                                'color' => 'danger'
-                            ]);
-                            return;
-                        }
-                    }
-                    if ($this->concepto_pago == 5 || $this->concepto_pago == 6) {
-                        if ($this->fecha_pago < $matriculaGestion->matricula_gestion_fecha_extemporanea_inicio || $this->fecha_pago > $matriculaGestion->matricula_gestion_fecha_extemporanea_fin) {
-                            $this->dispatchBrowserEvent('alerta_pago_plataforma', [
-                                'title' => '¡Error!',
-                                'text' => 'La fecha de pago ingresada no se encuentra dentro del rango de fechas de matrícula extemporánea.',
-                                'icon' => 'error',
-                                'confirmButtonText' => 'Aceptar',
-                                'color' => 'danger'
-                            ]);
-                            return;
-                        }
-                    }
-                    // validar si el pago a registrar pertenece a la matricula extemporanea
-                    $fecha_matricula_extemporanea_inicio = $matriculaGestion->matricula_gestion_fecha_extemporanea_inicio;
-                    $fecha_matricula_extemporanea_fin = $matriculaGestion->matricula_gestion_fecha_extemporanea_fin;
-                    if ($this->concepto_pago != 5 || $this->concepto_pago != 6) {
+                    if ($matriculaGestion) {
                         if ($this->concepto_pago == 3 || $this->concepto_pago == 4) {
-                            if ($this->fecha_pago >= $fecha_matricula_extemporanea_inicio && $this->fecha_pago <= $fecha_matricula_extemporanea_fin) {
+                            if ($this->fecha_pago < $matriculaGestion->matricula_gestion_fecha_inicio || $this->fecha_pago > $matriculaGestion->matricula_gestion_fecha_fin) {
                                 $this->dispatchBrowserEvent('alerta_pago_plataforma', [
                                     'title' => '¡Error!',
-                                    'text' => 'El pago que usted desea registrar pertenece a la matrícula extemporánea, por favor realice el proceso de matrícula extemporánea.',
+                                    'text' => 'La fecha de pago ingresada no se encuentra dentro del rango de fechas de matrícula.',
                                     'icon' => 'error',
                                     'confirmButtonText' => 'Aceptar',
                                     'color' => 'danger'
                                 ]);
                                 return;
+                            }
+                        }
+                        if ($this->concepto_pago == 5 || $this->concepto_pago == 6) {
+                            if ($this->fecha_pago < $matriculaGestion->matricula_gestion_fecha_extemporanea_inicio || $this->fecha_pago > $matriculaGestion->matricula_gestion_fecha_extemporanea_fin) {
+                                $this->dispatchBrowserEvent('alerta_pago_plataforma', [
+                                    'title' => '¡Error!',
+                                    'text' => 'La fecha de pago ingresada no se encuentra dentro del rango de fechas de matrícula extemporánea.',
+                                    'icon' => 'error',
+                                    'confirmButtonText' => 'Aceptar',
+                                    'color' => 'danger'
+                                ]);
+                                return;
+                            }
+                        }
+                        // validar si el pago a registrar pertenece a la matricula extemporanea
+                        $fecha_matricula_extemporanea_inicio = $matriculaGestion->matricula_gestion_fecha_extemporanea_inicio;
+                        $fecha_matricula_extemporanea_fin = $matriculaGestion->matricula_gestion_fecha_extemporanea_fin;
+                        if ($this->concepto_pago != 5 || $this->concepto_pago != 6) {
+                            if ($this->concepto_pago == 3 || $this->concepto_pago == 4) {
+                                if ($this->fecha_pago >= $fecha_matricula_extemporanea_inicio && $this->fecha_pago <= $fecha_matricula_extemporanea_fin) {
+                                    $this->dispatchBrowserEvent('alerta_pago_plataforma', [
+                                        'title' => '¡Error!',
+                                        'text' => 'El pago que usted desea registrar pertenece a la matrícula extemporánea, por favor realice el proceso de matrícula extemporánea.',
+                                        'icon' => 'error',
+                                        'confirmButtonText' => 'Aceptar',
+                                        'color' => 'danger'
+                                    ]);
+                                    return;
+                                }
                             }
                         }
                     }

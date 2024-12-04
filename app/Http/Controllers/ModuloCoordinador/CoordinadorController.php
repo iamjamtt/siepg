@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use App\Models\ProgramaProceso;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Http\Controllers\Controller;
+use App\Models\Matricula\Matricula as ModelMatricula;
 use App\Models\Mensualidad;
 use App\Models\ProgramaProcesoGrupo;
 use App\Models\TrabajadorTipoTrabajador;
@@ -300,28 +301,43 @@ class CoordinadorController extends Controller
             ->where('programa_proceso.id_programa_proceso', $id_programa_proceso)
             ->first();
         $tipo_programa = $programa_proceso->programa_tipo;
-        $matriculados = Matricula::join('admitido','admitido.id_admitido','=','matricula.id_admitido')
-            ->join('programa_proceso','programa_proceso.id_programa_proceso','=','admitido.id_programa_proceso')
-            ->join('programa_plan','programa_plan.id_programa_plan','=','programa_proceso.id_programa_plan')
-            ->join('programa','programa.id_programa','=','programa_plan.id_programa')
-            ->join('persona','persona.id_persona','=','admitido.id_persona')
-            ->join('programa_proceso_grupo','programa_proceso_grupo.id_programa_proceso_grupo','=','matricula.id_programa_proceso_grupo')
-            ->where('admitido.id_programa_proceso',$id_programa_proceso)
-            ->where('matricula.id_programa_proceso_grupo',$id_grupo)
-            ->where('matricula.matricula_estado',1)
-            ->orderBy('persona.nombre_completo','asc')
+        $matriculados = ModelMatricula::query()
+            ->join('admitido', 'admitido.id_admitido', '=', 'tbl_matricula.id_admitido')
+            ->join('persona', 'persona.id_persona', '=', 'admitido.id_persona')
+            ->join('programa_proceso', 'programa_proceso.id_programa_proceso', '=', 'admitido.id_programa_proceso')
+            ->join('programa_plan', 'programa_plan.id_programa_plan', '=', 'programa_proceso.id_programa_plan')
+            ->join('programa', 'programa.id_programa', '=', 'programa_plan.id_programa')
+            ->join('pago', 'pago.id_pago', '=', 'tbl_matricula.id_pago')
+            ->where('programa_proceso.id_programa_proceso', $id_programa_proceso)
+            //->where('id_programa_proceso_grupo', $id_grupo)
+            ->where('tbl_matricula.estado', 1)
+            ->orderBy('persona.nombre_completo', 'asc')
             ->get();
-        $programa = $programa_proceso->programa . ' EN ' . $programa_proceso->subprograma . ($programa_proceso->mencion ? ' CON MENCION EN ' . $programa_proceso->mencion : '');
-        $grupo = ProgramaProcesoGrupo::where('id_programa_proceso_grupo', $id_grupo)->first()->grupo_detalle;
+
+        $matriculadosNew = collect();
 
         $mayor = 0;
         foreach ($matriculados as $matriculado) {
-            $mensualiadad = Mensualidad::where('id_matricula', $matriculado->id_matricula)
-            ->where('id_admitido', $matriculado->id_admitido)
-            ->where('mensualidad_estado', 1)
-            ->get();
-            $mayor = count($mensualiadad) > $mayor ? count($mensualiadad) : $mayor;
+            ///
+            $grupo = obtenerGrupoDeMatricula($matriculado->id_matricula);
+            $grupoDetalle = ProgramaProcesoGrupo::query()
+                ->where('id_programa_proceso_grupo', $id_grupo)
+                ->first()
+                ->grupo_detalle;
+            if ($grupo == $grupoDetalle) {
+                $matriculadosNew->push($matriculado);
+
+                ///
+                $mensualiadad = Mensualidad::where('id_matricula', $matriculado->id_matricula)
+                ->where('id_admitido', $matriculado->id_admitido)
+                ->where('mensualidad_estado', 1)
+                ->get();
+                $mayor = count($mensualiadad) > $mayor ? count($mensualiadad) : $mayor;
+            }
         }
+        
+        $programa = $programa_proceso->programa . ' EN ' . $programa_proceso->subprograma . ($programa_proceso->mencion ? ' CON MENCION EN ' . $programa_proceso->mencion : '');
+        $grupo = ProgramaProcesoGrupo::where('id_programa_proceso_grupo', $id_grupo)->first()->grupo_detalle;
 
         $mencion = $programa_proceso->mencion ? ' con mencion en ' . $programa_proceso->mencion : '';
         $nombre = 'Reporte de pagos admitidos del ' . $programa_proceso->programa . ' en ' . $programa_proceso->subprograma . $mencion;
@@ -331,7 +347,7 @@ class CoordinadorController extends Controller
 
         $pdf = Pdf::loadView('modulo-coordinador.reporte-pagos.reporte_pagos_pdf', [
             'programa_proceso' => $programa_proceso,
-            'matriculados' => $matriculados,
+            'matriculados' => $matriculadosNew,
             'programa' => $programa,
             'grupo' => $grupo,
             'mayor' => $mayor

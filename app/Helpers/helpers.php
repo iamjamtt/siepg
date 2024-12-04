@@ -7,14 +7,13 @@ use App\Models\ExpedienteAdmision;
 use App\Models\ExpedienteInscripcion;
 use App\Models\ExpedienteInscripcionSeguimiento;
 use App\Models\Inscripcion;
-use App\Models\Matricula;
-use App\Models\MatriculaCurso;
 use App\Models\Mensualidad;
 use App\Models\Pago;
 use App\Models\Persona;
 use App\Models\ProgramaProceso;
 use App\Models\Matricula\Matricula as ModelMatricula;
 use App\Models\Matricula\MatriculaCurso as ModelMatriculaCurso;
+use App\Models\Reincorporacion;
 use App\Models\Reingreso;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Str;
@@ -818,6 +817,34 @@ function calcularPPS($admitido, $ciclo)
     $pps = round($pps, 2);
 
     return $pps;
+}
+
+function getResolucionReingreso($id_admitido)
+{
+    $reingreso = Reingreso::query()
+        ->where('id_admitido', $id_admitido)
+        ->where('reingreso_estado', 1)
+        ->first();
+
+    if (!$reingreso) {
+        return '';
+    }
+
+    return $reingreso->reingreso_resolucion;
+}
+
+function getResolucionIncorporacion($id_admitido)
+{
+    $reingreso = Reincorporacion::query()
+        ->where('id_admitido', $id_admitido)
+        ->where('reincorporacion_estado', 1)
+        ->first();
+
+    if (!$reingreso) {
+        return '';
+    }
+
+    return $reingreso->reincorporacion_resolucion;
 }
 
 //
