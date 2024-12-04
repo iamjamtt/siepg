@@ -313,8 +313,6 @@ class CoordinadorController extends Controller
             ->where('tbl_matricula.estado', 1)
             ->orderBy('persona.nombre_completo', 'asc')
             ->get();
-        $programa = $programa_proceso->programa . ' EN ' . $programa_proceso->subprograma . ($programa_proceso->mencion ? ' CON MENCION EN ' . $programa_proceso->mencion : '');
-        $grupo = ProgramaProcesoGrupo::where('id_programa_proceso_grupo', $id_grupo)->first()->grupo_detalle;
 
         $matriculadosNew = collect();
 
@@ -337,6 +335,9 @@ class CoordinadorController extends Controller
                 $mayor = count($mensualiadad) > $mayor ? count($mensualiadad) : $mayor;
             }
         }
+        
+        $programa = $programa_proceso->programa . ' EN ' . $programa_proceso->subprograma . ($programa_proceso->mencion ? ' CON MENCION EN ' . $programa_proceso->mencion : '');
+        $grupo = ProgramaProcesoGrupo::where('id_programa_proceso_grupo', $id_grupo)->first()->grupo_detalle;
 
         $mencion = $programa_proceso->mencion ? ' con mencion en ' . $programa_proceso->mencion : '';
         $nombre = 'Reporte de pagos admitidos del ' . $programa_proceso->programa . ' en ' . $programa_proceso->subprograma . $mencion;
