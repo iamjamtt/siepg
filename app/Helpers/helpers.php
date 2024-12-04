@@ -7,8 +7,6 @@ use App\Models\ExpedienteAdmision;
 use App\Models\ExpedienteInscripcion;
 use App\Models\ExpedienteInscripcionSeguimiento;
 use App\Models\Inscripcion;
-use App\Models\Matricula;
-use App\Models\MatriculaCurso;
 use App\Models\Mensualidad;
 use App\Models\Pago;
 use App\Models\Persona;
