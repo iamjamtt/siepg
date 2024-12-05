@@ -523,21 +523,23 @@
                                                     />
                                                 </td>
                                                 <td class="fs-6">
-                                                    <div class="form-check">
-                                                        {{-- <input
-                                                            class="form-check-input @error('nsp.'.$item->id_curso_programa_plan) is-invalid @enderror"
-                                                            type="checkbox"
-                                                            wire:model="nsp.{{ $item->id_curso_programa_plan }}"
-                                                            value="{{ $item->id_curso_programa_plan }}"
-                                                            id="nsp.{{ $item->id_curso_programa_plan }}"
-                                                        /> --}}
-                                                        <input
-                                                            class="form-check-input @error('selects.'.$item->id_curso_programa_plan.'.nsp') is-invalid @enderror"
-                                                            type="checkbox"
-                                                            wire:model="selects.{{ $item->id_curso_programa_plan }}.nsp"
-                                                            value="{{ $item->id_curso_programa_plan }}"
-                                                            id="selects.{{ $item->id_curso_programa_plan }}.nsp"
-                                                        />
+                                                    <div class="d-flex justify-content-center align-items-center">
+                                                        <div class="form-check">
+                                                            <input
+                                                                class="form-check-input @error('selects.'.$item->id_curso_programa_plan.'.nsp') is-invalid @enderror"
+                                                                type="checkbox"
+                                                                wire:model="selects.{{ $item->id_curso_programa_plan }}.nsp"
+                                                                value="{{ $item->id_curso_programa_plan }}"
+                                                                id="selects.{{ $item->id_curso_programa_plan }}.nsp"
+                                                            />
+                                                        </div>
+                                                        <button
+                                                            type="button"
+                                                            class="btn btn-icon btn-sm btn-danger"
+                                                            wire:click="eliminar_curso({{ $item->id_curso_programa_plan }})"
+                                                        >
+                                                            <i class="ki-outline ki-cross-square fs-1"></i>
+                                                        </button>
                                                     </div>
                                                 </td>
                                             </tr>
