@@ -137,7 +137,7 @@ class Index extends Component
         $this->matricula_curso = $matricula_curso;
         $this->id_matricula_curso = $matricula_curso->id_matricula_curso;
 
-        if ( $this->matricula_curso->estado = 3 ) {
+        if ( $this->matricula_curso->estado == 3 ) {
             // emitimos la alerta para mostrar mensaje sobre que el alumno ya fue asignado su nsp
             $this->dispatchBrowserEvent('alerta_matriculados', [
                 'title' => '¡Atención!',
@@ -537,6 +537,7 @@ class Index extends Component
             ->where('tbl_matricula_curso.activo', 1)
             ->where('persona.nombre_completo', 'like', '%'.$this->search.'%')
             ->orderBy('persona.nombre_completo', 'asc')
+            ->select('tbl_matricula_curso.*')
             ->get();
 
         $this->matriculados_count = cantidadAlumnosMatriculadosCurso($this->id_curso_programa_plan, $this->id_programa_proceso_grupo);
