@@ -129,17 +129,17 @@ class Index extends Component
 
         if ($this->paso == 2) {
 
-            // validamos si el array selects esta vacio
-            if (count($this->selects) == 0) {
-                $this->dispatchBrowserEvent('alerta-basica', [
-                    'title' => '¡Error!',
-                    'text' => 'Debe ingresar al menos una nota, para continuar con el proceso de reingreso.',
-                    'icon' => 'error',
-                    'confirmButtonText' => 'Aceptar',
-                    'color' => 'danger'
-                ]);
-                return;
-            }
+            // // validamos si el array selects esta vacio
+            // if (count($this->selects) == 0) {
+            //     $this->dispatchBrowserEvent('alerta-basica', [
+            //         'title' => '¡Error!',
+            //         'text' => 'Debe ingresar al menos una nota, para continuar con el proceso de reingreso.',
+            //         'icon' => 'error',
+            //         'confirmButtonText' => 'Aceptar',
+            //         'color' => 'danger'
+            //     ]);
+            //     return;
+            // }
 
             // validamos si se selecciono nsp pero sin su fecha de nota
             $hayNsp = false;
@@ -162,7 +162,7 @@ class Index extends Component
             }
 
             $this->validate([
-                'selects.*' => 'required|array|min:1',
+                'selects.*' => 'required|array',
                 'selects.*.nota' => 'nullable|numeric|min:0|max:20',
                 'selects.*.periodo' => 'nullable|string',
                 'selects.*.fecha_nota' => 'nullable|date',
@@ -182,6 +182,11 @@ class Index extends Component
     {
         $estudiante = Admitido::find($id_estudiante);
         $this->detalle_estudiante = $estudiante;
+    }
+
+    public function eliminar_curso($key)
+    {
+        unset($this->selects[$key]);
     }
 
     public function guardar_reingreso()
@@ -271,36 +276,41 @@ class Index extends Component
             $grupo = obtenerIdGrupoDeMatricula($ultimaMatricula->id_matricula);
         }
 
-        // registrar matricula
-        $matricula = new ModelMatricula();
-        $matricula->id_matricula_gestion = null;
-        $matricula->id_admitido = $estudiante->id_admitido;
-        $matricula->ciclo = 0;
-        $matricula->codigo = $codigo;
-        $matricula->fecha_matricula = date('Y-m-d');
-        $matricula->id_pago = null;
-        $matricula->save();
+        // verificamos si hay notas seleccionadas
+        if (count($this->selects) > 0) {
 
-        // registramos los cursos de la matricula
-        foreach ($this->selects as $key => $item) {
-            // convertimos la nota a float
-            $nota = isset($item['nota']) ? (float)$item['nota'] : 0;
-            $estado = $nota >= 14 ? 2 : 0;
-            if (isset($item['nsp']) && $item['nsp'] == $key) {
-                $nota = 0;
-                $estado = 3;
+            // registrar matricula
+            $matricula = new ModelMatricula();
+            $matricula->id_matricula_gestion = null;
+            $matricula->id_admitido = $estudiante->id_admitido;
+            $matricula->ciclo = 0;
+            $matricula->codigo = $codigo;
+            $matricula->fecha_matricula = date('Y-m-d');
+            $matricula->id_pago = null;
+            $matricula->save();
+
+            // registramos los cursos de la matricula
+            foreach ($this->selects as $key => $item) {
+                // convertimos la nota a float
+                $nota = isset($item['nota']) ? (float)$item['nota'] : 0;
+                $estado = $nota >= 14 ? 2 : 0;
+                if (isset($item['nsp']) && $item['nsp'] == $key) {
+                    $nota = 0;
+                    $estado = 3;
+                }
+                $matriculaCurso = new ModelMatriculaCurso();
+                $matriculaCurso->id_matricula = $matricula->id_matricula;
+                $matriculaCurso->id_curso_programa_plan = $key;
+                $matriculaCurso->id_programa_proceso_grupo = $grupo;
+                $matriculaCurso->id_docente = null;
+                $matriculaCurso->periodo = isset($item['periodo']) ? $item['periodo'] : calcularPeriodo($matricula->id_matricula);
+                $matriculaCurso->nota_promedio_final = $nota;
+                $matriculaCurso->fecha_ingreso_nota = date('Y-m-d');
+                $matriculaCurso->estado = $estado;
+                $matriculaCurso->activo = 0;
+                $matriculaCurso->save();
             }
-            $matriculaCurso = new ModelMatriculaCurso();
-            $matriculaCurso->id_matricula = $matricula->id_matricula;
-            $matriculaCurso->id_curso_programa_plan = $key;
-            $matriculaCurso->id_programa_proceso_grupo = $grupo;
-            $matriculaCurso->id_docente = null;
-            $matriculaCurso->periodo = isset($item['periodo']) ? $item['periodo'] : calcularPeriodo($matricula->id_matricula);
-            $matriculaCurso->nota_promedio_final = $nota;
-            $matriculaCurso->fecha_ingreso_nota = date('Y-m-d');
-            $matriculaCurso->estado = $estado;
-            $matriculaCurso->activo = 0;
-            $matriculaCurso->save();
+
         }
 
         // cerrar modal

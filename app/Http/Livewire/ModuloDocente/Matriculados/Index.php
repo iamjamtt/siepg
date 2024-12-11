@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\File;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\reporte\moduloDocente\matriculados\listaMatriculadosExport;
 use App\Models\Matricula\MatriculaCurso as ModelMatriculaCurso;
+use Illuminate\Support\Facades\DB;
 
 class Index extends Component
 {
@@ -136,7 +137,7 @@ class Index extends Component
         $this->matricula_curso = $matricula_curso;
         $this->id_matricula_curso = $matricula_curso->id_matricula_curso;
 
-        if ( $this->matricula_curso->estado = 3 ) {
+        if ( $this->matricula_curso->estado == 3 ) {
             // emitimos la alerta para mostrar mensaje sobre que el alumno ya fue asignado su nsp
             $this->dispatchBrowserEvent('alerta_matriculados', [
                 'title' => '¡Atención!',
@@ -528,25 +529,15 @@ class Index extends Component
     public function render()
     {
         $this->matriculados = ModelMatriculaCurso::query()
-            ->with([
-                'matricula' => function ($query) {
-                    $query->with([
-                        'admitido' => function ($query) {
-                            $query->with([
-                                'persona' => function ($query) {
-                                    $query->where('nombre_completo', 'like', '%'.$this->search.'%');
-                                }
-                            ]);
-                        }
-                    ]);
-                }
-            ])
-            ->where('id_curso_programa_plan', $this->id_curso_programa_plan)
-            ->where('id_programa_proceso_grupo', $this->id_programa_proceso_grupo)
-            ->where('activo', 1)
-            ->whereHas('matricula.admitido.persona', function ($query) {
-                $query->where('nombre_completo', 'like', '%'.$this->search.'%');
-            })
+            ->join('tbl_matricula', 'tbl_matricula_curso.id_matricula', 'tbl_matricula.id_matricula')
+            ->join('admitido', 'tbl_matricula.id_admitido', 'admitido.id_admitido')
+            ->join('persona', 'admitido.id_persona', 'persona.id_persona')
+            ->where('tbl_matricula_curso.id_curso_programa_plan', $this->id_curso_programa_plan)
+            ->where('tbl_matricula_curso.id_programa_proceso_grupo', $this->id_programa_proceso_grupo)
+            ->where('tbl_matricula_curso.activo', 1)
+            ->where('persona.nombre_completo', 'like', '%'.$this->search.'%')
+            ->orderBy('persona.nombre_completo', 'asc')
+            ->select('tbl_matricula_curso.*')
             ->get();
 
         $this->matriculados_count = cantidadAlumnosMatriculadosCurso($this->id_curso_programa_plan, $this->id_programa_proceso_grupo);
