@@ -847,4 +847,21 @@ function getResolucionIncorporacion($id_admitido)
     return $reingreso->reincorporacion_resolucion;
 }
 
+function calcularCantidadVecesLlevaCurso($id_admitido, $id_curso_programa_plan)
+{
+    $cantidad = ModelMatriculaCurso::query()
+        ->with([
+            'matricula' => function ($query) use ($id_admitido) {
+                $query->where('id_admitido', $id_admitido);
+            }
+        ])
+        ->where('id_curso_programa_plan', $id_curso_programa_plan)
+        ->whereHas('matricula', function ($query) use ($id_admitido) {
+            $query->where('id_admitido', $id_admitido);
+        })
+        ->count();
+
+    return $cantidad + 1;
+}
+
 //

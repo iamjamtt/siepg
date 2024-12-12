@@ -120,7 +120,7 @@ class Index extends Component
         }
 
         // generamos la prematricula
-        $this->generarPrematricula ($this->id_ciclo, $this->alumno);
+        $this->generarPrematricula($this->id_ciclo, $this->alumno);
 
         // cargamos los cursos prematriculados
         $this->cargarCursosPrematriculados($this->id_ciclo, $this->alumno->id_admitido);
@@ -466,6 +466,32 @@ class Index extends Component
 
             foreach ($cursosDesaprobados as $curso) {
                 // verificamos si el curso desaprobado ya se aprobo
+                $seAprobo = ModelMatriculaCurso::query()
+                    ->where('id_curso_programa_plan', $curso->id_curso_programa_plan)
+                    ->whereHas('matricula', function ($query) use ($alumno) {
+                        $query->where('id_admitido', $alumno->id_admitido);
+                    })
+                    ->where('estado', 2) // 2 = aprobado
+                    ->count() > 0;
+                if (!$seAprobo) {
+                    $cursosPrematricula->push($curso->cursoProgramaPlan);
+                }
+            }
+
+            $cursosNsp = ModelMatriculaCurso::query()
+                ->with([
+                    'cursoProgramaPlan' => function ($query) use ($id_ciclo) {
+                        $query->with('curso');
+                    }
+                ])
+                ->whereHas('matricula', function ($query) use ($alumno) {
+                    $query->where('id_admitido', $alumno->id_admitido);
+                })
+                ->where('estado', 3) // 3 = no se presento
+                ->get();
+
+            foreach ($cursosNsp as $curso) {
+                // verificamos si el curso no se presento ya se aprobo
                 $seAprobo = ModelMatriculaCurso::query()
                     ->where('id_curso_programa_plan', $curso->id_curso_programa_plan)
                     ->whereHas('matricula', function ($query) use ($alumno) {
