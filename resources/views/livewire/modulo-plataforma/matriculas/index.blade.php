@@ -235,7 +235,7 @@
                                 Pagos
                             </label>
                             <div class="table-responsive">
-                                <table class="table table-hover align-middle table-rounded border mb-0 gy-5 gs-5">
+                                <table class="table table-hover align-middle table-rounded border mb-0 gy-4 gs-4">
                                     <thead class="bg-light-warning">
                                         <tr class="fw-bold fs-5 text-gray-900 border-bottom-2 border-gray-200">
                                             <th>Concepto Pago</th>
@@ -296,6 +296,22 @@
                                 </table>
                             </div>
                         </div>
+                        <!-- alerta -->
+                        <div class="col-12">
+                            <div class="alert bg-light-warning border border-3 border-warning d-flex align-items-center p-5 mb-0 mt-2">
+                                <i class="ki-duotone ki-information-5 fs-2qx me-4 text-warning">
+                                    <i class="path1"></i>
+                                    <i class="path2"></i>
+                                    <i class="path3"></i>
+                                </i>
+                                <div class="d-flex flex-column">
+                                    <span class="fw-bold fs-5">
+                                        Si tienes cursos pendientes o no aprobados (NSP), es posible que no estén disponibles para matrícula en este periodo.
+                                        Por favor, consulta con el administrador del sistema para más información.
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
                         <div class="col-12">
                             <div class="d-flex justify-content-between">
                                 <label for="pagos" class="required form-label">
@@ -306,11 +322,12 @@
                                 </span>
                             </div>
                             <div class="table-responsive">
-                                <table class="table table-hover align-middle table-rounded border mb-0 gy-5 gs-5">
+                                <table class="table table-hover align-middle table-rounded border mb-0 gy-4 gs-4">
                                     <thead class="bg-light-warning">
                                         <tr class="fw-bold fs-5 text-gray-900 border-bottom-2 border-gray-200">
                                             <th>Codigo</th>
                                             <th>Nombre del Curso</th>
+                                            <th class="text-center">Veces</th>
                                             <th class="text-center">Credito</th>
                                             <th class="text-center">Ciclo</th>
                                             <th></th>
@@ -324,6 +341,9 @@
                                                 </td>
                                                 <td>
                                                     {{ $item->cursoProgramaPlan->curso->curso_nombre }}
+                                                </td>
+                                                <td align="center">
+                                                    {{ calcularCantidadVecesLlevaCurso($alumno->id_admitido, $item->id_curso_programa_plan) }}
                                                 </td>
                                                 <td align="center">
                                                     {{ $item->cursoProgramaPlan->curso->curso_credito }}
