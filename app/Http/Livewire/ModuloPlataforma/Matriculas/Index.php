@@ -120,7 +120,7 @@ class Index extends Component
         }
 
         // generamos la prematricula
-        $this->generarPrematricula ($this->id_ciclo, $this->alumno);
+        $this->generarPrematricula($this->id_ciclo, $this->alumno);
 
         // cargamos los cursos prematriculados
         $this->cargarCursosPrematriculados($this->id_ciclo, $this->alumno->id_admitido);
