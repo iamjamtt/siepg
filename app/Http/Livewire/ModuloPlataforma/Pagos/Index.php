@@ -323,7 +323,7 @@ class Index extends Component
                         ->first();
                     if ($matriculaGestion) {
                         if ($this->concepto_pago == 3 || $this->concepto_pago == 4) {
-                            if ($this->fecha_pago < $matriculaGestion->matricula_gestion_fecha_inicio || $this->fecha_pago > $matriculaGestion->matricula_gestion_fecha_fin) {
+                            if ($this->fecha_pago > $matriculaGestion->matricula_gestion_fecha_fin) {
                                 $this->dispatchBrowserEvent('alerta_pago_plataforma', [
                                     'title' => '¡Error!',
                                     'text' => 'La fecha de pago ingresada no se encuentra dentro del rango de fechas de matrícula.',
@@ -398,7 +398,8 @@ class Index extends Component
                     $fechaFin = $matriculaGestion->matricula_gestion_fecha_fin;
                     $fechaInicioExtemporanea = $matriculaGestion->matricula_gestion_fecha_extemporanea_inicio;
                     $fechaFinExtemporanea = $matriculaGestion->matricula_gestion_fecha_extemporanea_fin;
-                    if ($this->fecha_pago >= $fechaInicio && $this->fecha_pago <= $fechaFin) {
+                    // if ($this->fecha_pago >= $fechaInicio && $this->fecha_pago <= $fechaFin) {
+                    if ($this->fecha_pago <= $fechaFin) {
                         // en rango de fecha de matricula
                         // validamos el monto de pago de matricula es segun el concepto de pago
                         if ($this->concepto_pago != 3) {
