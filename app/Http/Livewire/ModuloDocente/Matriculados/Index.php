@@ -469,7 +469,7 @@ class Index extends Component
             $acta_docente->id_docente_curso = $id_docente_curso;
             $acta_docente->acta_docente_fecha_creacion = date('Y-m-d H:i:s');
             $acta_docente->acta_docente_estado = 1;
-            $acta_docente->es_reincorporacion = 1;
+            $acta_docente->es_incorporacion = 1;
             $acta_docente->save();
         }
 
