@@ -32,6 +32,8 @@ class MatriculaCurso extends Model
         'fecha_ingreso_nota',
         'estado',
         'activo',
+        'id_reingreso',
+        'id_incorporacion',
         'subsanacion_nota',
         'subsanacion_estado'
     ];
