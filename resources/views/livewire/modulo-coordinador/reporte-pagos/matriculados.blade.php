@@ -66,7 +66,20 @@
                         <div class="card-body mb-0">
                             <div class="table-responsive">
                                 <div class="d-flex flex-column flex-md-row align-items-center mb-5 w-100">
-                                    <div class="col-md-4 pe-md-3"></div>
+                                    <div class="col-md-4 pe-md-3">
+                                        <select wire:model="gestionMatricula" class="form-select w-100">
+                                            @if (!$tienePrimerCiclo)
+                                                <option value="0">
+                                                    Ciclo I
+                                                </option>
+                                            @endif
+                                            @foreach ($gestionesMatricula as $item)
+                                                <option value="{{ $item->id_matricula_gestion }}">
+                                                    Ciclo {{ $item->ciclo->ciclo }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
                                     <div class="col-md-4 px-md-3"></div>
                                     <div class="col-md-4 ps-md-3">
                                         <input type="search" wire:model="search" class="form-control w-100" placeholder="Buscar..."/>
@@ -86,9 +99,6 @@
                                     </thead>
                                     <tbody>
                                         @forelse ($matriculados as $item)
-                                        @php
-                                            dataPagoMatricula($item);
-                                        @endphp
                                             <tr class="fs-6">
                                                 <td class="fw-bold">
                                                     {{ $loop->iteration }}
@@ -103,13 +113,13 @@
                                                     {{ $item->nombre_completo }}
                                                 </td>
                                                 <td>
-                                                    S/. {{ number_format(dataPagoMatricula($item)['monto_total'], 2, ',', '.') }}
+                                                    S/. {{ number_format(dataPagoMatricula($item, $item->id_matricula)['monto_total'], 2, ',', '.') }}
                                                 </td>
                                                 <td class="fw-bold">
-                                                    S/. {{ number_format(dataPagoMatricula($item)['monto_pagado'], 2, ',', '.')}}
+                                                    S/. {{ number_format(dataPagoMatricula($item, $item->id_matricula)['monto_pagado'], 2, ',', '.')}}
                                                 </td>
                                                 <td class="text-danger">
-                                                    S/. {{ number_format(dataPagoMatricula($item)['deuda'], 2, ',', '.')}}
+                                                    S/. {{ number_format(dataPagoMatricula($item, $item->id_matricula)['deuda'], 2, ',', '.')}}
                                                 </td>
                                             </tr>
                                         @empty
