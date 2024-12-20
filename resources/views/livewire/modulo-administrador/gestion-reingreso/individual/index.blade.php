@@ -682,6 +682,15 @@
                                                                             id="curso_{{ $item2->cursoProgramaPlan->id_curso_programa_plan }}"
                                                                         />
                                                                     </div>
+                                                                    @if ($item2->id_reingreso)
+                                                                        <button
+                                                                            type="button"
+                                                                            class="btn btn-icon btn-sm btn-danger"
+                                                                            wire:click="eliminarCursoSeleccionado({{ $item2->id_matricula_curso }})"
+                                                                        >
+                                                                            <i class="ki-outline ki-cross-square fs-1"></i>
+                                                                        </button>
+                                                                    @endif
                                                                 </div>
                                                             </td>
                                                         </tr>

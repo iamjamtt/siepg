@@ -461,6 +461,17 @@ class Index extends Component
         $this->nombreResolucion = 'RESOLUCION DE REINGRESO ' . $reingreso->reingreso_resolucion;
 
         // obtebnemos las matriculas y cursos
+        $this->cargarMatriculas($reingreso->id_admitido, $reingreso);
+
+        // abrir modal
+        $this->dispatchBrowserEvent('modal', [
+            'modal' => '#modalAsiganarResolucion',
+            'action' => 'show',
+        ]);
+    }
+
+    public function cargarMatriculas($idAdmitido, $reingreso = null)
+    {
         $matriculas = ModelMatricula::query()
             ->with([
                 'cursos' => function ($query) {
@@ -471,7 +482,7 @@ class Index extends Component
                     ]);
                 }
             ])
-            ->where('id_admitido', $reingreso->id_admitido)
+            ->where('id_admitido', $idAdmitido)
             ->get();
 
         $this->matriculas = $matriculas;
@@ -487,12 +498,6 @@ class Index extends Component
         }
 
         $this->cursosSeleccionados = $cursosSeleccionados;
-
-        // abrir modal
-        $this->dispatchBrowserEvent('modal', [
-            'modal' => '#modalAsiganarResolucion',
-            'action' => 'show',
-        ]);
     }
 
     public function limpiarModalAsignarResolucion()
@@ -551,5 +556,17 @@ class Index extends Component
         ]);
 
         $this->cerrarModalAsignarResolucion();
+    }
+
+    public function eliminarCursoSeleccionado($id_matricula_curso)
+    {
+        $matriculaCurso = ModelMatriculaCurso::find($id_matricula_curso);
+        if ($matriculaCurso) {
+            $matriculaCurso->id_reingreso = null;
+            $matriculaCurso->save();
+        }
+
+        $reingreso = Reingreso::find($this->id_reingreso);
+        $this->cargarMatriculas($reingreso->id_admitido, $reingreso);
     }
 }
