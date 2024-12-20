@@ -48,7 +48,7 @@
 		<div class="d-flex flex-column flex-root" id="kt_app_root">
 			<style>
                 body {
-                    background-image: url("{{ asset('assets/media/auth/bg-login-posgrado2.jpg') }}");
+                    background-image: url("{{ asset('assets/media/auth/bg-login-posgrado-admin.jpg') }}");
                     background-repeat: no-repeat;
                     background-size: cover;
                     background-position: center;
@@ -68,7 +68,7 @@
 						<a href="https://www.unu.edu.pe/posgrado/index.php" target="_blank" class="mb-7">
 							<img alt="Logo" src="{{ asset('assets/media/logos/logo-pg.png') }}" height="90" />
 						</a>
-						<h2 class="text-white fw-bold m-0" style="font-size: 2rem">
+						<h2 class="text-dark fw-bold m-0" style="font-size: 2rem">
                             Escuela de Posgrado
                         </h2>
 					</div>
