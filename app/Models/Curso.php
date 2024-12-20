@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Curso extends Model
 {
@@ -29,5 +30,10 @@ class Curso extends Model
     public function ciclo()
     {
         return $this->belongsTo(Ciclo::class, 'id_ciclo');
+    }
+
+    public function cursoProgramaPlan(): HasOne
+    {
+        return $this->hasOne(CursoProgramaPlan::class, 'id_curso');
     }
 }
