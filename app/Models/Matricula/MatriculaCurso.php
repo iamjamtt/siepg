@@ -5,6 +5,8 @@ namespace App\Models\Matricula;
 use App\Models\CursoProgramaPlan;
 use App\Models\Docente;
 use App\Models\ProgramaProcesoGrupo;
+use App\Models\Reincorporacion;
+use App\Models\Reingreso;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -61,5 +63,15 @@ class MatriculaCurso extends Model
     public function docente()
     {
         return $this->belongsTo(Docente::class, 'id_docente', 'id_docente');
+    }
+
+    public function reingreso()
+    {
+        return $this->belongsTo(Reingreso::class, 'id_reingreso', 'id_reingreso');
+    }
+
+    public function incorporacion()
+    {
+        return $this->belongsTo(Reincorporacion::class, 'id_incorporacion', 'id_reincorporacion');
     }
 }

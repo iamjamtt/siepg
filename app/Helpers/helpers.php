@@ -879,4 +879,19 @@ function calcularCantidadVecesLlevaCurso($id_admitido, $id_curso_programa_plan)
     return $cantidad + 1;
 }
 
+function getNombreResolucionReingreso($id_matricula_curso)
+{
+    $matriculaCurso = ModelMatriculaCurso::find($id_matricula_curso);
+
+    if (!$matriculaCurso) {
+        return '';
+    }
+
+    if($matriculaCurso->id_reingreso) {
+        return $matriculaCurso->reingreso->reingreso_resolucion ?? '';
+    }
+
+    return '';
+}
+
 //
