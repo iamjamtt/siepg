@@ -668,7 +668,7 @@
                                                             <td class="fw-bold">
                                                                 {{ $item2->cursoProgramaPlan->curso->curso_nombre }} <br>
                                                                 <span class="text-muted">
-                                                                    {{ $item2->cursoProgramaPlan->curso->curso_codigo }}
+                                                                    {{ $item2->cursoProgramaPlan->curso->curso_codigo }} - Ciclo {{ $item2->cursoProgramaPlan->curso->ciclo->ciclo }}
                                                                 </span>
                                                             </td>
                                                             <td align="center">
