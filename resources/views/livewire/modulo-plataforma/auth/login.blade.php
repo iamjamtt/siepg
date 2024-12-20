@@ -4,7 +4,7 @@
             <form class="form w-100" wire:submit.prevent="ingresar_plataforma">
                 <div class="text-center mb-11">
                     <h1 class="text-dark fw-bolder mb-3">
-                        Plataforma Escuela de Posgrado
+                        Plataforma del Estudiante<br>Escuela de Posgrado
                     </h1>
                     <div class="text-gray-500 fw-semibold fs-4">
                         Iniciar sesión
@@ -46,7 +46,7 @@
                     </div>
                 @endif
                 <div class="mt-5">
-                    <button type="submit" class="btn btn-primary w-100" wire:loading.attr="disabled">
+                    <button type="submit" class="btn btn-warning w-100" wire:loading.attr="disabled">
                         <div wire:loading.remove wire:target="ingresar_plataforma">
                             Ingresar
                         </div>

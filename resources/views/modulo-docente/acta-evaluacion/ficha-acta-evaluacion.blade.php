@@ -269,19 +269,19 @@
                                 {{ $item->nombre_completo }}
                             </td>
                             <td style="border: 1px solid black; padding: 4px;" align="center">
-                                {{ $item->nota_evaluacion_permanente ? $item->nota_evaluacion_permanente : '-' }}
+                                {{ $item->nota_evaluacion_permanente ? round($item->nota_evaluacion_permanente) : '-' }}
                             </td>
                             <td style="border: 1px solid black; padding: 4px;" align="center">
-                                {{ $item->nota_evaluacion_medio_curso ? $item->nota_evaluacion_medio_curso : '-' }}
+                                {{ $item->nota_evaluacion_medio_curso ? round($item->nota_evaluacion_medio_curso) : '-' }}
                             </td>
                             <td style="border: 1px solid black; padding: 4px;" align="center">
-                                {{ $item->nota_evaluacion_final ? $item->nota_evaluacion_final : '-' }}
+                                {{ $item->nota_evaluacion_final ? round($item->nota_evaluacion_final) : '-' }}
                             </td>
                             <td style="border: 1px solid black; padding: 4px; {{ $item->nota_promedio_final < 14 ? 'color: #ff0000;' : '' }}" align="center">
                                 @if ($item->estado == 3)
                                     NSP
                                 @else
-                                    {{ $item->nota_promedio_final }}
+                                    {{ round($item->nota_promedio_final) }}
                                 @endif
                             </td>
                             <td style="border: 1px solid black; padding: 4px; {{ $item->nota_promedio_final < 14 ? 'color: #ff0000;' : '' }}">
@@ -534,19 +534,19 @@
                                 {{ $item->nombre_completo }}
                             </td>
                             <td style="border: 1px solid black; padding: 4px;" align="center">
-                                {{ $item->nota_evaluacion_permanente ? $item->nota_evaluacion_permanente : '-' }}
+                                {{ $item->nota_evaluacion_permanente ? round($item->nota_evaluacion_permanente) : '-' }}
                             </td>
                             <td style="border: 1px solid black; padding: 4px;" align="center">
-                                {{ $item->nota_evaluacion_medio_curso ? $item->nota_evaluacion_medio_curso : '-' }}
+                                {{ $item->nota_evaluacion_medio_curso ? round($item->nota_evaluacion_medio_curso) : '-' }}
                             </td>
                             <td style="border: 1px solid black; padding: 4px;" align="center">
-                                {{ $item->nota_evaluacion_final ? $item->nota_evaluacion_final : '-' }}
+                                {{ $item->nota_evaluacion_final ? round($item->nota_evaluacion_final) : '-' }}
                             </td>
                             <td style="border: 1px solid black; padding: 4px; {{ $item->nota_promedio_final < 14 ? 'color: #ff0000;' : '' }}" align="center">
                                 @if ($item->estado == 3)
                                     NSP
                                 @else
-                                    {{ $item->nota_promedio_final }}
+                                    {{ round($item->nota_promedio_final) }}
                                 @endif
                             </td>
                             <td style="border: 1px solid black; padding: 4px; {{ $item->nota_promedio_final < 14 ? 'color: #ff0000;' : '' }}">
@@ -804,19 +804,19 @@
                             {{ $item->nombre_completo }}
                         </td>
                         <td style="border: 1px solid black; padding: 4px;" align="center">
-                            {{ $item->nota_evaluacion_permanente ? $item->nota_evaluacion_permanente : '-' }}
+                            {{ $item->nota_evaluacion_permanente ? round($item->nota_evaluacion_permanente) : '-' }}
                         </td>
                         <td style="border: 1px solid black; padding: 4px;" align="center">
-                            {{ $item->nota_evaluacion_medio_curso ? $item->nota_evaluacion_medio_curso : '-' }}
+                            {{ $item->nota_evaluacion_medio_curso ? round($item->nota_evaluacion_medio_curso) : '-' }}
                         </td>
                         <td style="border: 1px solid black; padding: 4px;" align="center">
-                            {{ $item->nota_evaluacion_final ? $item->nota_evaluacion_final : '-' }}
+                            {{ $item->nota_evaluacion_final ? round($item->nota_evaluacion_final) : '-' }}
                         </td>
                         <td style="border: 1px solid black; padding: 4px; {{ $item->nota_promedio_final < 14 ? 'color: #ff0000;' : '' }}" align="center">
                             @if ($item->estado == 3)
                                 NSP
                             @else
-                                {{ $item->nota_promedio_final }}
+                                {{ round($item->nota_promedio_final) }}
                             @endif
                         </td>
                         <td style="border: 1px solid black; padding: 4px; {{ $item->nota_promedio_final < 14 ? 'color: #ff0000;' : '' }}">
@@ -1073,19 +1073,19 @@
                             {{ $item->nombre_completo }}
                         </td>
                         <td style="border: 1px solid black; padding: 4px;" align="center">
-                            {{ $item->nota_evaluacion_permanente ? $item->nota_evaluacion_permanente : '-' }}
+                            {{ $item->nota_evaluacion_permanente ? round($item->nota_evaluacion_permanente) : '-' }}
                         </td>
                         <td style="border: 1px solid black; padding: 4px;" align="center">
-                            {{ $item->nota_evaluacion_medio_curso ? $item->nota_evaluacion_medio_curso : '-' }}
+                            {{ $item->nota_evaluacion_medio_curso ? round($item->nota_evaluacion_medio_curso) : '-' }}
                         </td>
                         <td style="border: 1px solid black; padding: 4px;" align="center">
-                            {{ $item->nota_evaluacion_final ? $item->nota_evaluacion_final : '-' }}
+                            {{ $item->nota_evaluacion_final ? round($item->nota_evaluacion_final) : '-' }}
                         </td>
                         <td style="border: 1px solid black; padding: 4px; {{ $item->nota_promedio_final < 14 ? 'color: #ff0000;' : '' }}" align="center">
                             @if ($item->estado == 3)
                                 NSP
                             @else
-                                {{ $item->nota_promedio_final }}
+                                {{ round($item->nota_promedio_final) }}
                             @endif
                         </td>
                         <td style="border: 1px solid black; padding: 4px; {{ $item->nota_promedio_final < 14 ? 'color: #ff0000;' : '' }}">

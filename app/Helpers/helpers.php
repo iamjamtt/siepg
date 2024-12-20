@@ -350,10 +350,15 @@ function finalizar_evaluacion($evaluacion, $puntaje)
     }
 }
 
-function dataPagoMatricula($item)
+function dataPagoMatricula($item, $id_matricula = null)
 {
-    $monto_total = calcularMontoTotalCostoPorEnsenhanzaEstudiante($item->id_admitido);
-    $monto_pagado = calcularMontoPagadoCostoPorEnsenhanzaEstudiante($item->id_admitido);
+    if ($id_matricula) {
+        $monto_total = calcularMontoTotalCostoPorEnsenhanzaEstudiante($item->id_admitido, $id_matricula);
+        $monto_pagado = calcularMontoPagadoCostoPorEnsenhanzaEstudiante($item->id_admitido, $id_matricula);
+    } else {
+        $monto_total = calcularMontoTotalCostoPorEnsenhanzaEstudiante($item->id_admitido);
+        $monto_pagado = calcularMontoPagadoCostoPorEnsenhanzaEstudiante($item->id_admitido);
+    }
     $deuda = $monto_total - $monto_pagado;
 
     return [
@@ -363,13 +368,18 @@ function dataPagoMatricula($item)
     ];
 }
 
-function calcularMontoTotalCostoPorEnsenhanzaEstudiante($id_admitido)
+function calcularMontoTotalCostoPorEnsenhanzaEstudiante($id_admitido, $id_matricula = null)
 {
     $admitido = Admitido::query()
         ->with('ultimaMatricula')
         ->find($id_admitido);
 
-    $ultima_matricula = $admitido->ultimaMatriculaNuevo;
+    if ($id_matricula) {
+        $ultima_matricula = ModelMatricula::query()
+            ->find($id_matricula);
+    } else {
+        $ultima_matricula = $admitido->ultimaMatriculaNuevo;
+    }
 
     if (!$ultima_matricula) {
         return 0;
@@ -399,13 +409,18 @@ function calcularMontoTotalCostoPorEnsenhanzaEstudiante($id_admitido)
     return $monto_total;
 }
 
-function calcularMontoPagadoCostoPorEnsenhanzaEstudiante($id_admitido)
+function calcularMontoPagadoCostoPorEnsenhanzaEstudiante($id_admitido, $id_matricula = null)
 {
     $admitido = Admitido::query()
         ->with('ultimaMatricula')
         ->find($id_admitido);
 
-    $ultima_matricula = $admitido->ultimaMatriculaNuevo;
+    if ($id_matricula) {
+        $ultima_matricula = ModelMatricula::query()
+            ->find($id_matricula);
+    } else {
+        $ultima_matricula = $admitido->ultimaMatriculaNuevo;
+    }
 
     if (!$ultima_matricula) {
         return 0;
@@ -862,6 +877,21 @@ function calcularCantidadVecesLlevaCurso($id_admitido, $id_curso_programa_plan)
         ->count();
 
     return $cantidad + 1;
+}
+
+function getNombreResolucionReingreso($id_matricula_curso)
+{
+    $matriculaCurso = ModelMatriculaCurso::find($id_matricula_curso);
+
+    if (!$matriculaCurso) {
+        return '';
+    }
+
+    if($matriculaCurso->id_reingreso) {
+        return $matriculaCurso->reingreso->reingreso_resolucion ?? '';
+    }
+
+    return '';
 }
 
 //

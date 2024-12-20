@@ -377,7 +377,11 @@ class Index extends Component
 
         $planes = Plan::where('plan_estado', 1)->orderBy('plan', 'desc')->get();
         $procesos = Admision::orderBy('admision', 'desc')->get();
-        $programas = Programa::where('id_facultad', $this->coordinador->id_facultad)->where('programa_estado', 1)->get();
+        $programas = Programa::query()
+            ->where('id_facultad', $this->coordinador->id_facultad)
+            ->where('id_modalidad', 2)
+            ->where('programa_estado', 1)
+            ->get();
         $programa_tipo_filtro = $this->filtro_programa ? Programa::find($this->filtro_programa)->programa_tipo : null;
         $ciclos = Ciclo::where('ciclo_estado', 1)
                     ->where(function ($query) use ($programa_tipo_filtro) {

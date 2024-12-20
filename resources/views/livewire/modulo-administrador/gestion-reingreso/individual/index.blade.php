@@ -128,7 +128,7 @@
                                             <th>Programa</th>
                                             <th>Proceso</th>
                                             <th>Fecha</th>
-                                            {{-- <th></th> --}}
+                                            <th></th>
                                         </tr>
                                     </thead>
                                     <tbody class="fw-semibold text-gray-700">
@@ -166,7 +166,7 @@
                                                 <td class="fs-6">
                                                     {{ date('d/m/Y h:i A', strtotime($item->reingreso_fecha_creacion)) }}
                                                 </td>
-                                                {{-- <td class="text-center">
+                                                <td class="text-center">
                                                     <button type="button"
                                                         class="btn btn-flex btn-center fw-bold btn-outline btn-outline-dashed btn-outline-primary btn-active-light-primary hover-scale"
                                                         data-bs-toggle="dropdown">
@@ -191,23 +191,14 @@
                                                     <div class="dropdown-menu dropdown-menu-end menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-6 w-150px py-4"
                                                         data-kt-menu="true">
                                                         <div class="menu-item px-3">
-                                                            <a href="#modal_docente_detalle"
-                                                                wire:click="cargar_docente({{ $item->id_docente }}, 'show')"
-                                                                class="menu-link px-3 fs-6" data-bs-toggle="modal"
-                                                                data-bs-target="#modal_docente_detalle">
-                                                                Detalle
-                                                            </a>
-                                                        </div>
-                                                        <div class="menu-item px-3">
-                                                            <a href="#modal_docente"
-                                                                wire:click="cargar_docente({{ $item->id_docente }}, 'edit')"
-                                                                class="menu-link px-3 fs-6" data-bs-toggle="modal"
-                                                                data-bs-target="#modal_docente">
-                                                                Editar Re
+                                                            <a href="javascript:;"
+                                                                wire:click="abrirModalAsignarResolucion({{ $item->id_reingreso }})"
+                                                                class="menu-link px-3 fs-6">
+                                                                Asignar Resolución
                                                             </a>
                                                         </div>
                                                     </div>
-                                                </td> --}}
+                                                </td>
                                             </tr>
                                         @empty
                                             @if ($search != '')
@@ -607,6 +598,136 @@
                         </div>
                     </button>
                     @endif
+                </div>
+            </div>
+        </div>
+    </div>
+    <div wire:ignore.self class="modal fade" tabindex="-1" id="modalAsiganarResolucion">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title">
+                        {{ $title_modal }}
+                    </h2>
+
+                    <div
+                        class="btn btn-icon btn-sm btn-active-light-danger ms-2"
+                        wire:click="cerrarModalAsignarResolucion"
+                    >
+                        <span class="svg-icon svg-icon-2hx">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <rect opacity="0.3" x="2" y="2" width="20" height="20"
+                                    rx="5" fill="currentColor" />
+                                <rect x="7" y="15.3137" width="12" height="2" rx="1"
+                                    transform="rotate(-45 7 15.3137)" fill="currentColor" />
+                                <rect x="8.41422" y="7" width="12" height="2" rx="1"
+                                    transform="rotate(45 8.41422 7)" fill="currentColor" />
+                            </svg>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="modal-body">
+                    <div class="row g-2">
+                        <div class="col-md-12">
+                            <div class="form-floating mb-7">
+                                <input
+                                    type="text"
+                                    class="form-control form-control-solid"
+                                    id="nombreResolucion"
+                                    wire:model="nombreResolucion"
+                                    readonly
+                                />
+                                <label for="nombreResolucion">
+                                    Nombre de la Resolución
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row g-3">
+                        @foreach ($matriculas as $item)
+                            <div class="col-md-6" wire:key="{{ $item->id_matricula }}">
+                                <div class="card shadow-sm border border-secondary">
+                                    <div class="card-body">
+                                        <div class="mb-3 text-center">
+                                            <span class="fs-3 fw-bold">
+                                                Matricula {{ $loop->iteration }}
+                                            </span>
+                                        </div>
+                                        <div class="table-responsive">
+                                            <table class="table table-hover align-middle table-rounded border mb-0 gy-2 gs-2">
+                                                <thead>
+                                                    <tr class="fw-semibold fs-6 text-gray-800 border-bottom border-gray-200 bg-light-warning">
+                                                        <th colspan="2" class="text-center">Curso</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach ($item->cursos as $item2)
+                                                        <tr wire:key="{{ $item2->cursoProgramaPlan->id_curso_programa_plan }}">
+                                                            <td class="fw-bold">
+                                                                {{ $item2->cursoProgramaPlan->curso->curso_nombre }} <br>
+                                                                <span class="text-muted">
+                                                                    {{ $item2->cursoProgramaPlan->curso->curso_codigo }}
+                                                                </span>
+                                                            </td>
+                                                            <td align="center">
+                                                                <div class="d-flex justify-content-center align-items-center">
+                                                                    <div class="form-check">
+                                                                        <input
+                                                                            type="checkbox"
+                                                                            class="form-check-input"
+                                                                            wire:model="cursosSeleccionados"
+                                                                            value="{{ $item2->id_matricula_curso }}"
+                                                                            id="curso_{{ $item2->cursoProgramaPlan->id_curso_programa_plan }}"
+                                                                        />
+                                                                    </div>
+                                                                    @if ($item2->id_reingreso)
+                                                                        <button
+                                                                            type="button"
+                                                                            class="btn btn-icon btn-sm btn-danger"
+                                                                            wire:click="eliminarCursoSeleccionado({{ $item2->id_matricula_curso }})"
+                                                                        >
+                                                                            <i class="ki-outline ki-cross-square fs-1"></i>
+                                                                        </button>
+                                                                    @endif
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button
+                        type="button"
+                        class="btn btn-light"
+                        wire:click="cerrarModalAsignarResolucion"
+                    >
+                        Cerrar
+                    </button>
+                    <button
+                        type="button"
+                        wire:click="asignarResolucion"
+                        class="btn btn-primary"
+                        style="width: 200px"
+                        wire:loading.attr="disabled"
+                        wire:target="asignarResolucion"
+                    >
+                        <div wire:loading.remove wire:target="asignarResolucion">
+                            Asigar Resolución
+                        </div>
+                        <div wire:loading wire:target="asignarResolucion">
+                            Procesando <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                        </div>
+                    </button>
                 </div>
             </div>
         </div>

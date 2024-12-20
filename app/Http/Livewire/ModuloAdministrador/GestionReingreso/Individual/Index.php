@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\ModuloAdministrador\GestionReingreso\Individual;
 
 use App\Models\Admitido;
+use App\Models\Ciclo;
 use App\Models\CursoProgramaPlan;
 use App\Models\Matricula;
 use App\Models\Matricula\Matricula as ModelMatricula;
@@ -42,6 +43,12 @@ class Index extends Component
     public $resolucion_file;
 
     public array $selects = [];
+
+    //
+    public string $nombreResolucion = '';
+    public $matriculas = [];
+    public array $cursosSeleccionados = [];
+    public $id_reingreso;
 
     protected $queryString = [ // para que la paginacion se mantenga con el buscador
         'search' => ['except' => '', 'as' => 's'],
@@ -438,5 +445,128 @@ class Index extends Component
             'ciclos' => $ciclos,
             'grupos' => $grupos,
         ]);
+    }
+
+    public function mount()
+    {
+        $this->matriculas = collect();
+    }
+
+    public function abrirModalAsignarResolucion($idReingreso)
+    {
+        $reingreso = Reingreso::find($idReingreso);
+        $this->id_reingreso = $reingreso->id_reingreso;
+        $this->title_modal = 'Asignar Resolución a los Cursos de este reingreso';
+
+        $this->nombreResolucion = 'RESOLUCION DE REINGRESO ' . $reingreso->reingreso_resolucion;
+
+        // obtebnemos las matriculas y cursos
+        $this->cargarMatriculas($reingreso->id_admitido, $reingreso);
+
+        // abrir modal
+        $this->dispatchBrowserEvent('modal', [
+            'modal' => '#modalAsiganarResolucion',
+            'action' => 'show',
+        ]);
+    }
+
+    public function cargarMatriculas($idAdmitido, $reingreso = null)
+    {
+        $matriculas = ModelMatricula::query()
+            ->with([
+                'cursos' => function ($query) {
+                    $query->with([
+                        'cursoProgramaPlan' => function ($query) {
+                            $query->with('curso');
+                        }
+                    ]);
+                }
+            ])
+            ->where('id_admitido', $idAdmitido)
+            ->get();
+
+        $this->matriculas = $matriculas;
+
+        // cargar los cursos seleccionados
+        $cursosSeleccionados = [];
+        foreach ($matriculas as $matricula) {
+            foreach ($matricula->cursos as $curso) {
+                if ($curso->id_reingreso == $reingreso->id_reingreso) {
+                    $cursosSeleccionados[] = $curso->id_matricula_curso;
+                }
+            }
+        }
+
+        $this->cursosSeleccionados = $cursosSeleccionados;
+    }
+
+    public function limpiarModalAsignarResolucion()
+    {
+        $this->reset([
+            'title_modal',
+            'nombreResolucion',
+            'matriculas',
+            'cursosSeleccionados',
+            'id_reingreso',
+        ]);
+        $this->resetErrorBag();
+        $this->resetValidation();
+    }
+
+    public function cerrarModalAsignarResolucion()
+    {
+        $this->dispatchBrowserEvent('modal', [
+            'modal' => '#modalAsiganarResolucion',
+            'action' => 'hide',
+        ]);
+
+        $this->limpiarModalAsignarResolucion();
+    }
+
+    public function asignarResolucion()
+    {
+        if (count($this->cursosSeleccionados) == 0) {
+            $this->dispatchBrowserEvent('alerta-basica', [
+                'title' => '¡Error!',
+                'text' => 'Debe seleccionar al menos un curso para asignar la resolución.',
+                'icon' => 'error',
+                'confirmButtonText' => 'Aceptar',
+                'color' => 'danger'
+            ]);
+            return;
+        }
+
+        // $reingreso = Reingreso::find($this->id_reingreso);
+        // $admitido = Admitido::find($reingreso->id_admitido);
+
+        foreach ($this->cursosSeleccionados as $id_matricula_curso) {
+            $matriculaCurso = ModelMatriculaCurso::find($id_matricula_curso);
+            if ($matriculaCurso) {
+                $matriculaCurso->id_reingreso = $this->id_reingreso;
+                $matriculaCurso->save();
+            }
+        }
+
+        $this->dispatchBrowserEvent('alerta-basica', [
+            'title' => '¡Éxito!',
+            'text' => 'Resolución asignada correctamente.',
+            'icon' => 'success',
+            'confirmButtonText' => 'Aceptar',
+            'color' => 'success'
+        ]);
+
+        $this->cerrarModalAsignarResolucion();
+    }
+
+    public function eliminarCursoSeleccionado($id_matricula_curso)
+    {
+        $matriculaCurso = ModelMatriculaCurso::find($id_matricula_curso);
+        if ($matriculaCurso) {
+            $matriculaCurso->id_reingreso = null;
+            $matriculaCurso->save();
+        }
+
+        $reingreso = Reingreso::find($this->id_reingreso);
+        $this->cargarMatriculas($reingreso->id_admitido, $reingreso);
     }
 }

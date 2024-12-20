@@ -181,13 +181,24 @@
                                                         {{ $curso->curso_codigo }}
                                                     </td>
                                                     <td>
-                                                        {{ $curso->curso_nombre }}
-                                                        <div class="fs-6">
-                                                            <span class="fw-bold">Docente:</span>
-                                                            @if ($docente)
-                                                                {{ $docente->trabajador->grado_academico->grado_academico_prefijo }} {{ $docente->trabajador->trabajador_nombre_completo }}
-                                                            @else
-                                                                Sin asignar
+                                                        <div class="d-flex flex-column">
+                                                            <span class="fw-bold">
+                                                                {{ $curso->curso_nombre }}
+                                                            </span>
+                                                            <div class="fs-6">
+                                                                <span class="fw-bold">Docente:</span>
+                                                                @if ($docente)
+                                                                    {{ $docente->trabajador->grado_academico->grado_academico_prefijo }} {{ $docente->trabajador->trabajador_nombre_completo }}
+                                                                @else
+                                                                    Sin asignar
+                                                                @endif
+                                                            </div>
+                                                            @if ($matriculaCurso && $matriculaCurso->id_reingreso)
+                                                                <div class="fs-6">
+                                                                    <span class="text-danger">
+                                                                        RESOLUCIÓN DE REINGRESO {{ getNombreResolucionReingreso($matriculaCurso->id_matricula_curso) }}
+                                                                    </span>
+                                                                </div>
                                                             @endif
                                                         </div>
                                                     </td>
