@@ -174,7 +174,7 @@
                                     </tr>
                                     @empty
                                     <tr class="fs-6">
-                                        <td colspan="7" class="text-center">
+                                        <td colspan="8" class="text-center">
                                             <div class="text-muted py-5">
                                                 @if ($search == '')
                                                     No se encontraron resultados
