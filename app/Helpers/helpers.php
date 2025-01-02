@@ -439,9 +439,11 @@ function calcularMontoPagadoCostoPorEnsenhanzaEstudiante($id_admitido, $id_matri
 
     foreach($mensualidades as $mensualidad)
     {
-        if ( $mensualidad->pago->pago_estado == 2 && $mensualidad->pago->pago_verificacion == 2 )
-        {
-            $monto_pagado += $mensualidad->pago->pago_monto;
+        if ( $mensualidad->pago ) {
+            if ( $mensualidad->pago->pago_estado == 2 && $mensualidad->pago->pago_verificacion == 2 )
+            {
+                $monto_pagado += $mensualidad->pago->pago_monto;
+            }
         }
     }
 
