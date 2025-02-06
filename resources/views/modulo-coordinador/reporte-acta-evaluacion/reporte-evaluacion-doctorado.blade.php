@@ -182,7 +182,7 @@
                     @php
                         $num = 1;
                     @endphp
-                    @foreach ($evaluaciones as $item)
+                    @foreach ($evaluaciones_trasalados_externos as $item)
                         <tr style="font-size: 0.55rem">
                             <td align="center">{{ $num++ }}</td>
                             <td>{{ $item->nombre_completo }}</td>
