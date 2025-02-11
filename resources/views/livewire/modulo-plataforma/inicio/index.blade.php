@@ -136,7 +136,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4">
+                {{-- <div class="col-md-4">
                     <div id="slider" class="carousel carousel-custom slide pe-5" data-bs-ride="carousel"
                         data-bs-interval="5000">
                         <div class="carousel-inner">
@@ -210,7 +210,7 @@
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                         referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
                     </iframe>
-                </div>
+                </div> --}}
             </div>
         </div>
     </div>
@@ -275,7 +275,7 @@
             </div>
         </div>
     </div>
-    <!-- Modal Encuesta Docente 
+    <!-- Modal Encuesta Docente
     <div wire:ignore.self class="modal fade" id="modal_encuesta_docente"
         data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
@@ -307,7 +307,7 @@
             </div>
         </div>
     </div>-->
-    <!-- Modal alerta admitido 
+    <!-- Modal alerta admitido
     @if ($admitido)
         @if ($admitido->admitido_alerta == 0)
             <div wire:init="alerta_admitido"></div>
