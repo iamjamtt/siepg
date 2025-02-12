@@ -243,8 +243,14 @@ class PlataformaController extends Controller
         }
 
         $cursos = $matricula->cursos()
-            ->with('programaProcesoGrupo')
-            ->get();
+            ->with([
+                'cursoProgramaPlan' => function ($query) {
+                    $query->with('curso');
+                },
+                'programaProcesoGrupo'
+            ])
+            ->get()
+            ->sortBy('cursoProgramaPlan.curso.curso_codigo');
 
         $programa = null;
         $subprograma = null;
