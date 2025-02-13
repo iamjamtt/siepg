@@ -698,6 +698,11 @@ class Index extends Component
         $canales_pagos = CanalPago::where('canal_pago_estado', 1)->get(); // canales de pago
         $conceptos_pagos = ConceptoPago::where('concepto_pago_estado', 1)->get(); // canales de pago
 
+        // obtenemos deuda de ultima matricula
+        $monto_total = calcularMontoTotalCostoPorEnsenhanzaEstudiante($this->admitido->id_admitido);
+        $monto_pagado = calcularMontoPagadoCostoPorEnsenhanzaEstudiante($this->admitido->id_admitido);
+        $deuda = $monto_total - $monto_pagado;
+
         return view('livewire.modulo-plataforma.pagos.index', [
             'canal_pagos' => $canal_pagos,
             'pagos' => $pagos,
@@ -705,7 +710,8 @@ class Index extends Component
             'conceptos_pagos' => $conceptos_pagos,
             'admision' => $admision,
             'constancia_ingreso' => $constancia_ingreso,
-            'matricula_count' => $matricula_count
+            'matricula_count' => $matricula_count,
+            'deuda' => $deuda
         ]);
     }
 

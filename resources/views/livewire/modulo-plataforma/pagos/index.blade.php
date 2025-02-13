@@ -301,9 +301,11 @@
                                     @if($constancia_ingreso && $item->id_concepto_pago == 2) disabled @endif
                                     @if($activarConceptosDeMatricula == false)
                                         @if($item->id_concepto_pago == 3 || $item->id_concepto_pago == 4 || $item->id_concepto_pago == 5 || $item->id_concepto_pago == 6) disabled @endif
+                                    @else
+                                        @if($item->id_concepto_pago == 3 || $item->id_concepto_pago == 4 || $item->id_concepto_pago == 5 || $item->id_concepto_pago == 6) @if($deuda > 0) disabled @endif @endif
                                     @endif
                                     @if($matricula_count == 0 && $item->id_concepto_pago == 7) disabled @endif>
-                                    Concepto por {{ $item->concepto_pago }} @if($item->id_concepto_pago != 7) - S/. {{ number_format($item->concepto_pago_monto, 2, ',', '.') }} @endif
+                                    Concepto por {{ $item->concepto_pago }} @if($item->id_concepto_pago != 7) - S/. {{ number_format($item->concepto_pago_monto, 2, ',', '.') }} @endif {{ $deuda }}
                                 </option>
                                 @endforeach
                             </select>
