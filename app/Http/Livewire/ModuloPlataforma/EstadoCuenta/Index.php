@@ -105,7 +105,7 @@ class Index extends Component
             ])
             ->where('id_admitido', $this->admitido->id_admitido)
             ->where('id_matricula', $id_matricula)
-            ->orderBy('id_mensualidad', 'asc')
+            ->orderBy('id_mensualidad', 'desc')
             ->paginate(10);
 
         $monto_total = calcularMontoTotalCostoPorEnsenhanzaEstudiante($this->admitido->id_admitido);

@@ -53,6 +53,11 @@ class Pago extends Model
         'id_persona','id_persona');
     }
 
+    public function mensualidad(){
+        return $this->hasOne(Mensualidad::class,
+        'id_pago','id_pago');
+    }
+
     // protected static function boot() {
     //     parent::boot();
 
