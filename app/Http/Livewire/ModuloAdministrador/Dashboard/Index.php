@@ -29,7 +29,9 @@ class Index extends Component
 
     public function mount()
     {
-        $this->admisiones = Admision::all();
+        $this->admisiones = Admision::query()
+            ->orderBy('admision_año', 'desc')
+            ->get();
         $admision = Admision::where('admision_estado', 1)->first();
         $this->filtro_proceso = $admision->id_admision;
         $this->admision = Admision::where('id_admision', $this->filtro_proceso)->first();

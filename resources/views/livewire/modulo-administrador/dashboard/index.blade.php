@@ -320,7 +320,7 @@
                 </div>
 
                 <div class="row g-5 card-maestria">
-                    <div class="col-md-12">
+                    {{-- <div class="col-md-12">
                         <div class="card shadow-sm">
                             <div class="card-header bg-light-warning">
                                 <h3 class="card-title fw-bold">
@@ -340,7 +340,6 @@
                                                 <th class="text-center">Admitidos</th>
                                                 <th class="text-center">Matriculados</th>
                                                 <th class="text-center">Matriculado / Sin Ficha de Matricula</th>
-                                                {{-- <th class="text-center">Con Pago / Sin Matricula</th> --}}
                                                 <th class="text-center">Sin Pago / Sin Matricula</th>
                                             </tr>
                                         </thead>
@@ -395,9 +394,6 @@
                                                     <td class="fw-bold text-center">
                                                         {{ $con_pago }}
                                                     </td>
-                                                    {{-- <td class="fw-bold text-center">
-                                                        {{ $pagos }}
-                                                    </td> --}}
                                                     <td class="fw-bold text-center">
                                                         {{ $sin_pago }}
                                                     </td>
@@ -425,9 +421,6 @@
                                             <td class="fw-bold text-center">
                                                 {{ $suma_con_pago }}
                                             </td>
-                                            {{-- <td class="fw-bold text-center">
-                                                {{ $suma_pagos }}
-                                            </td> --}}
                                             <td class="fw-bold text-center">
                                                 {{ $suma_sin_pago }}
                                             </td>
@@ -436,7 +429,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
                     <div class="col-md-6">
                         <div class="card shadow-sm">
                             <div class="card-header bg-light-success">
