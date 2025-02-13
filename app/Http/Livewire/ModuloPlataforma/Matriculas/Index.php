@@ -474,7 +474,7 @@ class Index extends Component
                     ->where('estado', 2) // 2 = aprobado
                     ->count() > 0;
                 if (!$seAprobo) {
-                    $cursosPrematricula->push($curso->cursoProgramaPlan);
+                    // $cursosPrematricula->push($curso->cursoProgramaPlan);
                 }
             }
 
@@ -500,7 +500,7 @@ class Index extends Component
                     ->where('estado', 2) // 2 = aprobado
                     ->count() > 0;
                 if (!$seAprobo) {
-                    $cursosPrematricula->push($curso->cursoProgramaPlan);
+                    // $cursosPrematricula->push($curso->cursoProgramaPlan);
                 }
             }
         }
