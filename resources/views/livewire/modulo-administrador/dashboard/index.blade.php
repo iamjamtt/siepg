@@ -41,7 +41,7 @@
                                     <div class="mb-10">
                                         <label class="form-label fw-semibold">Proceso de Admisión: </label>
                                         <div>
-                                            <select class="form-select" wire:model="filtro_proceso" id="filtro_proceso"  data-control="select2" data-placeholder="Seleccione">
+                                            <select class="form-select" wire:model="filtro_proceso" id="filtro_proceso">
                                                 @foreach ($admisiones as $item)
                                                 <option value="{{ $item->id_admision }}">{{ $item->admision }}</option>
                                                 @endforeach
@@ -473,7 +473,7 @@
                                                 </tr>
                                             @empty
                                                 <tr>
-                                                    <td colspan="3" class="text-center text-muted">
+                                                    <td colspan="4" class="text-center text-muted">
                                                         No hay registros
                                                     </td>
                                                 </tr>
@@ -540,7 +540,7 @@
                                                 </tr>
                                             @empty
                                                 <tr>
-                                                    <td colspan="3" class="text-center text-muted">
+                                                    <td colspan="4" class="text-center text-muted">
                                                         No hay registros
                                                     </td>
                                                 </tr>
