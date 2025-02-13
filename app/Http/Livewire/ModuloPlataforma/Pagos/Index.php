@@ -376,9 +376,9 @@ class Index extends Component
             $monto_pagado = calcularMontoPagadoCostoPorEnsenhanzaEstudiante($admitido->id_admitido);
             $deuda = $monto_total - $monto_pagado;
             $monto_ingresado = $this->monto_operacion;
-            // formatear a decimales el monto ingresado y la deuda para validar
-            $monto_ingresado = number_format($monto_ingresado, 2);
-            $deuda = number_format($deuda, 2);
+            // formateamos los montos a float para comparar
+            $monto_ingresado = doubleval($monto_ingresado);
+            $deuda = doubleval($deuda);
             if ($this->concepto_pago == 7) {
                 if ($monto_ingresado > $deuda) {
                     $this->dispatchBrowserEvent('alerta_pago_plataforma', [
