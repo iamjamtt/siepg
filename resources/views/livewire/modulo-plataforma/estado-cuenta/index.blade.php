@@ -90,10 +90,10 @@
                         </div>
                     </div>
                     {{-- header de la tabla --}}
-                    <div class="card p-5 mb-5">
+                    {{-- <div class="card p-5 mb-5">
                         <div class="row g-3">
                             <div class="col-md-4">
-                                {{-- <button type="button" class="btn btn-outline btn-outline-dashed btn-outline-primary btn-active-light-primary btn-center fw-bold w-100px w-md-125px"
+                                <button type="button" class="btn btn-outline btn-outline-dashed btn-outline-primary btn-active-light-primary btn-center fw-bold w-100px w-md-125px"
                                     data-kt-menu-trigger="click" data-kt-menu-placement="bottom-start">
                                     <span class="svg-icon svg-icon-3 me-1">
                                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -141,14 +141,14 @@
                                                 data-kt-menu-dismiss="true">Aplicar</button>
                                         </div>
                                     </form>
-                                </div> --}}
+                                </div>
                             </div>
                             <div class="col-md-4"></div>
                             <div class="col-md-4">
                                 <input type="search" wire:model="search" class="form-control w-100" placeholder="Buscar..." />
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
                     {{-- tabla de pagos --}}
                     <div class="card shadow-sm mb-5">
                         {{-- <div class="card-body mb-0"> --}}
@@ -167,12 +167,16 @@
                                     <tbody class="fw-semibold text-gray-700">
                                         @forelse ($mensualidades as $item)
                                             @if ($item->pago)
+                                            @php
+                                                // quiero el contador de forma descendente
+                                                $contador = $mensualidades->count() - $loop->index;
+                                            @endphp
                                                 <tr class="fs-6">
                                                     <td>
                                                         {{ $item->id_mensualidad }}
                                                     </td>
                                                     <td>
-                                                        Pago por enseñanza 00{{  $loop->iteration }}
+                                                        Pago por enseñanza 00{{  $contador }}
                                                     </td>
                                                     <td>
                                                         {{ $item->pago->pago_operacion }}
@@ -181,7 +185,7 @@
                                                         S/. {{ number_format($item->pago->pago_monto, 2, ',', '.') }}
                                                     </td>
                                                     <td>
-                                                        {{ date('d/m/Y', strtotime($item->pago->mensualidad_fecha_creacion)) }}
+                                                        {{ date('d/m/Y', strtotime($item->pago->mensualidad->mensualidad_fecha_creacion)) }}
                                                     </td>
                                                     <td>
                                                         @if ($item->pago->pago_verificacion == 1)
