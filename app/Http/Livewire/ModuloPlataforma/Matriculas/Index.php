@@ -369,7 +369,7 @@ class Index extends Component
 
         $pagos = Pago::query()
             ->where('pago_documento', $this->alumno->persona->numero_documento)
-            ->where('pago_estado', 2)
+            ->where('pago_estado', 1)
             ->where('pago_verificacion', 2)
             ->where(function ($query) {
                 $query->where('id_concepto_pago', 3)
