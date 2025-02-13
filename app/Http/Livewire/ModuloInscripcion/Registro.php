@@ -186,22 +186,22 @@ class Registro extends Component
 
         $admision = Admision::where('admision_estado', 1)->first();
 
-        // si el pago tiene fecha de pago mayor al 20 de julio se valida para que ingrese un pago con fecha menor o igual al 20 de julio
-        $fecha_pago = $this->fecha_pago;
-        $fecha_pago = strtotime($fecha_pago);
-        $fecha_limite = '2024-07-20';
-        $fecha_limite = strtotime($fecha_limite);
-        if ($fecha_pago > $fecha_limite) {
-            // emitir evento para mostrar mensaje de alerta
-            $this->dispatchBrowserEvent('registro_inscripcion', [
-                'title' => '¡Error!',
-                'text' => 'La fecha de pago no puede ser mayor al 20 de julio',
-                'icon' => 'error',
-                'confirmButtonText' => 'Cerrar',
-                'color' => 'danger'
-            ]);
-            return;
-        }
+        // // si el pago tiene fecha de pago mayor al 20 de julio se valida para que ingrese un pago con fecha menor o igual al 20 de julio
+        // $fecha_pago = $this->fecha_pago;
+        // $fecha_pago = strtotime($fecha_pago);
+        // $fecha_limite = '2024-07-20';
+        // $fecha_limite = strtotime($fecha_limite);
+        // if ($fecha_pago > $fecha_limite) {
+        //     // emitir evento para mostrar mensaje de alerta
+        //     $this->dispatchBrowserEvent('registro_inscripcion', [
+        //         'title' => '¡Error!',
+        //         'text' => 'La fecha de pago no puede ser mayor al 20 de julio',
+        //         'icon' => 'error',
+        //         'confirmButtonText' => 'Cerrar',
+        //         'color' => 'danger'
+        //     ]);
+        //     return;
+        // }
 
         // verificamos el el concepto de pago es de convenio o victimas de violencia
         if ($this->concepto_pago != getIdConceptoPagoConvenio() || $this->concepto_pago != getIdConceptoPagoVictimasViolencia()) {
