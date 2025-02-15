@@ -621,9 +621,11 @@
                                 <option></option>
                                 @foreach ($programas as $item)
                                     <option value="{{ $item->id_programa_proceso }}">{{ $item->programa }} EN
-                                        {{ $item->subprograma }} @if ($item->mencion != '')
+                                        {{ $item->subprograma }}
+                                        @if ($item->mencion != '')
                                             CON MENCION EN {{ $item->mencion }}
                                         @endif
+                                        - {{ $item->modalidad }}
                                     </option>
                                 @endforeach
                             </select>
