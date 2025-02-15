@@ -51,12 +51,12 @@ class Index extends Component
         $this->title_modal = 'Buscar Programa Académico - Proceso ' . $admision->admision_año;
         $this->admision = $admision;
         $this->programas = ProgramaProceso::join('programa_plan', 'programa_plan.id_programa_plan', '=', 'programa_proceso.id_programa_plan')
-                                ->join('programa', 'programa.id_programa', '=', 'programa_plan.id_programa')
-                                ->join('modalidad', 'modalidad.id_modalidad', '=', 'programa.id_modalidad')
-                                ->where('programa_proceso.id_admision', $admision->id_admision)
-                                ->where('programa.id_facultad', $this->coordinador->id_facultad)
-                                ->where('programa.id_modalidad', $this->filtro_modalidad ? '=' : '!=', $this->filtro_modalidad)
-                                ->get();
+            ->join('programa', 'programa.id_programa', '=', 'programa_plan.id_programa')
+            ->join('modalidad', 'modalidad.id_modalidad', '=', 'programa.id_modalidad')
+            ->where('programa_proceso.id_admision', $admision->id_admision)
+            ->where('programa.id_facultad', $this->coordinador->id_facultad)
+            ->where('programa.id_modalidad', $this->filtro_modalidad ? '=' : '!=', $this->filtro_modalidad)
+            ->get();
     }
 
     public function limpiar_modal()
@@ -70,12 +70,13 @@ class Index extends Component
 
     public function render()
     {
-        $procesos = Admision::where(function ($query) {
-                                $query->where('admision_año', 'like', '%'.$this->search.'%');
-                            })
-                            ->orderBy('admision', 'desc')
-                            ->where('admision_estado', 1)
-                            ->paginate(6); // Obtener todos los procesos de admision
+        $procesos = Admision::query()
+            ->where(function ($query) {
+                $query->where('admision_año', 'like', '%'.$this->search.'%');
+            })
+            ->orderBy('admision_año', 'desc')
+            // ->where('admision_estado', 1)
+            ->paginate(6); // Obtener todos los procesos de admision
 
         $modalidades = Modalidad::where('modalidad_estado', 1)->get(); // Obtener todas las modalidades
 

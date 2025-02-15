@@ -7,7 +7,7 @@ use App\Models\Admision;
 use App\Models\Admitido;
 use App\Models\ConstanciaIngreso;
 use App\Models\Inscripcion;
-use App\Models\Matricula;
+use App\Models\Matricula\Matricula as MatriculaMatricula;
 use App\Models\Mensualidad;
 use App\Models\Pago;
 use App\Models\ProgramaProceso;
@@ -153,7 +153,7 @@ class Index extends Component
         $this->ingreso_constancia = $this->ingreso_constancia + $diferencia_constancia_matricula + $diferencia_constancia_matricula_extemporanea;
 
         // Se calcula el ingreso por concepto de matriculas
-        $ingreso_matricula_map = ConstanciaIngreso::query()
+        $ingreso_matricula_map = MatriculaMatricula::query()
             ->with([
                 'pago' => function ($query) {
                     $query->where('pago_estado', 2)
@@ -192,39 +192,7 @@ class Index extends Component
         $diferencia_matricula_constancia_extemporanea = $sum_constancia_matricula_extemporanea - ($count_constancia_matricula_extemporanea * 30);
         $this->ingreso_matricula = $ingreso_matricula_sum + $diferencia_matricula_constancia + $diferencia_matricula_constancia_extemporanea;
 
-
-        // $this->ingreso_constancia = Pago::where('pago_estado', 2)
-        //     ->where('pago_verificacion', 2)
-        //     ->where('id_concepto_pago', 2)
-        //     ->sum('pago_monto');
-        // $ingreso_constancia_matricula = Pago::where('pago_estado', 2)
-        //     ->where('pago_verificacion', 2)
-        //     ->where('id_concepto_pago',4)
-        //     ->get();
-        // $ingreso_constancia_matricula_extemporanea = Pago::where('pago_estado', 2)
-        //     ->where('pago_verificacion', 2)
-        //     ->where('id_concepto_pago',6)
-        //     ->get();
-        // $sum_constancia_matricula = $ingreso_constancia_matricula->sum('pago_monto');
-        // $count_constancia_matricula = $ingreso_constancia_matricula->count();
-        // $diferencia_constancia_matricula = $sum_constancia_matricula - ($count_constancia_matricula * 150);
-        // $sum_constancia_matricula_extemporanea = $ingreso_constancia_matricula_extemporanea->sum('pago_monto');
-        // $count_constancia_matricula_extemporanea = $ingreso_constancia_matricula_extemporanea->count();
-        // $diferencia_constancia_matricula_extemporanea = $sum_constancia_matricula_extemporanea - ($count_constancia_matricula_extemporanea * 200);
-        // $this->ingreso_constancia = $this->ingreso_constancia + $diferencia_constancia_matricula + $diferencia_constancia_matricula_extemporanea;
-
-        // Se calcula el ingreso por concepto de matriculas
-        // $this->ingreso_matricula = Pago::where('pago_estado', 2)
-        //     ->where('pago_verificacion', 2)
-        //     ->where(function($query){
-        //         $query->where('id_concepto_pago', 3)
-        //             ->orWhere('id_concepto_pago', 5);
-        //     })
-        //     ->sum('pago_monto');
-        // $diferencia_matricula_constancia = $sum_constancia_matricula - ($count_constancia_matricula * 30);
-        // $diferencia_matricula_constancia_extemporanea = $sum_constancia_matricula_extemporanea - ($count_constancia_matricula_extemporanea * 30);
-        // $this->ingreso_matricula = $this->ingreso_matricula + $diferencia_matricula_constancia + $diferencia_matricula_constancia_extemporanea;
-
+        // Se calcula el ingreso por concepto de inscripciones
         $this->ingreso_inscripcion = Inscripcion::join('pago', 'pago.id_pago', '=', 'inscripcion.id_pago')
             ->join('programa_proceso', 'programa_proceso.id_programa_proceso', '=', 'inscripcion.id_programa_proceso')
             ->where('programa_proceso.id_admision', $this->filtro_proceso_data)
@@ -367,6 +335,7 @@ class Index extends Component
             $this->filtro_proceso_data = $this->filtro_proceso;
             $this->admision = Admision::where('id_admision', $filtro)->first();
             $this->calcularMontos();
+            $this->emit('filtro_aplicado_maestria', $this->filtro_proceso_data);
         }
     }
 
@@ -395,11 +364,19 @@ class Index extends Component
             'programa' => 'required'
         ]);
         // verificamos si el programa tiene matriculados
-        $matriculados = Matricula::join('admitido', 'matricula.id_admitido', '=', 'admitido.id_admitido')
-            ->join('programa_proceso', 'admitido.id_programa_proceso', '=', 'programa_proceso.id_programa_proceso')
-            ->join('programa_plan', 'programa_proceso.id_programa_plan', '=', 'programa_plan.id_programa_plan')
-            ->join('programa', 'programa_plan.id_programa', '=', 'programa.id_programa')
-            ->where('admitido.id_programa_proceso', $this->programa)
+        $matriculados = MatriculaMatricula::query()
+            ->with([
+                'admitido' => function ($query) {
+                    $query->with([
+                        'programa_proceso' => function ($query) {
+                            $query->where('id_admision', $this->proceso);
+                        }
+                    ]);
+                }
+            ])
+            ->whereHas('admitido.programa_proceso', function ($query) {
+                $query->where('id_admision', $this->proceso);
+            })
             ->get();
         if ($matriculados->count() == 0) {
             $this->dispatchBrowserEvent('alerta-usuario', [
@@ -426,8 +403,8 @@ class Index extends Component
         if ($this->proceso) {
             $programas = ProgramaProceso::join('programa_plan', 'programa_plan.id_programa_plan', '=', 'programa_proceso.id_programa_plan')
                 ->join('programa', 'programa.id_programa', '=', 'programa_plan.id_programa')
+                ->join('modalidad', 'modalidad.id_modalidad', '=', 'programa.id_modalidad')
                 ->where('programa_proceso.id_admision', $this->proceso)
-                ->where('programa.id_modalidad', 2)
                 ->get();
         } else {
             $programas = collect();
