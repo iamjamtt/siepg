@@ -4,8 +4,8 @@
             <div class="col-md-8 m-auto">
                 <div id="slider" class="carousel carousel-custom slide" data-bs-ride="carousel" data-bs-interval="5000">
                     <div class="carousel-inner pt-8">
-                        <div class="carousel-item active">
-                            <img src="{{ asset('media/banner_posgrado.jpeg') }}" alt="carousel" class="w-100 rounded" />
+                        <div class="carousel-item active text-center">
+                            <img src="{{ asset('media/banner-2025.jpeg') }}" alt="carousel" class="w-75 rounded" />
                         </div>
                     </div>
                     <div class="d-flex align-items-center justify-content-center flex-wrap">
