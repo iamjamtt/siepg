@@ -335,6 +335,7 @@ class Index extends Component
             $this->filtro_proceso_data = $this->filtro_proceso;
             $this->admision = Admision::where('id_admision', $filtro)->first();
             $this->calcularMontos();
+            $this->emit('filtro_aplicado_maestria', $this->filtro_proceso_data);
         }
     }
 
