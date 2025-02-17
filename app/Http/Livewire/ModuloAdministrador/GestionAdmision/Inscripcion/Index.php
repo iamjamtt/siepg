@@ -94,6 +94,10 @@ class Index extends Component
     public function mount()
     {
         $this->programasModal = new Collection();
+        $this->proceso_filtro = Admision::query()
+            ->where('admision_estado', 1)
+            ->first()->id_admision;
+        $this->procesoFiltro = $this->proceso_filtro;
     }
 
     public function updated($propertyName)
@@ -130,6 +134,7 @@ class Index extends Component
             'estadoFiltro',
             'estado_filtro',
         );
+        $this->mount();
     }
 
     //Asignamos los filtros
