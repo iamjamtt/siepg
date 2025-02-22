@@ -193,10 +193,17 @@
                 <h2 class="card-title mb-5 text-center">
                     Prospecto de Admisión
                 </h2>
-                <a target="_blank" href="{{ asset('assets_pdf/prospecto-admision-2024.pdf') }}"
+                {{-- <a target="_blank" href="{{ asset('assets_pdf/prospecto-admision-2024.pdf') }}"
                     class="btn btn-info">
                     Descargar
-                </a>
+                </a> --}}
+                <button
+                    type="button"
+                    class="btn btn-info"
+                    disabled
+                >
+                    Descargar
+                </button>
             </div>
         </div>
         <div class="col-sm-12 col-md-6 col-lg-6 col-xl-4">
