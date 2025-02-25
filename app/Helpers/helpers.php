@@ -606,19 +606,27 @@ function calcularPeriodo($id_matricula)
 function cantidadAlumnosMatriculadosCurso($id_curso_programa_plan, $id_programa_proceso_grupo)
 {
     return ModelMatriculaCurso::query()
-        ->where('id_curso_programa_plan', $id_curso_programa_plan)
-        ->where('id_programa_proceso_grupo', $id_programa_proceso_grupo)
-        ->where('activo', 1)
+        ->join('tbl_matricula', 'tbl_matricula_curso.id_matricula', 'tbl_matricula.id_matricula')
+        ->join('admitido', 'tbl_matricula.id_admitido', 'admitido.id_admitido')
+        ->join('persona', 'admitido.id_persona', 'persona.id_persona')
+        ->where('admitido.admitido_estado', 1)
+        ->where('tbl_matricula_curso.id_curso_programa_plan', $id_curso_programa_plan)
+        ->where('tbl_matricula_curso.id_programa_proceso_grupo', $id_programa_proceso_grupo)
+        ->where('tbl_matricula_curso.activo', 1)
         ->count();
 }
 
 function cantidadAlumnosMatriculadosCursoFinalizado($id_curso_programa_plan, $id_programa_proceso_grupo)
 {
     return ModelMatriculaCurso::query()
-        ->where('id_curso_programa_plan', $id_curso_programa_plan)
-        ->where('id_programa_proceso_grupo', $id_programa_proceso_grupo)
-        ->where('estado', '!=', 1)
-        ->where('activo', 1)
+        ->join('tbl_matricula', 'tbl_matricula_curso.id_matricula', 'tbl_matricula.id_matricula')
+        ->join('admitido', 'tbl_matricula.id_admitido', 'admitido.id_admitido')
+        ->join('persona', 'admitido.id_persona', 'persona.id_persona')
+        ->where('admitido.admitido_estado', 1)
+        ->where('tbl_matricula_curso.id_curso_programa_plan', $id_curso_programa_plan)
+        ->where('tbl_matricula_curso.id_programa_proceso_grupo', $id_programa_proceso_grupo)
+        ->where('tbl_matricula_curso.estado', '!=', 1)
+        ->where('tbl_matricula_curso.activo', 1)
         ->count();
 }
 
