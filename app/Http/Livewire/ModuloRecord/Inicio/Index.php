@@ -10,6 +10,7 @@ use Livewire\WithPagination;
 class Index extends Component
 {
     use WithPagination;
+    protected $paginationTheme = 'bootstrap';
 
     public $buscar = '';
 
@@ -63,5 +64,7 @@ class Index extends Component
         } else {
             $this->mostrarAlumnos = true;
         }
+
+        $this->resetPage();
     }
 }

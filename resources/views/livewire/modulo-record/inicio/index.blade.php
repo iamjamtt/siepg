@@ -84,7 +84,7 @@
                                                                 </div>
                                                             </td>
                                                             <td>
-                                                                <span href="#" class="text-gray-900 fw-bold mb-1 fs-6">
+                                                                <span class="text-gray-900 fw-bold mb-1 fs-6">
                                                                     {{ $alumno->nombre_completo }}
                                                                 </span>
                                                                 <span class="text-muted fw-semibold d-block fs-7">
@@ -99,7 +99,11 @@
                                                                 </span>
                                                             </td>
                                                             <td class="text-end">
-                                                                <a href="#" class="btn btn-sm btn-secondary">
+                                                                <a
+                                                                    href="{{ route('record.buscar', $alumno->id_admitido) }}"
+                                                                    target="_blank"
+                                                                    class="btn btn-sm btn-secondary"
+                                                                >
                                                                     Ver record academico
                                                                 </a>
                                                             </td>
@@ -115,6 +119,11 @@
                                                             </td>
                                                         </tr>
                                                     @endforelse
+                                                    <tr>
+                                                        <td colspan="3">
+                                                            {{ $alumnos->links() }}
+                                                        </td>
+                                                    </tr>
                                                 </tbody>
                                             </table>
                                         </div>
