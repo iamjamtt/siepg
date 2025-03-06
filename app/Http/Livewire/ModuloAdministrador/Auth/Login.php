@@ -76,6 +76,12 @@ class Login extends Component
                                 auth('usuario')->login($usuario);
                                 return redirect()->route('contable.inicio');
                             }
+                            elseif($administrativo->area_administrativo->id_area_administrativo == 9)
+                            {
+                                // si es de la area de record academico lo redireccionamos a la vista de record academico
+                                auth('usuario')->login($usuario);
+                                return redirect()->route('record.inicio');
+                            }
                             else
                             {
                                 // si es de otra area sin vista mostrar un mensaje de error
