@@ -153,7 +153,7 @@ class Index extends Component
 
     public function mount()
     {
-        $this->modalidad_model = Modalidad::where('modalidad_estado', 1)->get();
+        $this->modalidad_model = Modalidad::all();
         $this->programas_model = collect();
         $this->codigo_estudiante_model = collect();
     }
