@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ModuloAdministrador\DashboardController;
 use App\Http\Controllers\ModuloInscripcion\InscripcionController;
+use App\Http\Controllers\RecordAcademicoController;
+use App\Http\Livewire\ModuloRecord\Inicio\Index as IndexInicioRecord;
 
 // Routa para o dashboard do administrador y otros roles
 Route::get('/login', [DashboardController::class, 'auth'])->middleware(['auth.usuario.redirect.sesion'])->name('login');
@@ -26,4 +28,13 @@ Route::get('/posgrado/{id}/gracias-docente', [InscripcionController::class, 'gra
 // Ruta para para enviar email de las credenciales
 Route::get('/posgrado/{id}/credenciales-docente', [InscripcionController::class, 'credenciales_email_docente'])->name('posgrado.credenciales-email.docente');
 //
+
+Route::get('/buscar/record-academico', IndexInicioRecord::class)
+    ->middleware('auth.usuario')
+    ->name('record.inicio');
+
+Route::get('/buscar/record-academico/{admitido}', RecordAcademicoController::class)
+    ->middleware('auth.usuario')
+    ->name('record.buscar');
+
 //
