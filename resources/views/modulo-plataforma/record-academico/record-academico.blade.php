@@ -205,12 +205,12 @@
     </table>
     <div style="width:100%; padding-right: 0rem; padding-left: 0rem; margin-bottom: 0.5rem; margin-top: 0.5rem; border-style: solid; border-width: 0.25px; border-color: black; border-collapse: collapse;">
     </div>
-    <div style="width:100%; padding-right: 0rem; padding-left: 0rem; padding-bottom: 0rem; padding-top: 0.5rem; text-align: center;">
+    {{-- <div style="width:100%; padding-right: 0rem; padding-left: 0rem; padding-bottom: 0rem; padding-top: 0.5rem; text-align: center;">
         <span style="text-align: center; font-weight: 700; font-size: 0.7rem; font-style: italic;">
             PLAN DE ESTUDIOS {{ $plan->plan }} / {{ $plan->plan_resolucion }}
             {{ date('d/m/Y', strtotime($plan->plan_fecha_resolucion)) }}
         </span>
-    </div>
+    </div> --}}
     @foreach ($ciclos as $item)
         @php
             $cursos = App\Models\CursoProgramaPlan::query()
