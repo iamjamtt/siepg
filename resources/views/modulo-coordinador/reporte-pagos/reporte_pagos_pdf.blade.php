@@ -124,9 +124,9 @@
             @endphp
             @foreach ($matriculados as $item)
             @php
-                $monto_total = dataPagoMatricula($item)['monto_total'];
-                $monto_pagado = dataPagoMatricula($item)['monto_pagado'];
-                $deuda = dataPagoMatricula($item)['deuda'];
+                $monto_total = dataPagoMatricula($item->id_admitido, $item->id_matricula)['monto_total'];
+                $monto_pagado = dataPagoMatricula($item->id_admitido, $item->id_matricula)['monto_pagado'];
+                $deuda = dataPagoMatricula($item->id_admitido, $item->id_matricula)['deuda'];
 
                 $mensualidades = App\Models\Mensualidad::query()
                     ->where('id_matricula', $item->id_matricula)

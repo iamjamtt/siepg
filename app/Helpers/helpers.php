@@ -350,14 +350,14 @@ function finalizar_evaluacion($evaluacion, $puntaje)
     }
 }
 
-function dataPagoMatricula($item, $id_matricula = null)
+function dataPagoMatricula($id_admitido, $id_matricula = null)
 {
     if ($id_matricula) {
-        $monto_total = calcularMontoTotalCostoPorEnsenhanzaEstudiante($item->id_admitido, $id_matricula);
-        $monto_pagado = calcularMontoPagadoCostoPorEnsenhanzaEstudiante($item->id_admitido, $id_matricula);
+        $monto_total = calcularMontoTotalCostoPorEnsenhanzaEstudiante($id_admitido, $id_matricula);
+        $monto_pagado = calcularMontoPagadoCostoPorEnsenhanzaEstudiante($id_admitido, $id_matricula);
     } else {
-        $monto_total = calcularMontoTotalCostoPorEnsenhanzaEstudiante($item->id_admitido);
-        $monto_pagado = calcularMontoPagadoCostoPorEnsenhanzaEstudiante($item->id_admitido);
+        $monto_total = calcularMontoTotalCostoPorEnsenhanzaEstudiante($id_admitido);
+        $monto_pagado = calcularMontoPagadoCostoPorEnsenhanzaEstudiante($id_admitido);
     }
     $deuda = $monto_total - $monto_pagado;
 

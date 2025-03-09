@@ -36,8 +36,9 @@
                         Descargar Reporte (Excel)
                     </button> --}}
                     <a href="{{ route('coordinador.reporte-pagos-pdf', [
-                        'id_programa_proceso' => $id_programa_proceso,
-                        'id_grupo' => $id_grupo,
+                            'id_programa_proceso' => $id_programa_proceso,
+                            'id_grupo' => $id_grupo,
+                            'id_gestion_matricula' => $gestionMatricula,
                         ]) }}"
                         target="_blank"
                         class="btn btn-primary fw-bold"
@@ -113,13 +114,19 @@
                                                     {{ $item->nombre_completo }}
                                                 </td>
                                                 <td>
-                                                    S/. {{ number_format(dataPagoMatricula($item, $item->id_matricula)['monto_total'], 2, ',', '.') }}
+                                                    S/. {{ number_format(dataPagoMatricula($item->id_admitido, $item->id_matricula)['monto_total'], 2, ',', '.') }}
                                                 </td>
                                                 <td class="fw-bold">
-                                                    S/. {{ number_format(dataPagoMatricula($item, $item->id_matricula)['monto_pagado'], 2, ',', '.')}}
+                                                    S/. {{ number_format(dataPagoMatricula($item->id_admitido, $item->id_matricula)['monto_pagado'], 2, ',', '.')}}
                                                 </td>
-                                                <td class="text-danger">
-                                                    S/. {{ number_format(dataPagoMatricula($item, $item->id_matricula)['deuda'], 2, ',', '.')}}
+                                                <td class="
+                                                    @if (dataPagoMatricula($item->id_admitido, $item->id_matricula)['deuda'] > 0)
+                                                        text-danger fw-bold
+                                                    @else
+                                                        text-success fw-bold
+                                                    @endif
+                                                ">
+                                                    S/. {{ number_format(dataPagoMatricula($item->id_admitido, $item->id_matricula)['deuda'], 2, ',', '.')}}
                                                 </td>
                                             </tr>
                                         @empty
