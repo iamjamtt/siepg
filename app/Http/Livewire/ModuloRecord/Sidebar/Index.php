@@ -19,7 +19,7 @@ class Index extends Component
 
     public function cerrar_sesion()
     {
-        auth('evaluacion')->logout();
-        return redirect()->route('evaluacion.login');
+        auth('usuario')->logout();
+        return redirect()->route('login');
     }
 }
