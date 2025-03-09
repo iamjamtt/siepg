@@ -3,7 +3,6 @@
 namespace App\Http\Livewire\ModuloRecord\Inicio;
 
 use App\Models\Admitido;
-use Illuminate\Support\Collection;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -42,8 +41,7 @@ class Index extends Component
 
         return view('livewire.modulo-record.inicio.index', [
             'alumnos' => $alumnos
-        ])
-            ->layout('layouts.modulo-record', ['title' => 'RECORDS ACADEMICOS']);
+        ]);
     }
 
     public function mount()

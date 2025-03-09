@@ -3,7 +3,7 @@
 
 <head>
     <title>
-        {{ $title ?? 'SIEPG Escuela de Posgrado' }}
+        @yield('title')
     </title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -80,9 +80,7 @@
 
                 @livewire('modulo-record.sidebar.index')
 
-                <div class="app-main flex-column flex-row-fluid" id="kt_app_main">
-                    {{ $slot }}
-                </div>
+                @yield('content')
 
                 <div id="kt_app_footer" class="app-footer mt-auto py-3">
                     <div
