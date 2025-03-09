@@ -293,8 +293,10 @@ class CoordinadorController extends Controller
         return view('modulo-administrador.gestion-retiro.index');
     }
 
-    public function reporte_pagos_pdf($id_programa_proceso, $id_grupo)
+    public function reporte_pagos_pdf($id_programa_proceso, $id_grupo, $id_gestion_matricula)
     {
+        $id_gestion_matricula = $id_gestion_matricula == 0 ? null : $id_gestion_matricula;
+
         $programa_proceso = ProgramaProceso::join('programa_plan', 'programa_plan.id_programa_plan', '=', 'programa_proceso.id_programa_plan')
             ->join('programa', 'programa.id_programa', '=', 'programa_plan.id_programa')
             ->join('modalidad', 'modalidad.id_modalidad', '=', 'programa.id_modalidad')
@@ -309,6 +311,7 @@ class CoordinadorController extends Controller
             ->join('programa', 'programa.id_programa', '=', 'programa_plan.id_programa')
             ->join('pago', 'pago.id_pago', '=', 'tbl_matricula.id_pago')
             ->where('programa_proceso.id_programa_proceso', $id_programa_proceso)
+            ->where('tbl_matricula.id_matricula_gestion', $id_gestion_matricula)
             //->where('id_programa_proceso_grupo', $id_grupo)
             ->where('tbl_matricula.estado', 1)
             ->orderBy('persona.nombre_completo', 'asc')
@@ -328,14 +331,15 @@ class CoordinadorController extends Controller
                 $matriculadosNew->push($matriculado);
 
                 ///
-                $mensualiadad = Mensualidad::where('id_matricula', $matriculado->id_matricula)
+                $mensualiadad = Mensualidad::query()
+                ->where('id_matricula', $matriculado->id_matricula)
                 ->where('id_admitido', $matriculado->id_admitido)
                 ->where('mensualidad_estado', 1)
                 ->get();
                 $mayor = count($mensualiadad) > $mayor ? count($mensualiadad) : $mayor;
             }
         }
-        
+
         $programa = $programa_proceso->programa . ' EN ' . $programa_proceso->subprograma . ($programa_proceso->mencion ? ' CON MENCION EN ' . $programa_proceso->mencion : '');
         $grupo = ProgramaProcesoGrupo::where('id_programa_proceso_grupo', $id_grupo)->first()->grupo_detalle;
 

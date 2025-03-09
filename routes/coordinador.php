@@ -55,4 +55,4 @@ Route::get('/reporte-pagos/{id_programa_proceso}/programa/{id_grupo}/grupo', [Co
 Route::get('/matriculas', [CoordinadorController::class, 'matriculas'])->middleware(['auth.usuario', 'verificar.usuario.coordinador'])->name('coordinador.matriculas');
 
 // ruta para exportar el reporte de pagos
-Route::get('/reporte-pagos/{id_programa_proceso}/programa/{id_grupo}/grupo/pdf', [CoordinadorController::class, 'reporte_pagos_pdf'])->middleware(['auth.usuario', 'verificar.usuario.coordinador'])->name('coordinador.reporte-pagos-pdf');
+Route::get('/reporte-pagos/{id_programa_proceso}/programa/{id_grupo}/grupo/{id_gestion_matricula}/pdf', [CoordinadorController::class, 'reporte_pagos_pdf'])->middleware(['auth.usuario', 'verificar.usuario.coordinador'])->name('coordinador.reporte-pagos-pdf');
