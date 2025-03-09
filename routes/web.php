@@ -30,11 +30,11 @@ Route::get('/posgrado/{id}/credenciales-docente', [InscripcionController::class,
 //
 
 Route::get('/buscar/record-academico', IndexInicioRecord::class)
-    ->middleware('auth.usuario')
+    ->middleware(['auth.usuario', 'verificar.usuario.record'])
     ->name('record.inicio');
 
 Route::get('/buscar/record-academico/{admitido}', RecordAcademicoController::class)
-    ->middleware('auth.usuario')
+    ->middleware(['auth.usuario', 'verificar.usuario.record'])
     ->name('record.buscar');
 
 //

@@ -75,5 +75,6 @@ class Kernel extends HttpKernel
         'verificar.usuario.coordinador' => \App\Http\Middleware\VerificationUsuarioCoordinador::class,
         'verificar.usuario.docente' => \App\Http\Middleware\VerificationUsuarioDocente::class,
         'auth.usuario.evaluador' => \App\Http\Middleware\AuthUsuarioEvaluador::class,
+        'verificar.usuario.record' => \App\Http\Middleware\VerificationUsuarioRecord::class,
     ];
 }
