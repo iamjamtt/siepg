@@ -13,7 +13,12 @@ use Illuminate\Http\Request;
 
 class RecordAcademicoController extends Controller
 {
-    public function __invoke(Request $request, Admitido $admitido)
+    public function index()
+    {
+        return view('modulo-record.inicio.index');
+    }
+
+    public function buscar(Request $request, Admitido $admitido)
     {
         if ($admitido == null) {
             abort(404);
