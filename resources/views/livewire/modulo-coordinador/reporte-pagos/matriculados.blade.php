@@ -38,7 +38,7 @@
                     <a href="{{ route('coordinador.reporte-pagos-pdf', [
                             'id_programa_proceso' => $id_programa_proceso,
                             'id_grupo' => $id_grupo,
-                            'id_gestion_matricula' => $gestionMatricula,
+                            'id_gestion_matricula' => $gestionMatricula ?? 0,
                         ]) }}"
                         target="_blank"
                         class="btn btn-primary fw-bold"
