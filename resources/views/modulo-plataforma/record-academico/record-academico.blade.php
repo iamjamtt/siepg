@@ -205,12 +205,12 @@
     </table>
     <div style="width:100%; padding-right: 0rem; padding-left: 0rem; margin-bottom: 0.5rem; margin-top: 0.5rem; border-style: solid; border-width: 0.25px; border-color: black; border-collapse: collapse;">
     </div>
-    {{-- <div style="width:100%; padding-right: 0rem; padding-left: 0rem; padding-bottom: 0rem; padding-top: 0.5rem; text-align: center;">
+    <div style="width:100%; padding-right: 0rem; padding-left: 0rem; padding-bottom: 0rem; padding-top: 0.5rem; text-align: center;">
         <span style="text-align: center; font-weight: 700; font-size: 0.7rem; font-style: italic;">
             PLAN DE ESTUDIOS {{ $plan->plan }} / {{ $plan->plan_resolucion }}
             {{ date('d/m/Y', strtotime($plan->plan_fecha_resolucion)) }}
         </span>
-    </div> --}}
+    </div>
     @foreach ($ciclos as $item)
         @php
             $cursos = App\Models\CursoProgramaPlan::query()
@@ -219,7 +219,7 @@
                 ->where('curso.id_ciclo', $item->id_ciclo)
                 ->get();
         @endphp
-        <table class="table" style="width:100%; padding-right: 0rem; padding-left: 0rem; padding-bottom: 0rem; padding-top: 0.5rem;">
+        <table class="table" style="width:100%; padding-right: 0rem; padding-left: 0rem; padding-bottom: 0rem; padding-top: 0rem;">
             <tr>
                 <td widht="50%">
                     <span style="font-weight: 700; font-size: 0.7rem;">
@@ -304,13 +304,34 @@
                             })
                             ->orderBy('id_matricula_curso', 'desc')
                             ->first();
+                        $docente = $matriculaCurso ? ($matriculaCurso->docente ?? null) : null;
                     @endphp
-                    <tr style="padding: 4px; font-size: 0.5rem">
+                    <tr style="padding: 4px; font-size: 0.5rem; border: 1px solid black;">
                         <td style="border-right: 1px solid black; border-left: 1px solid black; padding: 4px;" align="center">
                             {{ $curso->curso_codigo }}
                         </td>
                         <td style="border-right: 1px solid black; border-left: 1px solid black; padding: 4px;">
-                            {{ $curso->curso_nombre }}
+                            <div style="display: flex; direction: column; align-items: center;">
+                                <span>
+                                    {{ $curso->curso_nombre }}
+                                </span>
+                                <div>
+                                    <span style="font-weight: 700;">Docente:</span>
+                                    @if ($docente)
+                                        {{ $docente->trabajador->grado_academico->grado_academico_prefijo }} {{ $docente->trabajador->trabajador_nombre_completo }}
+                                    @else
+                                        Sin asignar
+                                    @endif
+                                </div>
+                                @if ($matriculaCurso && $matriculaCurso->id_reingreso)
+                                    <div class="fs-6">
+                                        <span class="text-danger">
+                                            RESOLUCIÓN DE REINGRESO {{ getNombreResolucionReingreso($matriculaCurso->id_matricula_curso) }}
+                                        </span>
+                                    </div>
+                                @endif
+                            </div>
+
                         </td>
                         <td style="border-right: 1px solid black; border-left: 1px solid black; padding: 4px;" align="center">
                             @if ($matriculaCurso)
@@ -328,14 +349,39 @@
                         <td style="border-right: 1px solid black; border-left: 1px solid black; padding: 4px;" align="center">
                             {{ $matriculaCurso ? $matriculaCurso->periodo : '---' }}
                         </td>
-                        <td style="border-right: 1px solid black; border-left: 1px solid black; padding: 4px; font-weight: 700;" align="center">
+                        <td
+                            style="
+                                border-right: 1px solid black;
+                                border-left: 1px solid black;
+                                padding: 4px;
+                                font-weight: 700;
+                                @if ($matriculaCurso && $matriculaCurso->estado == 3)
+                                    color: red;
+                                @elseif ($matriculaCurso && $matriculaCurso->estado == 0)
+                                    color: red;
+                                @endif
+                            "
+                            align="center"
+                        >
                             @if ($matriculaCurso && $matriculaCurso->nota_promedio_final)
                                 {{ number_format($matriculaCurso->nota_promedio_final, 0) }}
                             @else
                                 ---
                             @endif
                         </td>
-                        <td style="border-right: 1px solid black; border-left: 1px solid black; padding: 4px;" align="center">
+                        <td
+                            style="
+                                border-right: 1px solid black;
+                                border-left: 1px solid black;
+                                padding: 4px;
+                                @if ($matriculaCurso && $matriculaCurso->estado == 3)
+                                    color: red;
+                                @elseif ($matriculaCurso && $matriculaCurso->estado == 0)
+                                    color: red;
+                                @endif
+                            "
+                            align="center"
+                        >
                             @if ($matriculaCurso && $matriculaCurso->estado == 1)
                                 PENDIENTE
                             @elseif ($matriculaCurso && $matriculaCurso->estado == 3)

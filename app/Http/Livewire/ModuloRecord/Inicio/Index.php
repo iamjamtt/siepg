@@ -30,7 +30,8 @@ class Index extends Component
                 ->join('programa', 'programa.id_programa', '=', 'programa_plan.id_programa')
                 ->where(function ($query) use ($buscar) {
                     $query->where('persona.nombre_completo', 'like', '%' . $buscar . '%')
-                        ->orWhere('persona.numero_documento', 'like', '%' . $buscar . '%');
+                        ->orWhere('persona.numero_documento', 'like', '%' . $buscar . '%')
+                        ->orWhere('admitido.admitido_codigo', 'like', '%' . $buscar . '%');
                 })
                 ->where('admitido.admitido_estado', 1)
                 ->orderBy('persona.nombre_completo')
