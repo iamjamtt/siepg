@@ -33,7 +33,7 @@
                                                     type="text"
                                                     class="form-control"
                                                     wire:model.defer="buscar"
-                                                    placeholder="Buscar alumno por nombre, apellido o DNI..."
+                                                    placeholder="Buscar alumno por codigo, nombre, apellido o DNI..."
                                                 />
                                             </div>
                                         </div>
@@ -88,7 +88,7 @@
                                                                     {{ $alumno->nombre_completo }}
                                                                 </span>
                                                                 <span class="text-muted fw-semibold d-block fs-7">
-                                                                    {{ $alumno->numero_documento }}
+                                                                    {{ $alumno->admitido_codigo }} - {{ $alumno->numero_documento }}
                                                                 </span>
                                                                 <span class="text-muted fw-semibold d-block fs-7">
                                                                     @if ($alumno->mencion)
