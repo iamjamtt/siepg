@@ -127,119 +127,62 @@ class Index extends Component
             $maximo_codigo_admitidos = Admitido::orderBy('admitido_codigo', 'desc')->first(); // codigo maximo de admitidos
 
             // generamos codigo de doctorado
-            if($item->programa_tipo == 2){
-                if($maximo_codigo_admitidos){
-                    $codigo_doctorado_inicio = substr($maximo_codigo_admitidos->admitido_codigo, 0, 3);
-                    if($codigo_doctorado_inicio == $codigo_doctorado){
-                        $codigo = substr($maximo_codigo_admitidos->admitido_codigo, 6, 10);
-                        $codigo = intval($codigo) + 1;
-                        if($codigo < 10){
-                            $codigo = '000'.$codigo;
-                        }else if($codigo < 100 && $codigo > 9){
-                            $codigo = '00'.$codigo;
-                        }else if($codigo < 1000 && $codigo > 99){
-                            $codigo = '0'.$codigo;
-                        }else if($codigo < 10000 && $codigo > 999){
-                            $codigo = $codigo;
-                        }
-                        if($item->id_modalidad == 1){
-                            $codigo = $codigo_doctorado.'P'.$admision_año.$codigo;
-                        }else{
-                            $codigo = $codigo_doctorado.'D'.$admision_año.$codigo;
-                        }
-                    }else{
-                        $maximo_codigo_admitidos = Admitido::where('admitido_codigo', 'like', $codigo_doctorado.'%')
-                                                        ->orderBy('admitido_codigo', 'desc')->first(); // codigo maximo de admitidos
-                        if($maximo_codigo_admitidos){
-                            $codigo = substr($maximo_codigo_admitidos->admitido_codigo, 6, 10);
-                            $codigo = intval($codigo) + 1;
-                            if($codigo < 10){
-                                $codigo = '000'.$codigo;
-                            }else if($codigo < 100 && $codigo > 9){
-                                $codigo = '00'.$codigo;
-                            }else if($codigo < 1000 && $codigo > 99){
-                                $codigo = '0'.$codigo;
-                            }else if($codigo < 10000 && $codigo > 999){
-                                $codigo = $codigo;
-                            }
-                            if($item->id_modalidad == 1){
-                                $codigo = $codigo_doctorado.'P'.$admision_año.$codigo;
-                            }else{
-                                $codigo = $codigo_doctorado.'D'.$admision_año.$codigo;
-                            }
-                        }else{
-                            if($item->id_modalidad == 1){
-                                $codigo = $codigo_doctorado.'P'.$admision_año.'0001';
-                            }else{
-                                $codigo = $codigo_doctorado.'D'.$admision_año.'0001';
-                            }
-                        }
-                    }
-                }else{
-                    if($item->id_modalidad == 1){
-                        $codigo = $codigo_doctorado.'P'.$admision_año.'0001';
-                    }else{
-                        $codigo = $codigo_doctorado.'D'.$admision_año.'0001';
-                    }
+            if ($item->programa_tipo == 2) {
+                // 1) Determinamos la letra según la modalidad
+                $letter = $item->id_modalidad == 1 ? 'P' : 'D';
+                // 2) Construimos el prefijo fijo: ej. "0D0P25"
+                $prefix = $codigo_doctorado . $letter . $admision_año;
+
+                // 3) Buscamos el registro con el código máximo para ese prefijo
+                $max = Admitido::where('admitido_codigo', 'like', $prefix . '%')
+                               ->orderBy('admitido_codigo', 'desc')
+                               ->first();
+
+                // 4) Calculamos el siguiente número
+                if ($max) {
+                    // Extraemos los 4 dígitos justo después del prefijo
+                    $lastNum = intval(substr($max->admitido_codigo, strlen($prefix), 4));
+                    $nextNum = $lastNum + 1;
+                } else {
+                    // Si no hay ningún registro previo, empezamos por 1
+                    $nextNum = 1;
                 }
+
+                // 5) Formateamos a 4 dígitos con ceros a la izquierda
+                $counter = str_pad($nextNum, 4, '0', STR_PAD_LEFT);
+
+                // 6) Montamos el código final
+                $codigo = $prefix . $counter;
             }
 
+
             // generamos codigo de maestria
-            if($item->programa_tipo == 1){
-                if($maximo_codigo_admitidos){
-                    $codigo_maestria_inicio = substr($maximo_codigo_admitidos->admitido_codigo, 0, 3);
-                    if($codigo_maestria_inicio == $codigo_maestria){
-                        $codigo = substr($maximo_codigo_admitidos->admitido_codigo, 6, 10);
-                        $codigo = intval($codigo) + 1;
-                        if($codigo < 10){
-                            $codigo = '000'.$codigo;
-                        }else if($codigo < 100 && $codigo > 9){
-                            $codigo = '00'.$codigo;
-                        }else if($codigo < 1000 && $codigo > 99){
-                            $codigo = '0'.$codigo;
-                        }else if($codigo < 10000 && $codigo > 999){
-                            $codigo = $codigo;
-                        }
-                        if($item->id_modalidad == 1){
-                            $codigo = $codigo_maestria.'P'.$admision_año.$codigo;
-                        }else{
-                            $codigo = $codigo_maestria.'D'.$admision_año.$codigo;
-                        }
-                    }else{
-                        $maximo_codigo_admitidos = Admitido::where('admitido_codigo', 'like', $codigo_maestria.'%')
-                                                        ->orderBy('admitido_codigo', 'desc')->first(); // codigo maximo de admitidos
-                        if($maximo_codigo_admitidos){
-                            $codigo = substr($maximo_codigo_admitidos->admitido_codigo, 7, 10);
-                            $codigo = intval($codigo) + 1;
-                            if($codigo < 10){
-                                $codigo = '000'.$codigo;
-                            }else if($codigo < 100 && $codigo > 9){
-                                $codigo = '00'.$codigo;
-                            }else if($codigo < 1000 && $codigo > 99){
-                                $codigo = '0'.$codigo;
-                            }else if($codigo < 10000 && $codigo > 999){
-                                $codigo = $codigo;
-                            }
-                            if($item->id_modalidad == 1){
-                                $codigo = $codigo_maestria.'P'.$admision_año.$codigo;
-                            }else{
-                                $codigo = $codigo_maestria.'D'.$admision_año.$codigo;
-                            }
-                        }else{
-                            if($item->id_modalidad == 1){
-                                $codigo = $codigo_maestria.'P'.$admision_año.'0001';
-                            }else{
-                                $codigo = $codigo_maestria.'D'.$admision_año.'0001';
-                            }
-                        }
-                    }
-                }else{
-                    if($item->id_modalidad == 1){
-                        $codigo = $codigo_maestria.'P'.$admision_año.'0001';
-                    }else{
-                        $codigo = $codigo_maestria.'D'.$admision_año.'0001';
-                    }
+            if ($item->programa_tipo == 1) {
+                // 1) Determinamos la letra según la modalidad
+                $letter = $item->id_modalidad == 1 ? 'P' : 'D';
+                // 2) Construimos el prefijo fijo: ej. "0M0P25"
+                $prefix = $codigo_maestria . $letter . $admision_año;
+
+                // 3) Buscamos el registro con el código máximo para ese prefijo
+                $max = Admitido::where('admitido_codigo', 'like', $prefix . '%')
+                               ->orderBy('admitido_codigo', 'desc')
+                               ->first();
+
+                // 4) Calculamos el siguiente número
+                if ($max) {
+                    // Extraemos los 4 dígitos justo después del prefijo
+                    $lastNum = intval(substr($max->admitido_codigo, strlen($prefix), 4));
+                    $nextNum = $lastNum + 1;
+                } else {
+                    // Si no hay ningún registro previo, empezamos por 1
+                    $nextNum = 1;
                 }
+
+                // 5) Formateamos a 4 dígitos con ceros a la izquierda
+                $counter = str_pad($nextNum, 4, '0', STR_PAD_LEFT);
+
+                // 6) Montamos el código final
+                $codigo = $prefix . $counter;
             }
 
             // creamos al usuario admitido
