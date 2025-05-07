@@ -19,11 +19,15 @@ use App\Models\PrematriculaCurso;
 use App\Models\ProgramaProcesoGrupo;
 use Illuminate\Support\Facades\File;
 use App\Jobs\ProcessEnvioFichaMatricula;
+use App\Models\ConstanciaIngreso;
+use App\Models\Curso;
 use App\Models\Matricula\Matricula as ModelMatricula;
 use App\Models\Matricula\MatriculaCurso as ModelMatriculaCurso;
 use App\Models\Matricula\PreMatriculaCurso as ModelPreMatriculaCurso;
 use App\Models\MatriculaGestion;
 use App\Models\Programa;
+use App\Models\ProgramaProceso;
+use Illuminate\Support\Facades\DB;
 
 class Index extends Component
 {
@@ -46,6 +50,7 @@ class Index extends Component
 
     protected $listeners = [
         'generar_matricula' => 'generar_matricula',
+        'generar_matricula_ingresante' => 'generar_matricula_ingresante',
         'ficha_matricula' => 'ficha_matricula',
     ];
 
@@ -696,5 +701,213 @@ class Index extends Component
             ->where('id_ciclo', $id_ciclo)
             ->where('estado', 1)
             ->get();
+    }
+
+    public function verificarFechasMatricula($id_programa_proceso)
+    {
+        $fechaActual = date('Y-m-d');
+        $programaProceso = ProgramaProceso::query()
+            ->with('admision')
+            ->where('id_programa_proceso', $id_programa_proceso)
+            ->first();
+
+        if ($programaProceso) {
+            $fechaInicio = $programaProceso->admision->admision_fecha_inicio_matricula;
+            $fechaFin = $programaProceso->admision->admision_fecha_fin_matricula_extemporanea;
+
+            if ($fechaActual >= $fechaInicio && $fechaActual <= $fechaFin) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function verificarConstanciaIngreso($id_admitido)
+    {
+        $constancia = ConstanciaIngreso::query()
+            ->where('id_admitido', $id_admitido)
+            ->where('constancia_ingreso_estado', 1) // 1 = activo
+            ->first();
+
+        if ($constancia) {
+            return true;
+        }
+        return false;
+    }
+
+    public function abrir_modal_maticula_ingresante()
+    {
+        // dd($this->verificarFechasMatricula($this->alumno->id_programa_proceso), $this->alumno->programa_proceso->admision);
+
+        // verificamos si estamos en fechas de matricula
+        if (!$this->verificarFechasMatricula($this->alumno->id_programa_proceso)) {
+            $this->dispatchBrowserEvent('alerta_generar_matricula', [
+                'title' => '¡Error!',
+                'text' => 'No se encuentra en fechas de matrícula.',
+                'icon' => 'error',
+                'confirmButtonText' => 'Aceptar',
+                'color' => 'danger'
+            ]);
+            return;
+        }
+
+        // verificamos si genero su constancia de ingreso
+        if (!$this->verificarConstanciaIngreso($this->alumno->id_admitido)) {
+            $this->dispatchBrowserEvent('alerta_generar_matricula', [
+                'title' => '¡Error!',
+                'text' => 'No se puede matricular, aún no ha generado su constancia de ingreso.',
+                'icon' => 'error',
+                'confirmButtonText' => 'Aceptar',
+                'color' => 'danger'
+            ]);
+            return;
+        }
+
+        // abrimos el modal
+        $this->dispatchBrowserEvent('modal_matricula_ingresantes', ['action' => 'show']);
+    }
+
+    public function alerta_generar_matricula_ingresante()
+    {
+        $this->validate([
+            'grupo' => 'required|numeric',
+            'check_pago' => 'required|array|min:1|max:1'
+        ]);
+
+        // validar que el checkbox tenga al menos un pago seleccionado y como maximo sea un pago el seleccionado
+        if (count($this->check_pago) == 0) {
+            $this->dispatchBrowserEvent('alerta_generar_matricula', [
+                'title' => '¡Error!',
+                'text' => 'Debe seleccionar un pago para generar la matrícula',
+                'icon' => 'error',
+                'confirmButtonText' => 'Aceptar',
+                'color' => 'danger'
+            ]);
+            return;
+        } else if (count($this->check_pago) > 1) {
+            $this->dispatchBrowserEvent('alerta_generar_matricula', [
+                'title' => '¡Error!',
+                'text' => 'Solo puede seleccionar un pago para generar la matrícula',
+                'icon' => 'error',
+                'confirmButtonText' => 'Aceptar',
+                'color' => 'danger'
+            ]);
+            return;
+        }
+
+        $this->dispatchBrowserEvent('alerta_generar_matricula_ingresante', [
+            'title' => 'Confirmar matrícula',
+            'text' => '¿Está seguro de generar la matrícula?',
+            'icon' => 'question',
+            'confirmButtonText' => 'Generar',
+            'cancelButtonText' => 'Cancelar',
+            'confirmButtonColor' => 'primary',
+            'cancelButtonColor' => 'danger'
+        ]);
+    }
+
+    public function generar_matricula_ingresante()
+    {
+        try {
+            // buscamos el grupo
+            $grupo = $this->grupo;
+
+            // generar codigo de matricula
+            $codigo = 'M' . date('Y') . str_pad(1, 5, "0", STR_PAD_LEFT);
+
+            // obtener el ultimo registro de matricula
+            $matricula = ModelMatricula::orderBy('id_matricula', 'desc')->first();
+
+            if ($matricula) {
+                $codigo = $matricula->codigo;
+                $codigo = substr($codigo, 5);
+                $codigo = (int)$codigo + 1;
+                $codigo = 'M' . date('Y') . str_pad($codigo, 5, "0", STR_PAD_LEFT);
+            } else {
+                $codigo = 'M' . date('Y') . str_pad(1, 5, "0", STR_PAD_LEFT);
+            }
+
+            DB::beginTransaction();
+
+            // registrar matricula
+            $matricula = new ModelMatricula();
+            $matricula->id_matricula_gestion = null;
+            $matricula->id_admitido = $this->alumno->id_admitido;
+            $matricula->ciclo = $this->id_ciclo;
+            $matricula->codigo = $codigo;
+            $matricula->fecha_matricula = date('Y-m-d');
+            $matricula->id_pago = $this->check_pago[0];
+            $matricula->save();
+
+            // cambiar de estado
+            $pago = Pago::find($this->check_pago[0]);
+            $pago->pago_estado = 2;
+            $pago->save();
+
+            // registramos los cursos de la matricula
+            $cursos = CursoProgramaPlan::query()
+                ->with([
+                    'curso',
+                    'programa_plan'
+                ])
+                ->whereHas('curso', function ($query) {
+                    $query->where('id_ciclo', $this->id_ciclo);
+                })
+                ->where('id_programa_plan', $this->alumno->programa_proceso->id_programa_plan)
+                ->get();
+            foreach ($cursos as $curso) {
+                $matriculaCurso = new ModelMatriculaCurso();
+                $matriculaCurso->id_matricula = $matricula->id_matricula;
+                $matriculaCurso->id_curso_programa_plan = $curso->id_curso_programa_plan;
+                $matriculaCurso->id_programa_proceso_grupo = $grupo;
+                $matriculaCurso->id_docente = null;
+                $matriculaCurso->periodo = $this->calcularPeriodo();
+                $matriculaCurso->save();
+            }
+
+            DB::commit();
+
+            // emitimos una alerta de que se esta generando la matricula
+            $this->dispatchBrowserEvent('alerta_generar_matricula', [
+                'title' => '¡Exito!',
+                'text' => 'Se ha generado su matrícula correctamente',
+                'icon' => 'success',
+                'confirmButtonText' => 'Aceptar',
+                'color' => 'success'
+            ]);
+
+            // cerramos el modal
+            $this->dispatchBrowserEvent('modal_matricula_ingresantes', ['action' => 'hide']);
+
+            // reseteamos las variables
+            $this->limpiar_modal();
+
+            // enviamos la ficha de matricula a otra vista
+            $this->dispatchBrowserEvent('enviar_ficha_matricula', [
+                'id_matricula' => $matricula->id_matricula,
+            ]);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            // emitimos una alerta de que se esta generando la matricula
+            $this->dispatchBrowserEvent('alerta_generar_matricula', [
+                'title' => '¡Error!',
+                'text' => 'Ocurrio un error al generar la matrícula, por favor intente nuevamente: ' . $e->getMessage(),
+                'icon' => 'error',
+                'confirmButtonText' => 'Aceptar',
+                'color' => 'danger'
+            ]);
+            return;
+        }
+    }
+
+    function calcularPeriodo()
+    {
+        $admision = $this->alumno->programa_proceso->admision;
+        $anio = $admision->admision_año;
+        $periodo = $this->alumno->matriculas()->count();
+
+        return $anio . ' - ' . $periodo;
     }
 }
