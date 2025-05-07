@@ -16,11 +16,19 @@
                 </ul>
             </div>
             @if ($alumno->admitido_estado == 1)
-                <div class="d-flex align-items-center gap-2 gap-lg-3">
-                    <button type="button" class="btn fw-bold btn-primary" wire:click="abrir_modal" wire:loading.attr="disabled" wire:target="abrir_modal">
-                        Generar Matricula
-                    </button>
-                </div>
+                @if ($alumno->ingresante == 0)
+                    <div class="d-flex align-items-center gap-2 gap-lg-3">
+                        <button type="button" class="btn fw-bold btn-primary" wire:click="abrir_modal" wire:loading.attr="disabled" wire:target="abrir_modal">
+                            Generar Matricula
+                        </button>
+                    </div>
+                @else
+                    <div class="d-flex align-items-center gap-2 gap-lg-3">
+                        <button type="button" class="btn fw-bold btn-primary" wire:click="abrir_modal_maticula_ingresante" wire:loading.attr="disabled" wire:target="abrir_modal_maticula_ingresante">
+                            Generar Matricula
+                        </button>
+                    </div>
+                @endif
             @endif
         </div>
     </div>
@@ -386,6 +394,141 @@
                             Generar Matricula
                         </div>
                         <div wire:loading wire:target="alerta_generar_matricula">
+                            Generando <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                        </div>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{-- modal matricula ingresantes --}}
+    <div wire:ignore.self class="modal fade" tabindex="-1" id="modal_matricula_ingresantes">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">
+                        Matricula de Ingresantes
+                    </h3>
+
+                    <div class="btn btn-icon btn-sm btn-active-light-danger ms-2" wire:click="limpiar_modal" data-bs-dismiss="modal" aria-label="Close">
+                        <span class="svg-icon svg-icon-2hx">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect opacity="0.3" x="2" y="2" width="20" height="20" rx="5" fill="currentColor"/>
+                                <rect x="7" y="15.3137" width="12" height="2" rx="1" transform="rotate(-45 7 15.3137)" fill="currentColor"/>
+                                <rect x="8.41422" y="7" width="12" height="2" rx="1" transform="rotate(45 8.41422 7)" fill="currentColor"/>
+                            </svg>
+                        </span>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <form autocomplete="off" class="row g-5">
+                        <div class="col-md-12">
+                            <label for="grupo" class="required form-label">
+                                Grupo
+                            </label>
+                            <select
+                                class="form-select @error('grupo') is-invalid @enderror"
+                                wire:model="grupo"
+                                id="grupo"
+                            >
+                                <option value="">
+                                    Seleccione su grupo...
+                                </option>
+                                @foreach ($grupos as $item)
+                                @php
+                                    $contador_matriculados_grupos = obtenerContadorDeMatriculasPorGrupos($alumno->id_programa_proceso, $gestion->id_matricula_gestion ?? 0, $item->id_programa_proceso_grupo);
+                                @endphp
+                                <option
+                                    value="{{ $item->id_programa_proceso_grupo }}"
+                                    @if ($contador_matriculados_grupos == $item->grupo_cantidad)
+                                        disabled
+                                    @endif
+                                >
+                                    GRUPO {{ $item->grupo_detalle }} - CUPOS: {{ $item->grupo_cantidad - $contador_matriculados_grupos }}
+                                </option>
+                                @endforeach
+                            </select>
+                            @error('grupo')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+                        <div class="col-12">
+                            <label for="pagos" class="required form-label">
+                                Pagos
+                            </label>
+                            <div class="table-responsive">
+                                <table class="table table-hover align-middle table-rounded border mb-0 gy-4 gs-4">
+                                    <thead class="bg-light-warning">
+                                        <tr class="fw-bold fs-5 text-gray-900 border-bottom-2 border-gray-200">
+                                            <th>Concepto Pago</th>
+                                            <th class="text-center">Operacion</th>
+                                            <th class="text-center">Monto</th>
+                                            <th class="text-center">Fecha</th>
+                                            <th class="text-center">Estado</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="fw-semibold text-gray-700">
+                                        @forelse ($pagos as $item)
+                                        <tr class="fs-6 text-gray-700 fw-semibold">
+                                            <td>
+                                                {{ $item->concepto_pago->concepto_pago }}
+                                            </td>
+                                            <td class="text-center">
+                                                {{ $item->pago_operacion }}
+                                            </td>
+                                            <td class="text-center">
+                                                S/. {{ number_format($item->pago_monto, 2, ',', '.') }}
+                                            </td>
+                                            <td class="text-center">
+                                                {{ date('d/m/Y', strtotime($item->pago_fecha)) }}
+                                            </td>
+                                            <td class="text-center">
+                                                @if ($item->pago_verificacion == 1)
+                                                    <span class="badge badge-warning fs-6 px-3 py-2">Pendiente</span>
+                                                @elseif ($item->pago_verificacion == 2)
+                                                    <span class="badge badge-success fs-6 px-3 py-2">Validado</span>
+                                                @elseif ($item->pago_verificacion == 0 && $item->pago_estado == 0)
+                                                        <span class="badge badge-danger fs-6 px-3 py-2">Rechazado</span>
+                                                @elseif ($item->pago_verificacion == 0)
+                                                    <span class="badge badge-danger fs-6 px-3 py-2">Observado</span>
+                                                @endif
+                                            </td>
+                                            <td class="text-end">
+                                                <div class="form-check">
+                                                    <input
+                                                        type="checkbox"
+                                                        class="form-check-input @error('check_pago') is-invalid @enderror"
+                                                        wire:model="check_pago"
+                                                        value="{{ $item->id_pago }}"
+                                                    />
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        @empty
+                                        <tr class="fs-6">
+                                            <td colspan="6" class="text-center">
+                                                <div class="text-muted py-4">
+                                                    No se encontraron resultados
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        @endforelse
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal" wire:click="limpiar_modal">
+                        Cerrar
+                    </button>
+                    <button type="button" wire:click="alerta_generar_matricula_ingresante" class="btn btn-primary" style="width: 165px" wire:loading.attr="disabled" wire:target="alerta_generar_matricula_ingresante">
+                        <div wire:loading.remove wire:target="alerta_generar_matricula_ingresante">
+                            Generar Matricula
+                        </div>
+                        <div wire:loading wire:target="alerta_generar_matricula_ingresante">
                             Generando <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
                         </div>
                     </button>
