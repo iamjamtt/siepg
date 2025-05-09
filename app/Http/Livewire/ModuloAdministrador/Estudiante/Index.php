@@ -461,6 +461,12 @@ class Index extends Component
 
         //Guardamos los datos
         $persona = Persona::findOrFail($this->id_persona);
+
+        $contrasena = '';
+        if ($this->numero_documento != $persona->numero_documento) {
+            $contrasena = Hash::make($this->numero_documento);
+        }
+
         $persona->numero_documento = $this->numero_documento;
         $persona->apellido_paterno = $this->apellido_paterno;
         $persona->apellido_materno = $this->apellido_materno;
@@ -507,6 +513,9 @@ class Index extends Component
         // actualizamos el correo de la tabla de usuarios
         $usuario = UsuarioEstudiante::where('id_persona', $this->id_persona)->first();
         $usuario->usuario_estudiante = mb_strtoupper($this->correo, 'UTF-8');
+        if ($contrasena != '') {
+            $usuario->usuario_estudiante_password = $contrasena;
+        }
         $usuario->save();
 
         $this->alertaEstudiante('¡Éxito!', "El estudiante $persona->nombre_completo se actualizó correctamente.", 'success', 'Aceptar', 'success');
