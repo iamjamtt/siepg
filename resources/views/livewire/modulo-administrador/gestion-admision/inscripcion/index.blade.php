@@ -272,6 +272,7 @@
                                                         {{ $item->nombre }}
                                                     </span>
                                                     <span class="text-gray-600">{{ $item->numero_documento }}</span>
+                                                    <span class="text-gray-600">Cel. {{ $item->celular }}</span>
                                                 </div>
                                             </td>
                                             <td>

@@ -8,6 +8,9 @@
     window.addEventListener('modal_matricula', event => {
         $('#modal_matricula').modal(event.detail.action);
     })
+    window.addEventListener('modal_matricula_ingresantes', event => {
+        $('#modal_matricula_ingresantes').modal(event.detail.action);
+    })
     window.addEventListener('alerta_generar_matricula', event => {
         Swal.fire({
             title: event.detail.title,
@@ -38,6 +41,27 @@
         }).then((result) => {
             if (result.isConfirmed) {
                 Livewire.emitTo('modulo-plataforma.matriculas.index', 'generar_matricula');
+            }
+        });
+    });
+    window.addEventListener('alerta_generar_matricula_ingresante', event => {
+        // alert('Name updated to: ' + event.detail.id);
+        Swal.fire({
+            title: event.detail.title,
+            text: event.detail.text,
+            icon: event.detail.icon,
+            showCancelButton: true,
+            confirmButtonText: event.detail.confirmButtonText,
+            cancelButtonText: event.detail.cancelButtonText,
+            // confirmButtonClass: 'hover-elevate-up', // Hover para elevar boton al pasar el cursor
+            // cancelButtonClass: 'hover-elevate-up', // Hover para elevar boton al pasar el cursor
+            customClass: {
+                confirmButton: "btn btn-"+event.detail.confirmButtonColor,
+                cancelButton: "btn btn-"+event.detail.cancelButtonColor,
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Livewire.emitTo('modulo-plataforma.matriculas.index', 'generar_matricula_ingresante');
             }
         });
     });
@@ -77,6 +101,13 @@
                 });
             }
         })
+    });
+    window.addEventListener('enviar_ficha_matricula', event => {
+        const { id_matricula } = event.detail;
+        // Aquí puedes agregar la lógica para manejar la ficha de matrícula con el id_matricula
+        console.log('ID de matrícula recibida:', id_matricula);
+        // abrir la ruta de ver ficha de matrícula
+        window.open('/plataforma/matriculas-ficha/' + id_matricula, '_blank');
     });
 </script>
 @endsection

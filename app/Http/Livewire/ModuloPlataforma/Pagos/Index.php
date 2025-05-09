@@ -16,6 +16,7 @@ use App\Models\Mensualidad;
 use App\Models\Pago;
 use App\Models\PagoObservacion;
 use App\Models\Persona;
+use App\Models\ProgramaProceso;
 use App\Models\ProgramaProcesoGrupo;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -703,6 +704,10 @@ class Index extends Component
         $monto_pagado = calcularMontoPagadoCostoPorEnsenhanzaEstudiante($this->admitido->id_admitido);
         $deuda = $monto_total - $monto_pagado;
 
+        // es ingresante
+        $es_ingresante = $this->admitido ? ($this->admitido->ingresante == 1 ? true : false) : false;
+        $verificar_fecha_matricula_ingresantes = $this->admitido ? $this->verificarFechasMatriculaIngresantes($this->admitido->id_programa_proceso) : false;
+
         return view('livewire.modulo-plataforma.pagos.index', [
             'canal_pagos' => $canal_pagos,
             'pagos' => $pagos,
@@ -711,7 +716,9 @@ class Index extends Component
             'admision' => $admision,
             'constancia_ingreso' => $constancia_ingreso,
             'matricula_count' => $matricula_count,
-            'deuda' => $deuda
+            'deuda' => $deuda,
+            'es_ingresante' => $es_ingresante,
+            'verificar_fecha_matricula_ingresantes' => $verificar_fecha_matricula_ingresantes,
         ]);
     }
 
@@ -745,6 +752,25 @@ class Index extends Component
             return false;
         }
 
+        return false;
+    }
+
+    public function verificarFechasMatriculaIngresantes($id_programa_proceso)
+    {
+        $fechaActual = date('Y-m-d');
+        $programaProceso = ProgramaProceso::query()
+            ->with('admision')
+            ->where('id_programa_proceso', $id_programa_proceso)
+            ->first();
+
+        if ($programaProceso) {
+            $fechaInicio = $programaProceso->admision->admision_fecha_inicio_matricula;
+            $fechaFin = $programaProceso->admision->admision_fecha_fin_matricula_extemporanea;
+
+            if ($fechaActual >= $fechaInicio && $fechaActual <= $fechaFin) {
+                return true;
+            }
+        }
         return false;
     }
 }
