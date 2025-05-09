@@ -4,8 +4,8 @@ namespace App\Http\Livewire\ModuloPlataforma\EstadoCuenta;
 
 use App\Models\Admitido;
 use App\Models\CostoEnseñanza;
-use App\Models\Matricula;
-use App\Models\MatriculaCurso;
+use App\Models\Matricula\Matricula;
+use App\Models\Matricula\MatriculaCurso;
 use App\Models\Mensualidad;
 use App\Models\Persona;
 use Livewire\Component;
@@ -44,25 +44,34 @@ class Index extends Component
         {
             abort(403);
         }
-        // buscar ultima matricula
-        $ultima_matricula = Matricula::where('id_admitido', $this->admitido->id_admitido)->where('matricula_estado', 1)->orderBy('id_matricula', 'desc')->first();
 
         // asuganamos la ultima matricula al filtro
-        $this->filtro_matricula = $ultima_matricula ? $ultima_matricula->id_matricula : null;
+        $this->filtro_matricula = $this->admitido->ultimaMatriculaNuevo->id_matricula ?? null;
         $this->data_matricula = $this->filtro_matricula;
 
         // buscar cursos de la ultima matricula
-        $cursos = $ultima_matricula ?
-            MatriculaCurso::join('curso_programa_plan', 'matricula_curso.id_curso_programa_plan', '=', 'curso_programa_plan.id_curso_programa_plan')
-                                ->join('curso', 'curso_programa_plan.id_curso', '=', 'curso.id_curso')
-                                ->where('matricula_curso.id_matricula', $ultima_matricula->id_matricula)
-                                ->get() :
-            collect([]);
+        $cursos = collect();
+
+        if ($this->filtro_matricula)
+        {
+            $cursos = MatriculaCurso::query()
+                ->with([
+                    'cursoProgramaPlan' => function($query) {
+                        $query->with([
+                            'curso' => function($query) {
+                                $query->select('id_curso', 'curso_nombre', 'curso_credito');
+                            }
+                        ]);
+                    }
+                ])
+                ->where('id_matricula', $this->filtro_matricula)
+                ->get();
+        }
 
         // sumar creditos de los cursos
         foreach($cursos as $curso)
         {
-            $this->creditos_totales += $curso->curso_credito;
+            $this->creditos_totales += $curso->cursoProgramaPlan->curso->curso_credito;
         }
 
         // buscamos el plan del admitido
