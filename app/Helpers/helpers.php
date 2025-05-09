@@ -507,6 +507,36 @@ function obtenerContadorDeMatriculasPorGrupos($id_programa_proceso, $id_matricul
     return $contador;
 }
 
+function obtenerContadorDeMatriculasPorGruposIngresantes($id_programa_proceso, $id_programa_proceso_grupo)
+{
+    $matriculados = ModelMatricula::query()
+        ->with([
+            'admitido' => function($query) use ($id_programa_proceso) {
+                $query->with('persona', 'programa_proceso')
+                    ->where('id_programa_proceso', $id_programa_proceso);
+            },
+            'cursos'
+        ])
+        ->where('ciclo', 1)
+        ->where('estado', 1)
+        ->get();
+    $contador = 0;
+    foreach($matriculados as $matriculado) {
+        if ($matriculado->admitido) {
+            $value = false;
+            foreach($matriculado->cursos as $curso) {
+                if ($curso->id_programa_proceso_grupo == $id_programa_proceso_grupo) {
+                    $value = true;
+                }
+            }
+            if ($value) {
+                $contador++;
+            }
+        }
+    }
+    return $contador;
+}
+
 function obtenerGrupoDeMatricula($id_matricula)
 {
     $matricula = ModelMatricula::query()
