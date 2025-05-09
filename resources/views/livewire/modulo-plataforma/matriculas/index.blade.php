@@ -24,7 +24,7 @@
                     </div>
                 @else
                     <div class="d-flex align-items-center gap-2 gap-lg-3">
-                        <button type="button" class="btn fw-bold btn-primary" wire:click="abrir_modal_maticula_ingresante" wire:loading.attr="disabled" wire:target="abrir_modal_maticula_ingresante">
+                        <button type="button" class="btn fw-bold btn-primary" wire:click="abrir_modal_maticula_ingresante" wire:loading.attr="disabled" wire:target="abrir_modal_maticula_ingresante" disabled>
                             Generar Matricula
                         </button>
                     </div>
