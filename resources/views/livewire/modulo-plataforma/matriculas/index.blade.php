@@ -24,7 +24,7 @@
                     </div>
                 @else
                     <div class="d-flex align-items-center gap-2 gap-lg-3">
-                        <button type="button" class="btn fw-bold btn-primary" wire:click="abrir_modal_maticula_ingresante" wire:loading.attr="disabled" wire:target="abrir_modal_maticula_ingresante" disabled>
+                        <button type="button" class="btn fw-bold btn-primary" wire:click="abrir_modal_maticula_ingresante" wire:loading.attr="disabled" wire:target="abrir_modal_maticula_ingresante">
                             Generar Matricula
                         </button>
                     </div>
@@ -436,11 +436,11 @@
                                 </option>
                                 @foreach ($grupos as $item)
                                 @php
-                                    $contador_matriculados_grupos = obtenerContadorDeMatriculasPorGrupos($alumno->id_programa_proceso, $gestion->id_matricula_gestion ?? 0, $item->id_programa_proceso_grupo);
+                                    $contador_matriculados_grupos = obtenerContadorDeMatriculasPorGruposIngresantes($alumno->id_programa_proceso, $item->id_programa_proceso_grupo);
                                 @endphp
                                 <option
                                     value="{{ $item->id_programa_proceso_grupo }}"
-                                    @if ($contador_matriculados_grupos == $item->grupo_cantidad)
+                                    @if ($contador_matriculados_grupos >= $item->grupo_cantidad)
                                         disabled
                                     @endif
                                 >
