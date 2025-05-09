@@ -865,6 +865,9 @@ class Index extends Component
                 $matriculaCurso->save();
             }
 
+            $this->alumno->ingresante = 0;
+            $this->alumno->save();
+
             DB::commit();
 
             // emitimos una alerta de que se esta generando la matricula

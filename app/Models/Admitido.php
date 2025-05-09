@@ -24,6 +24,7 @@ class Admitido extends Model
         'admitido_alerta',
         'es_traslado_externo',
         'creditos_acumulados',
+        'ingresante'
     ];
 
     public $timestamps = false;
