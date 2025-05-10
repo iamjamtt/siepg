@@ -399,6 +399,7 @@ class Index extends Component
         $this->alumno = Admitido::query()
             ->with('persona','programa_proceso')
             ->where('id_persona', $persona->id_persona)
+            ->orderBy('id_admitido', 'desc')
             ->first();
 
         if (!$this->alumno) {
