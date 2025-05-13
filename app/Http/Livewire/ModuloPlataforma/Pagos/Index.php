@@ -447,7 +447,7 @@ class Index extends Component
             $admitido = $this->admitido ?? null;
             if ($admitido) {
                 $esIngresante = $admitido->ingresante == 1 ? true : false;
-                if ($esIngresante) {
+                if ($esIngresante && $this->concepto_pago != 2) {
                     //
                     $fechaPago = $this->fecha_pago;
                     $admision = $admitido->programa_proceso->admision;
