@@ -124,7 +124,7 @@
                                                         'id_admitido',
                                                         $admitido->id_admitido,
                                                     )->first();
-                                                    $matricula = App\Models\Matricula::where(
+                                                    $matricula = App\Models\Matricula\Matricula::where(
                                                         'id_admitido',
                                                         $admitido->id_admitido,
                                                     )->orderBy('id_matricula', 'desc')
@@ -225,13 +225,9 @@
                                             <td align="center">
                                                 @if ($admitido)
                                                     @if ($matricula)
-                                                        @if ($matricula->matricula_ficha_url)
-                                                            <a href="{{ asset($matricula->matricula_ficha_url) }}" target="_blank" class="btn btn-outline btn-outline-info">
-                                                                Ver
-                                                            </a>
-                                                        @else
-                                                            -
-                                                        @endif
+                                                        <a href="{{ route('plataforma.matriculas-ficha', ['id_matricula' => $matricula->id_matricula]) }}" target="_blank" class="btn btn-outline btn-outline-info">
+                                                            Ver
+                                                        </a>
                                                     @else
                                                         -
                                                     @endif

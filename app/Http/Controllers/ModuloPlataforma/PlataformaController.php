@@ -232,8 +232,10 @@ class PlataformaController extends Controller
 
         $admitido = $matricula->admitido;
 
-        if (auth('plataforma')->user()->id_persona != $admitido->id_persona) {
-            abort(403, 'Acceso no autorizado');
+        if (!auth('usuario')->check()) {
+            if (auth('plataforma')->user()->id_persona != $admitido->id_persona) {
+                abort(403, 'Acceso no autorizado');
+            }
         }
 
         $pago = $matricula->pago;
