@@ -723,11 +723,11 @@ class Index extends Component
             ->orderBy('persona.id_persona', 'desc')
             ->paginate(100);
 
-        $programas = Programa::where('id_modalidad', 2)->get();
+        $programas = Programa::query()->with('modalidad')->get();
 
         return view('livewire.modulo-administrador.estudiante.index', [
             "estudiantesModel" => $estudiantesModel,
-            "procesos" => Admision::all(),
+            "procesos" => Admision::query()->orderBy('admision', 'desc')->get(),
             "genero_model" => Genero::all(),
             "estado_civil_model" => EstadoCivil::all(),
             "discapacidad_model" => Discapacidad::all(),
