@@ -76,14 +76,14 @@
                             <div class="col-md-5">
                                 <select class="form-select @error('filtro_programas') is-invalid @enderror"
                                     wire:model="filtro_programas" id="filtro_programas" data-control="select2"
-                                    data-placeholder="Seleccione el programa" data-allow-clear="true">
+                                    data-placeholder="Seleccione el programa">
                                     <option></option>
                                     <option value="0">
-                                        TODOS LOS PROGRAMAS
+                                        MOSTRAR TODOS LOS PROGRAMAS
                                     </option>
                                     @foreach ($programas as $item)
                                         <option value="{{ $item->id_programa }}">
-                                            {{ $item->programa }} EN {{ $item->subprograma }} {{ $item->mencion ? ' CON MENCION EN ' . $item->mencion : '' }}
+                                            {{ $item->programa }} EN {{ $item->subprograma }} {{ $item->mencion ? ' CON MENCION EN ' . $item->mencion : '' }} / ({{ $item->modalidad->modalidad }})
                                         </option>
                                     @endforeach
                                 </select>
@@ -1269,7 +1269,7 @@
         $(document).ready(function() {
             $('#filtro_programas').select2({
                 placeholder: 'Seleccione su programa',
-                allowClear: true,
+                // allowClear: true,
                 width: '100%',
                 selectOnClose: true,
                 language: {
@@ -1287,7 +1287,7 @@
             Livewire.hook('message.processed', (message, component) => {
                 $('#filtro_programas').select2({
                     placeholder: 'Seleccione su programa',
-                    allowClear: true,
+                    // allowClear: true,
                     width: '100%',
                     selectOnClose: true,
                     language: {
