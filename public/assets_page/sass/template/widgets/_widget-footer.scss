@@ -1,0 +1,410 @@
+.footer-widget {
+    margin-bottom: 50px;
+
+    &,
+    .widget {
+        padding: 0;
+        border: none;
+        padding-bottom: 0;
+        background-color: transparent;
+        box-shadow: none;
+    }
+
+    .form-group {
+        >i {
+            color: $theme-color;
+            top: 18px;
+        }
+    }
+
+    select {
+        background-color: transparent;
+        border: 1px solid $border-color;
+        filter: brightness(9);
+    }
+
+    .search-form input {
+        background: transparent;
+    }
+
+    .widget_title {
+        max-width: 270px;
+        color: $white-color;
+        font-weight: 600;
+        font-size: 24px;
+        margin: -0.12em 0 40px 0;
+        padding: 0 0 0 11px;
+        border: 0;
+
+        te &:before {
+            display: none;
+        }
+
+        &:after {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 3px;
+            height: 17px;
+            width: 3px;
+            background-color: $theme-color;
+            opacity: 1;
+            z-index: 1;
+        }
+
+        img {
+            margin: -7px 10px 0 0;
+        }
+    }
+
+    &.widget_meta,
+    &.widget_pages,
+    &.widget_archive,
+    &.widget_categories,
+    &.widget_nav_menu {
+        ul {
+            margin-top: -4px;
+        }
+
+        .menu,
+        >ul {
+            margin-bottom: -4px;
+        }
+
+        a {
+            font-size: 16px;
+            font-weight: 400;
+            padding: 0 0 0 16px;
+            margin-bottom: 24px;
+            font-family: $body-font;
+            display: block;
+            max-width: 100%;
+            width: max-content;
+            padding-right: 0;
+            background-color: transparent;
+            border: none;
+            position: relative;
+            box-shadow: none;
+            color: $body-color;
+
+            &:before {
+                content: "\f105";
+                position: absolute;
+                font-weight: 400;
+                font-family: $icon-font;
+                left: 0;
+                top: 0;
+                opacity: 1;
+                transform: translateY(0);
+                font-size: 16px;
+                background-color: transparent;
+                border: none;
+                color: $body-color;
+                transition: 0.4s;
+            }
+
+            &:after {
+                display: none;
+            }
+
+            &:hover {
+                background-color: transparent;
+                color: $theme-color;
+
+                &:before {
+                    color: $theme-color;
+                    left: 2px;
+                }
+            }
+        }
+
+        li {
+            border: 0;
+            padding-bottom: 0;
+            margin-bottom: 0;
+
+            >span {
+                @include equal-size(auto);
+                background-color: transparent;
+                color: $body-color;
+                line-height: 1;
+                top: 2px;
+            }
+        }
+    }
+
+    .recent-post {
+        max-width: 300px;
+        margin-bottom: 20px;
+
+        .media-img {
+            max-width: 80px;
+
+            &:after {
+                line-height: 74px;
+            }
+        }
+
+        .post-title {
+            color: $white-color;
+
+
+        }
+
+        &:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: 0;
+        }
+
+        .recent-post-meta {
+            margin-top: -0.4em;
+
+            a {
+                font-weight: 400;
+                line-height: 1.2;
+            }
+
+            i {
+                color: $theme-color;
+            }
+
+            a:hover {
+                i {
+                    color: $theme-color;
+                }
+            }
+        }
+    }
+
+    &.widget_rss ul .rsswidget,
+    &.wp-block-rss ul .rsswidget {
+        color: $white-color;
+
+        &:hover {
+            color: $theme-color;
+        }
+    }
+
+    &.widget_rss ul .rss-date,
+    &.wp-block-rss ul .rss-date {
+        color: $white-color;
+    }
+
+    &.widget_rss ul .rssSummary,
+    &.wp-block-rss ul .rssSummary {
+        color: $body-color;
+    }
+
+    &.widget_rss ul cite,
+    &.wp-block-rss ul cite {
+        color: $theme-color;
+    }
+}
+
+.about-logo {
+    margin-bottom: 32px;
+}
+
+.th-widget-about {
+    max-width: 400px;
+
+    .about-logo {
+        margin-bottom: 30px;
+    }
+
+    .about-text {
+        margin-bottom: 45px;
+        margin-top: -0.5em;
+    }
+}
+
+.th-newsletter-widget {
+    max-width: 290px;
+
+    .newsletter-form {
+        margin-top: 40px;
+        position: relative;
+        display: block;
+
+        .form-group {
+            input {
+                backdrop-filter: none;
+                font-size: 14px;
+                height: 56px;
+                padding: 0 20px;
+                border: 1px solid $body-color;
+                border-radius: 0px;
+                width: 400px;
+
+                &::placeholder {
+                    color: $body-color;
+                }
+            }
+
+            &:after {
+                display: none;
+            }
+        }
+
+        .th-btn {
+            min-width: auto;
+            font-size: 16px;
+            font-weight: 400;
+            display: flex;
+            align-items: center;
+            margin-top: 16px;
+            height: 56px;
+            width: 400px;
+        }
+    }
+
+    .form-group {
+        margin-bottom: 0;
+    }
+
+    .check-group {
+        margin-bottom: 20px;
+    }
+
+    &.style2 {
+        .newsletter-form .form-group input {
+            border-radius: 8px;
+        }
+
+        .newsletter-form .th-btn {
+            border-radius: 8px;
+        }
+    }
+
+    &.style3 {
+        .newsletter-form .form-group input {
+            border-radius: 0px;
+        }
+    }
+}
+
+.th-widget-instagram {
+    .instagram-feeds {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+        max-width: 312px;
+    }
+
+    .insta-thumb {
+        overflow: hidden;
+        position: relative;
+        border-radius: 0px;
+
+        &:before {
+            content: '';
+            height: calc(100% - 14px);
+            width: calc(100% - 14px);
+            background-color: $title-color;
+            opacity: 0.8;
+            position: absolute;
+            top: 7px;
+            left: 7px;
+            transform: scaleX(0);
+            border-radius: inherit;
+            transition: 0.4s ease-in-out;
+        }
+
+        img {
+            width: 100%;
+            height: 86px;
+        }
+
+        .insta-btn {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            color: $white-color;
+            visibility: hidden;
+            opacity: 0;
+            transform: translate(-50%, 20px);
+            background: transparent;
+
+            &:hover {
+                color: $theme-color;
+            }
+        }
+
+        &:hover {
+            &:before {
+                transform: scaleX(1);
+            }
+
+            .insta-btn {
+                transform: translate(-50%, -50%);
+                opacity: 1;
+                visibility: visible;
+            }
+        }
+    }
+}
+
+.footer-text {
+    margin-top: -0.5em;
+    margin-bottom: 25px;
+}
+
+.social-box {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+
+    .social-title {
+        font-size: 20px;
+        color: $white-color;
+        font-weight: 600;
+        margin-right: 20px;
+        margin-bottom: 0;
+    }
+}
+
+.icon-group {
+    a {
+        color: $white-color;
+        font-size: 18px;
+        margin-right: 17px;
+
+        &:last-child {
+            margin-right: 0;
+        }
+    }
+}
+
+@include lg {
+    .footer-widget {
+
+        &.widget_meta,
+        &.widget_pages,
+        &.widget_archive,
+        &.widget_categories,
+        &.widget_nav_menu {
+            a {
+                margin-bottom: 16px;
+            }
+
+        }
+    }
+}
+
+@include sm {
+    .footer-widget {
+        .widget_title {
+            margin-bottom: 35px;
+        }
+    }
+
+    .th-widget-about .about-text {
+        margin-bottom: 20px;
+        ;
+    }
+
+    .social-box.mb-30 {
+        margin-bottom: 25px;
+    }
+}

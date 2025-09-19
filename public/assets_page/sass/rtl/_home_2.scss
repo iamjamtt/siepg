@@ -1,0 +1,128 @@
+.hero-shape-2-8 {
+    transform: rotateY(180deg);
+}
+.img-box2 {
+    padding: 0 0 56px 200px;  
+    .img2 {
+        left: 0;
+        right: auto;
+    }
+    .img3 {
+        left: 0;
+        right: auto;
+    }
+    .about-shape2-1 {
+        right: -212px;
+        left: auto;
+        @include xxl {
+            right: -70px;
+        }
+    }
+    .about-shape2-2 {
+        right: -50px;
+        left: auto;
+        @include ml {
+            right: 0;
+        }
+    }
+    @include ml {
+        padding: 0 0px 50px 150px;
+    }
+    @include xl {
+        padding: 0 0 120px 100px;
+    }
+    @include lg {
+        padding: 0 0 0px 200px;
+    }
+    @include sm {
+        padding: 0 0 0px 70px;
+    }
+    @include xs {
+        padding: 0;
+        .about-shape2-2 {
+            right: auto;
+            left: 0;
+        }
+    }
+}
+
+.video-thumb2-1 {
+    margin: -120px 0 -120px -315px;
+    @include xxl {
+        margin-left: -100px;
+    }
+    @include xl {
+        margin-left: -50px;
+    }
+    @include md {
+        margin: 0;
+    }
+}
+
+//Cigmaion 2---------------------------------------
+.cigmaion-card.style2 {
+    .cigmaion-card_progress-wrap {
+        .progress {
+            .progress-bar {
+                .progress-value {
+                    left: 0;
+                    right: auto;
+                    transform: translate(-50%, -100%);
+                }
+            }
+        }
+    }
+}
+
+/* Team Card 2---------------------------------- */
+.team-card2 {
+    .th-social {
+        a {
+            &:last-child {
+                border-bottom: 0;
+            }
+            &:first-child {
+                transform: translate(25px, 0px);
+            }
+            &:nth-child(2) {
+                transform: translate(25px, 0px);
+            }
+            &:nth-child(3) {
+                transform: translate(-25px, 0px);
+            }
+            &:nth-child(4) {
+                transform: translate(-25px, 0px);
+            }
+        }
+    }
+}
+
+/* Testimonial Area 2---------------------------------- */
+.testi-thumb-slider-wrap2 {
+    .testi-box-img {
+        border-radius: 0;
+    }
+}
+/* Event Area 1---------------------------------- */
+.event-card {
+    direction: ltr;
+}
+
+/* Process Card ---------------------------------- */
+.process-card-wrap {
+    .process-card {
+        &:after {
+            left: -10px;
+            right: auto;
+            transform: translate(-50%, 0);
+        }
+    }
+    &:nth-child(2) {
+        .process-card {
+            &:after {
+                transform: translate(-50%, 0) rotate(20deg);
+            }
+        }
+    }
+}
+

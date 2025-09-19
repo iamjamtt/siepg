@@ -1,0 +1,11 @@
+/* Appointment ---------------------------------- */
+.appointment-page-form {
+    border-radius: 30px;
+    padding: 60px;
+    @include sm {
+        padding: 40px;
+    }
+    @include xs {
+        padding: 30px 20px;
+    }
+}

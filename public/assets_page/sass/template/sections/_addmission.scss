@@ -1,0 +1,77 @@
+.addmission-area{
+    position: relative;
+    height: 650px;
+    .addmission-bg-thumb{
+        inset: 0;
+        position: absolute;
+        img{
+            height:100%;
+            width:100%;
+            object-fit: cover;
+        }
+    }
+}
+.admission-forum-wrap{
+    margin-top: -350px;
+    .admission-forum-inner{
+        background-color: $title-color;
+        position: relative;
+        .addmission-forum-thumb{
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            width: 43.5%;
+            @include md{
+                width: 100%;
+                position: relative;
+            }
+            img{
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+        }
+        .addmisson-forum{
+            padding: 60px 60px 60px 162px;
+            @include xl{
+                padding: 45.5px 45.5px 45.5px 125px;
+            }
+            @include md {
+                padding: 60px;
+            }
+            @include xs{
+                padding: 25px;
+            }
+            input,
+            textarea,
+            select{
+                border-radius: 0;
+                 color: $border-color7;
+                border: 1px solid $body-color;
+                transition: 0.4s ease-in;
+                background-color: transparent;
+                &:focus{
+                    border: 1px solid $theme-color;
+                }
+                &::placeholder{
+                    color: $border-color7;
+                }
+            }
+            select{
+                color: $border-color7;
+                option{
+                    color: $body-color;
+                }
+            }
+            input:-webkit-autofill,
+            textarea:-webkit-autofill,
+            select:-webkit-autofill{
+                box-shadow: 0 0 0 1000px transparent inset !important;
+                -webkit-text-fill-color: #fff !important;
+                transition: background-color 9999s ease-in-out 0s !important;
+            }
+ 
+        }
+    }
+}

@@ -1,0 +1,86 @@
+/* Brand 1 ---------------------------------- */
+.brand-wrap1 {
+    .brand-wrap-title {
+        font-size: 24px;
+        font-weight: 600;
+        margin-top: -0.25em;
+        margin-bottom: 40px;
+        span {
+            font-size: 30px;
+        }
+    }
+}
+.brand-box {
+    display: grid;
+    align-content: center;
+    text-align: center;
+    justify-content: center;
+    transition: 0.4s ease-in-out;
+    min-height: 32px;
+    img {
+        transition: 0.4s;
+    }
+    &:hover {
+        img {
+            filter: none;
+            transform: scale(1.05);
+        }
+    }
+}
+/* Brand 3 ---------------------------------- */
+.brand-wrap3 {
+    position: relative;
+    z-index: 1;
+    padding: 23px 0;
+    &:after {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        background: $theme-color2;
+        width: calc(50% - 150px);
+        z-index: -1;
+        clip-path: polygon(0 0, 100% 0, 100% 100%, 50px 100%);
+    }
+    .counter-wrap3 {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+        padding-left: 140px;
+        .counter-number {
+            color: $white-color;
+            font-size: 56px;
+            font-weight: 700;
+            margin-bottom: 0;
+        }
+        .counter-rating {
+            color: $yellow-color;
+            display: flex;
+            gap: 8px;
+        }
+        .counter-text {
+            font-size: 18px;
+            font-weight: 600;
+            color: $white-color;
+            margin-bottom: -0.3em;
+            margin-top: 10px;
+        }
+    }
+    @include lg {
+        .counter-wrap3 {
+            padding-left: 50px;
+        }
+        &:after {
+            display: none;
+        }
+    }
+    @include md {
+        text-align: center;
+        .counter-wrap3 {
+            padding-left: 0;
+            display: inline-flex;
+            text-align: start;
+        }
+    }
+}

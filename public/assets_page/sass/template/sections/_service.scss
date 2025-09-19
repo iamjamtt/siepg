@@ -1,0 +1,1054 @@
+/* Service Card ---------------------------------- */
+.service-card {
+    background-color: $title-color;
+    padding: 40px;
+    display: flex;
+    justify-content: space-between;
+    transition: all 0.4s ease-in-out;
+
+    @media(max-width: 1499px) {
+        padding: 30px;
+    }
+
+    @include md {
+        padding: 30px 20px;
+    }
+
+    @include vxs {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .box-title {
+        font-weight: 700;
+        font-size: 28px;
+        letter-spacing: 0.02em;
+        color: $white-color;
+        max-width: 174px;
+        margin-bottom: 5px;
+        a {
+            color: inherit;
+        }
+
+        @media(max-width: 1499px) {
+            font-size: 24px;
+        }
+
+    }
+
+    .box-text {
+        font-weight: 400;
+        font-size: 18px;
+        letter-spacing: 0.02em;
+        color: $white-color;
+        margin-bottom: 30px;
+        max-width: 294px;
+
+        @include vxs {
+            max-width: 100%;
+        }
+    }
+
+    .icon-btn {
+        width: 48px;
+        height: 48px;
+        background-color: $theme-color;
+        border-radius: 48px;
+        border: none;
+
+    }
+
+    .box-wrapp {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+
+        @include vxs {
+            gap: 20px;
+        }
+    }
+
+    .box-number {
+        font-weight: 600;
+        font-size: 72px;
+        line-height: 72px;
+        leading-trim: both;
+        text-edge: cap;
+        text-transform: capitalize;
+        color: rgba(255, 255, 255, 0.2);
+        margin-bottom: 0;
+    }
+
+    &:hover {
+        background-color: $theme-color;
+
+        .icon-btn {
+            background-color: $title-color;
+        }
+    }
+}
+
+/* Service Card 2---------------------------------- */
+.service-card2 {
+    position: relative;
+    background: $title-color;
+    overflow: hidden;
+    z-index: 1;
+    padding: 40px;
+
+    .box-img {
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        transition: 0.4s;
+        opacity: 0;
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        &:after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(32, 40, 68, 0.16) -25.28%, rgba(32, 40, 68, 0.8) 50.11%);
+
+        }
+    }
+
+    .box-icon {
+        transition: 0.4s;
+        width: 100px;
+        height: 100px;
+        line-height: 100px;
+        border-radius: 50%;
+        background: $black-color2;
+        text-align: center;
+        margin-bottom: 40px;
+        position: relative;
+        z-index: 1;
+
+        &:after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            transform: scale(0);
+            border-radius: 50%;
+            background-color: $theme-color;
+            transform-origin: center;
+            transform-style: preserve-3d;
+            transition: all 0.5s cubic-bezier(0.62, 0.21, 0.45, 1.52);
+            z-index: -1;
+        }
+
+        img {
+            transition: all 0.4s ease-in-out;
+            filter: brightness(99);
+        }
+    }
+
+    .box-title {
+        margin-top: -0.35em;
+        margin-bottom: 15px;
+        font-weight: 600;
+        font-size: 28px;
+
+        a {
+            color: $white-color;
+        }
+
+        &:hover {
+            a {
+                color: $theme-color;
+            }
+        }
+    }
+
+    .box-text {
+        margin-bottom: -0.5em;
+        color: $light-color;
+    }
+
+    .th-btn {
+        margin-top: 40px;
+
+        &:after {
+            transition: 0.4s;
+        }
+    }
+
+    &:hover {
+        .box-img {
+            opacity: 1;
+        }
+
+        .box-icon {
+            &:after {
+                transform: scaleX(1);
+            }
+
+            img {
+                filter: none;
+                transform: scale(-1) rotate(180deg);
+            }
+        }
+
+        .th-btn {
+            color: $title-color;
+
+            &:after {
+                width: 100%;
+            }
+
+            &:hover {
+                &:after {
+                    background: $white-color;
+                }
+            }
+        }
+    }
+
+    @include sm {
+        .box-title {
+            font-size: 24px;
+        }
+    }
+
+    @include vxs {
+        padding: 35px;
+
+        .box-icon {
+            margin-bottom: 30px;
+        }
+    }
+}
+
+/* Service Card 3---------------------------------- */
+.service-slider3 {
+    margin-right: -140px;
+
+    .slider-scrollbar {
+        max-width: calc(100% - 140px);
+    }
+
+    @include hd {
+        margin-right: 0;
+
+        .slider-scrollbar {
+            max-width: 100%;
+        }
+    }
+
+    @include xxl {
+        margin-right: 0;
+
+        .slider-scrollbar {
+            max-width: 100%;
+        }
+    }
+}
+
+.service-card3 {
+    background: $black-color2;
+    padding: 48px 32px;
+
+    .box-icon {
+        height: 100px;
+        width: 100px;
+        border-radius: 50%;
+        display: inline-block;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid $light-color;
+        margin-bottom: 48px;
+        position: relative;
+        z-index: 1;
+        transition: 0.4s;
+
+        &:after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            transform: scale(0);
+            border-radius: 50%;
+            background-color: $theme-color;
+            transform-origin: center;
+            transform-style: preserve-3d;
+            transition: all 0.5s cubic-bezier(0.62, 0.21, 0.45, 1.52);
+            z-index: -1;
+        }
+
+        .color-masking {
+            transition: 0.4s;
+        }
+    }
+
+    .box-title {
+        font-size: 28px;
+
+        a {
+            color: $white-color;
+
+            &:hover {
+                color: $theme-color;
+            }
+        }
+    }
+
+    .box-text {
+        color: $light-color;
+        margin-bottom: 40px;
+        font-size: 18px;
+    }
+
+    &:hover {
+        .box-icon {
+            border-color: $theme-color;
+
+            &:after {
+                transform: scaleX(1);
+            }
+
+            .color-masking {
+                transform: scale(-1) rotate(180deg);
+                filter: brightness(99);
+            }
+        }
+
+        .th-btn {
+            color: $title-color;
+
+            &:after {
+                width: 100%;
+            }
+
+            &:hover {
+                &:after {
+                    background: $white-color;
+                }
+            }
+        }
+    }
+
+    @include md {
+        padding: 40px 30px;
+
+        .box-icon {
+            margin-bottom: 30px;
+        }
+
+        .box-title {
+            font-size: 24px;
+        }
+
+        .box-text {
+            font-size: 15px;
+        }
+    }
+
+    @include sm {
+        .box-text {
+            font-size: 16px;
+        }
+    }
+}
+
+/* Service Card 4---------------------------------- */
+.service-area-4 {
+    background-repeat: no-repeat;
+    background-size: 100% 50%;
+    background-position: top;
+}
+
+.service-slider4 {
+    margin-right: -140px;
+
+    @include hd {
+        margin-right: 0;
+    }
+
+    @include xxl {
+        margin-right: 0;
+    }
+}
+
+.service-card4 {
+    background: $smoke-color;
+    padding: 56px;
+    position: relative;
+    z-index: 1;
+
+    .box-img {
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        transition: 0.4s;
+        opacity: 0;
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        &:after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: $title-color;
+            opacity: 0.6;
+
+        }
+    }
+
+    .box-icon {
+        transition: 0.4s;
+        width: 80px;
+        height: 80px;
+        line-height: 78px;
+        border-radius: 50%;
+        background: transparent;
+        border: 1px solid $light-color;
+        text-align: center;
+        margin-bottom: 40px;
+        position: relative;
+        z-index: 1;
+
+        &:after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            transform: scale(0);
+            border-radius: 50%;
+            background-color: $theme-color;
+            transform-origin: center;
+            transform-style: preserve-3d;
+            transition: all 0.5s cubic-bezier(0.62, 0.21, 0.45, 1.52);
+            z-index: -1;
+        }
+
+        img {
+            transition: all 0.4s ease-in-out;
+        }
+    }
+
+    .box-number {
+        font-size: 72px;
+        font-weight: 800;
+        font-family: $title-font;
+        position: absolute;
+        top: 70px;
+        right: 56px;
+        line-height: 0.75em;
+        color: transparent;
+        -webkit-text-stroke: 1px $light-color;
+    }
+
+    .box-title {
+        font-size: 28px;
+        font-weight: 600;
+        margin-bottom: 7px;
+    }
+
+    .box-text {
+        transition: 0.4s;
+    }
+
+    .th-btn {
+        margin-top: 32px;
+    }
+
+    &:hover {
+        .box-img {
+            opacity: 1;
+        }
+
+        .box-icon {
+            border-color: $theme-color;
+
+            &:after {
+                transform: scaleX(1);
+            }
+
+            img {
+                filter: none;
+                transform: scale(-1) rotate(180deg);
+            }
+        }
+
+        .box-title {
+            a {
+                color: $white-color;
+
+                &:hover {
+                    color: $theme-color;
+                }
+            }
+        }
+
+        .box-text {
+            color: $light-color;
+        }
+
+        .th-btn {
+            border-color: $theme-color;
+
+            &:after {
+                width: 100%;
+                background: $theme-color;
+            }
+
+            &:hover {
+                border-color: $theme-color2;
+
+                &:after {
+                    background: $theme-color2;
+                }
+            }
+        }
+    }
+
+    @include xxl {
+        padding: 50px;
+
+        .box-title {
+            font-size: 24px;
+        }
+    }
+
+    @include ml {
+        padding: 40px;
+    }
+
+    @include xs {
+        padding: 30px;
+
+        .box-icon {
+            margin-bottom: 30px;
+        }
+
+        .box-number {
+            top: 45px;
+            right: 30px;
+        }
+    }
+}
+
+/* Service Card 5---------------------------------- */
+.service-bg-shape5-1 {
+    width: 158px;
+}
+
+.service-tabs {
+    border: 0;
+    gap: 1px;
+    padding-bottom: 53px;
+
+    .nav-item {
+        width: 33.26%;
+
+        .nav-link {
+            margin-bottom: 0;
+            width: 100%;
+            padding: 48px 20px;
+            border-radius: 0;
+            border: 0;
+            background: $title-color;
+            font-size: 28px;
+            font-weight: 600;
+            color: $white-color;
+            position: relative;
+            height: 100%;
+
+            &:after {
+                content: '';
+                position: absolute;
+                bottom: 40px;
+                background: transparent;
+                height: 40px;
+                width: 60px;
+                left: 50%;
+                transform: translate(-50%, 100%);
+                border-top: solid 40px $theme-color;
+                border-left: solid 30px transparent;
+                border-right: solid 30px transparent;
+                transition: 0.4s;
+                opacity: 0;
+                z-index: -1;
+            }
+
+            .box-icon {
+                position: relative;
+                display: flex;
+                width: 100px;
+                height: 100px;
+                border-radius: 50%;
+                margin: auto;
+                text-align: center;
+                justify-content: center;
+                align-items: center;
+                background: $white-color;
+                margin-bottom: 28px;
+
+                .color-masking {
+                    filter: brightness(0.2);
+                    transition: 0.4s;
+                }
+
+                .masking-src {
+                    background: $title-color;
+                    transition: 0.4s;
+                }
+            }
+
+            &.active {
+                background: $theme-color;
+
+                &:after {
+                    bottom: 0;
+                    opacity: 1;
+                }
+
+                .box-icon {
+                    .color-masking {
+                        filter: none;
+                    }
+
+                    .masking-src {
+                        background: $theme-color;
+                    }
+                }
+            }
+        }
+    }
+
+    @include lg {
+        .nav-item .nav-link {
+            font-size: 24px;
+        }
+    }
+
+    @include md {
+        .nav-item {
+            width: 33.23%;
+
+            .nav-link {
+                padding: 30px 20px;
+                font-size: 18px;
+
+                .box-icon {
+                    width: 90px;
+                    height: 90px;
+                    margin-bottom: 20px;
+                }
+
+                &:after {
+                    height: 25px;
+                    width: 40px;
+                    border-top: solid 25px $theme-color;
+                    border-left: solid 20px transparent;
+                    border-right: solid 20px transparent;
+                }
+            }
+        }
+    }
+
+    @include sm {
+        justify-content: center;
+
+        .nav-item {
+            width: 49.9%;
+
+            .nav-link {
+                &:after {
+                    display: none;
+                }
+            }
+        }
+    }
+
+    @include xs {
+        .nav-item {
+            width: 100%;
+        }
+    }
+}
+
+.service-tab-content {
+    display: flex;
+    background: $title-color;
+
+    .service-tab-list-wrap {
+        padding: 80px 48px;
+        width: 33.333%;
+        flex: none;
+
+        .service-tab-list {
+            position: relative;
+            padding-left: 80px;
+            z-index: 1;
+
+            &:before {
+                content: '';
+                position: absolute;
+                left: 15px;
+                top: 25px;
+                height: 24px;
+                background: $theme-color;
+                clip-path: path('M8.55186 18.5479C11.0008 14.7831 20.008 5.09279 27.4776 0.0585812C27.7949 -0.155222 28.1531 0.264464 27.8901 0.542246C20.7938 8.03629 13.2087 16.513 8.85249 23.8428C8.73114 24.047 8.43819 24.0541 8.31139 23.8533C6.11928 20.381 4.2392 15.3898 0.209389 13.8603C-0.089979 13.7467 -0.0612074 13.3235 0.250089 13.2485C4.1119 12.318 5.92146 15.6208 8.55186 18.5475V18.5479Z');
+                width: 27px;
+            }
+
+            &:after {
+                content: '';
+                position: absolute;
+                height: 56px;
+                width: 56px;
+                border-radius: 50%;
+                background: $black-color2;
+                left: 0;
+                top: 9px;
+                z-index: -1;
+            }
+
+            &:not(:last-child) {
+                border-bottom: 1px solid $body-color;
+                padding-bottom: 64px;
+                margin-bottom: 64px;
+            }
+
+            .box-title {
+                font-size: 28px;
+                font-weight: 600;
+                color: $white-color;
+            }
+
+            .box-text {
+                font-size: 18px;
+                color: $light-color;
+            }
+        }
+    }
+
+    .service-tab-thumb {
+        img {
+            height: 100%;
+            object-fit: cover;
+        }
+    }
+
+    @include ml {
+        .service-tab-list-wrap {
+            padding: 40px;
+
+            .service-tab-list {
+                &:not(:last-child) {
+                    padding-bottom: 40px;
+                    margin-bottom: 40px;
+                }
+            }
+        }
+    }
+
+    @include xl {
+        .service-tab-list-wrap {
+            padding: 40px;
+
+            .service-tab-list {
+                padding-left: 0;
+                padding-top: 80px;
+
+                &:after {
+                    top: 0px;
+                }
+
+                &:before {
+                    top: 15px;
+                }
+
+                &:not(:last-child) {
+                    padding-bottom: 40px;
+                    margin-bottom: 40px;
+                }
+
+                .box-text {
+                    font-size: 16px;
+                }
+            }
+        }
+    }
+
+    @include md {
+        flex-direction: column-reverse;
+        flex-wrap: wrap;
+
+        .service-tab-list-wrap {
+            width: 100%;
+
+            .service-tab-list {
+                padding-left: 80px;
+                padding-top: 0;
+
+                &:after {
+                    top: 9px;
+                }
+
+                &:before {
+                    top: 25px;
+                }
+            }
+        }
+    }
+
+    @include sm {
+        .service-tab-list-wrap .service-tab-list .box-title {
+            font-size: 24px;
+        }
+    }
+
+    @include xs {
+        .service-tab-list-wrap {
+            .service-tab-list {
+                padding-left: 0;
+                padding-top: 80px;
+
+                &:after {
+                    top: 0px;
+                }
+
+                &:before {
+                    top: 15px;
+                }
+
+                &:not(:last-child) {
+                    padding-bottom: 40px;
+                    margin-bottom: 40px;
+                }
+
+                .box-text {
+                    font-size: 16px;
+                }
+            }
+        }
+    }
+}
+
+/* Service card 2 style2 ---------------------------------- */
+.service-card2.style2 {
+    background: $smoke-color2;
+
+    .box-icon {
+        background: $white-color;
+        border: 1px solid $light-color;
+
+        img {
+            filter: none;
+        }
+
+        &:after {
+            display: none;
+        }
+    }
+
+    .box-title {
+        a {
+            color: $title-color;
+
+            &:hover {
+                color: $theme-color;
+            }
+        }
+    }
+
+    .box-text {
+        color: $body-color;
+        transition: 0.4sth;
+    }
+
+    &:hover {
+        .box-icon {
+            border: 1px solid $white-color;
+        }
+
+        .box-title {
+            a {
+                color: $white-color;
+
+                &:hover {
+                    color: $theme-color;
+                }
+            }
+        }
+
+        .box-text {
+            color: $light-color;
+        }
+
+        .th-btn {
+            color: $white-color;
+
+            &:hover {
+                color: $theme-color;
+            }
+        }
+    }
+}
+
+/* Service Details ---------------------------------- */
+.page-title {
+    margin-bottom: 20px;
+}
+
+.sidebar-area {
+    &.style2 {
+        margin-left: 50px;
+
+        @include lg {
+            margin-left: 0;
+        }
+    }
+}
+
+.page-img {
+    margin-bottom: 40px;
+    overflow: hidden;
+    position: relative;
+
+    img {
+        width: 100%;
+    }
+
+    .tag {
+        position: absolute;
+        padding: 4px 14px;
+        top: 16px;
+        right: 16px;
+        color: $white-color;
+        display: block;
+        background-color: $theme-color;
+        text-transform: uppercase;
+        margin-bottom: 0;
+        z-index: 3;
+
+        & .tag-number {
+            display: block;
+            font-weight: 500;
+            font-size: 24px;
+            line-height: 1;
+            letter-spacing: 0.02em;
+            text-align: center;
+        }
+    }
+
+    @include sm {
+        border-radius: 10px;
+
+        .tag {
+            top: 20px;
+        }
+    }
+}
+
+.page-single {
+    margin-bottom: 30px;
+}
+
+.service-page-list-wrap {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 40px;
+
+    .single-service-list {
+        max-width: 550px;
+
+        .box-title {
+            margin-bottom: 10px;
+        }
+
+        .box-text {
+            font-size: 18px;
+        }
+    }
+
+    @include lg {
+        grid-template-columns: repeat(1, 1fr);
+
+        .single-service-list {
+            max-width: none;
+        }
+    }
+}
+
+.service-process-wrap {
+    display: flex;
+    position: relative;
+    gap: 30px 15px;
+
+    .service-process-line {
+        position: absolute;
+        top: 4px;
+        left: 40px;
+        z-index: -1;
+
+        @include xxl {
+            display: none;
+        }
+    }
+
+    .service-process-card {
+        .box-icon {
+            width: 100px;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: $smoke-color2;
+            margin-bottom: 24px;
+        }
+
+        .box-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .box-text {
+            font-size: 14px;
+            font-family: $title-font;
+        }
+    }
+
+    @include xxl {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    @include lg {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    @include xs {
+        grid-template-columns: repeat(1, 1fr);
+    }
+}
+
+.page-img-grid {
+    display: flex;
+    gap: 24px;
+
+    .page-img {
+        height: 100%;
+
+        img {
+            height: 100%;
+        }
+    }
+
+    @include xs {
+        display: block;
+    }
+}

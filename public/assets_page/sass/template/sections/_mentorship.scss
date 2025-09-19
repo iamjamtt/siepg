@@ -1,0 +1,67 @@
+/*==============================
+Mentorship Area Home 3
+==============================*/
+.mentorship-area-1 {
+    padding-bottom: calc(120px - 75px) !important;
+
+    @include md {
+        padding-bottom: 80px !important;
+    }
+}
+
+.mentorship-card {
+    .card-content {
+        position: relative;
+        background-color: $gray-color;
+        width: calc(100% - 48px);
+        margin: -75px auto 0 auto;
+        padding: 65px 25px;
+        text-align: center;
+        z-index: 2;
+
+        @include lg {
+            padding: 40px 25px;
+        }
+
+        @include xs {
+            padding: 30px 20px;
+        }
+    }
+
+    .box-title {
+        font-size: 28px;
+        font-weight: 700;
+        line-height: 40px;
+        letter-spacing: 0.56px;
+
+        @include lg {
+            font-size: 24px;
+            line-height: 36px;
+        }
+
+        @include xs {
+            font-size: 20px;
+            line-height: 30px;
+        }
+    }
+
+    .box-text {
+        font-size: 20px;
+        line-height: 30px;
+        margin-top: 17px;
+
+        @include lg {
+            font-size: 18px;
+            line-height: 28px;
+        }
+
+        @include xs {
+            font-size: 16px;
+            line-height: 26px;
+        }
+    }
+
+    .btn-wrap {
+        margin-top: 52px;
+    }
+}

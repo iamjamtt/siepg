@@ -1,0 +1,145 @@
+.short-services-wrap1 {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 107px;
+
+    @include xl {
+        height: auto;
+        margin-top: 30px;
+    }
+}
+
+.short-services-social {
+    position: relative;
+
+    &::before {
+        position: absolute;
+        width: 1000px;
+        height: 100px;
+        top: -34px;
+        z-index: -1;
+        background-color: $theme-color;
+        content: '';
+        left: -705px;
+
+        @include xxl {
+            left: -730px;
+        }
+    }
+
+    .th-social {
+        position: relative;
+        top: -5px;
+
+        a {
+            border-color: #D3DBE2;
+
+            &:hover {
+                background-color: $white-color;
+                border-color: $white-color;
+                color: $theme-color;
+            }
+        }
+    }
+
+    @include xl {
+        display: none;
+    }
+}
+
+.short-services-items {
+    display: flex;
+    align-items: center;
+    gap: 80px;
+    position: relative;
+
+    @include ml {
+        gap: 40px;
+    }
+
+    @include xl {
+        justify-content: center;
+    }
+
+    @include md {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    @include sm {
+        justify-content: start;
+    }
+
+    &::before {
+        width: 316px;
+        height: 1px;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background-color: $border-color;
+        left: -35%;
+        content: '';
+
+        @media(max-width: 1799px) {
+            width: 200px;
+            left: -24%; 
+        }
+
+        @include xxl {
+            display: none;
+        }
+    }
+}
+
+.short-services-item {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    position: relative;
+
+    &::before {
+        width: 1px;
+        height: 64px;
+        background-color: $border-color;
+        content: '';
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        right: -40px;
+
+        @include ml {
+            right: -20px;
+        }
+
+        @include md {
+            display: none;
+        }
+    }
+
+    &:last-child {
+        &::before {
+            display: none;
+        }
+    }
+
+    .short-services-text {
+        .box-title {
+            font-size: 28px;
+            line-height: 40px;
+            font-weight: 700;
+            letter-spacing: 0.56px;
+            margin-bottom: 0;
+
+            @include xs {
+                font-size: 22px;
+                line-height: 32px;
+            }
+        }
+
+        .box-text {
+            font-size: 16px;
+            color: $title-color;
+        }
+    }
+}

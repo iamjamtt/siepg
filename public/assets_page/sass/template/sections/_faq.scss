@@ -1,0 +1,448 @@
+/* Faq 1 ---------------------------------- */
+.faq-area-1 {
+    background-color: $smoke-color;
+
+    .ripple-1,
+    .ripple-2,
+    .ripple-3,
+    .ripple-4,
+    .ripple-5 {
+        width: 526px;
+        height: 526px;
+        position: absolute;
+        left: -150px;
+        text-align: center;
+        bottom: -50px;
+        margin: auto;
+        background-color: transparent;
+        border: 1px solid rgba(87, 88, 95, 0.5);
+        border-radius: 50%;
+        animation: ripple2 10s linear infinite;
+        opacity: 0;
+    }
+
+    .ripple-1 {
+        animation-delay: 0;
+    }
+
+    .ripple-2 {
+        animation-delay: 2s;
+    }
+
+    .ripple-3 {
+        animation-delay: 4s;
+    }
+
+    .ripple-4 {
+        animation-delay: 6s;
+    }
+
+    .ripple-5 {
+        animation-delay: 8s;
+    }
+}
+
+.accordion-card {
+    transition: 0.4s ease-in-out;
+    border-radius: 0;
+    overflow: hidden;
+    background-color: $title-color;
+    border: 1px solid $border-color;
+    text-align: left;
+    position: relative;
+    z-index: 3;
+    padding-bottom: 13px;
+
+
+    &:not(:last-child) {
+        margin-bottom: 16px;
+    }
+
+    &:has(.accordion-button.collapsed) {
+        background-color: transparent;
+        border: 1px solid $border-color;
+    }
+
+    .accordion-button {
+        font-size: 24px;
+        font-weight: 500;
+        font-family: $title-font;
+        border: 0;
+        color: $title-color;
+        background-color: transparent;
+        border-radius: 0;
+        padding: 27px 55px 12px 30px;
+        gap: 10px;
+        margin-bottom: 0;
+        text-align: left;
+        letter-spacing: 0.02em;
+        transition: 0.3s;
+        position: relative;
+
+        @include sm {
+            font-size: 20px;
+        }
+
+        &:after {
+            content: "\2b";
+            height: 100%;
+            width: auto;
+            line-height: 1;
+            background-color: transparent;
+            background-image: none;
+            font-family: $icon-font;
+            color: $title-color;
+            font-weight: 500;
+            font-size: 24px;
+            display: grid;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: absolute;
+            top: 6px;
+            right: 30px;
+            transition: 0.3s ease-in-out;
+        }
+
+        &:focus {
+            outline: none;
+            box-shadow: none;
+        }
+
+        &:not(.collapsed) {
+            color: $white-color;
+
+            &:after {
+                content: "\f00d";
+                transform: rotate(90deg);
+                color: $white-color;
+            }
+        }
+    }
+
+    .accordion-collapse {
+        border: none;
+    }
+
+    .accordion-body {
+        border: none;
+        padding: 0 35px 20px 0;
+        margin: 0 30px;
+    }
+
+    .faq-text {
+        margin-bottom: -0.48em;
+        color: $white-color;
+        font-size: 16px;
+        letter-spacing: 0;
+    }
+}
+
+@include xs {
+    .accordion-card {
+        padding-bottom: 6px;
+
+        .accordion-button {
+            font-size: 18px;
+            padding: 20px 55px 12px 20px;
+
+            &:after {
+                right: 20px;
+            }
+        }
+
+        .accordion-body {
+            padding: 0px 0 20px;
+            margin: 0 20px;
+        }
+
+    }
+}
+
+.faq-wrap {
+    max-width: 500px;
+
+    @include ml {
+        max-width: 100%;
+        text-align: center;
+    }
+}
+
+.faq {
+    &-content {
+        margin-left: 37px;
+
+        @media (max-width: 1600px) {
+            margin-left: 100px;
+        }
+
+        @include xxl {
+            margin-left: 200px;
+        }
+
+        @include ml {
+            margin-left: 0px;
+        }
+
+    }
+
+    .box-text {
+        font-size: 18px;
+        max-width: 480px;
+    }
+
+
+    &-shape3 {
+        @media (max-width:1700px) {
+            width: 100px;
+        }
+
+        @include md {
+            display: none;
+        }
+    }
+}
+
+.faq-imgbox {
+    position: relative;
+    left: -50%;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+
+    @media (max-width: 1700px) {
+        left: -38%;
+    }
+
+    @media (max-width: 1600px) {
+        left: -24%;
+    }
+
+    @include xxl {
+        left: 0;
+    }
+
+    @include ml {
+        justify-content: center;
+    }
+
+    @include xl {
+        justify-content: center;
+    }
+
+    @include sm {
+        display: block;
+        text-align: center;
+        margin: auto;
+    }
+
+    & img {
+        max-width: inherit;
+
+        @include sm {
+            width: 100%;
+        }
+    }
+
+    & .img1 {
+        &>img {
+            margin-bottom: 16px;
+
+            @include xl {
+                display: block;
+            }
+        }
+
+        @include sm {
+            text-align: center;
+            margin: auto;
+        }
+    }
+}
+
+
+/* Faq 2 ---------------------------------- */
+.faq-area-2 {
+    background-color: $smoke-color;
+
+    .faq-shape {
+        @media (max-width:1700px) {
+            width: 100px;
+        }
+
+        @include xl {
+            display: none;
+        }
+    }
+
+    .faq-wrap2 {
+        &:last-child {
+            margin-top: 16px;
+        }
+    }
+}
+
+.accordion-card {
+    &.style2 {
+        background-color: transparent;
+
+        .accordion-button:not(.collapsed) {
+            color: $title-color;
+
+            &::after {
+                color: $theme-color;
+            }
+        }
+
+        .faq-text {
+            color: $body-color;
+        }
+    }
+}
+
+.accordion-card {
+    &.style3 {
+        background-color: transparent;
+        padding-bottom: 0;
+
+        .accordion-button {
+            padding: 24px 33px;
+            font-size: 28px;
+
+            @include xxl {
+                font-size: 24px;
+            }
+
+            @include ml {
+                font-size: 20px;
+            }
+
+            @include xl {
+                padding: 20px 16px;
+            }
+
+            &:after {
+                border: 1px solid #B7C2CC;
+                width: 40px;
+                height: 40px;
+                background-color: transparent;
+                border-radius: 48px;
+                content: "\f107";
+                top: 20px;
+
+                @include xl {
+                    top: 15px;
+                    right: 16px;
+                }
+
+                @include vxs {
+                    width: 25px;
+                    height: 25px;
+                    font-size: 20px;
+                    top: 25px;
+                }
+            }
+        }
+
+        .accordion-button:not(.collapsed) {
+            background-color: $theme-color;
+            color: $white-color;
+
+            &::after {
+                background-color: #FFF6F8;
+                color: $theme-color;
+                transform: rotate(-180deg);
+                border-color: $theme-color;
+            }
+        }
+
+        .faq-text {
+            color: $body-color;
+        }
+
+        .accordion-body {
+            position: relative;
+            margin: 0;
+            z-index: 2;
+            padding: 35px 32px;
+
+            &:before {
+                content: "";
+                position: absolute;
+                inset: 0;
+                background: linear-gradient(0deg, rgba(7, 14, 32, 0.7), rgba(7, 14, 32, 0.7));
+                z-index: -1;
+
+            }
+
+            .list {
+                padding: 0;
+
+                li {
+                    list-style: none;
+                    font-weight: 600;
+                    font-size: 24px;
+                    color: $white-color;
+
+                    @include ml {
+                        font-size: 18px;
+                    }
+
+                    &:not(:last-child) {
+                        margin-bottom: 10px;
+                    }
+                }
+            }
+        }
+    }
+}
+
+/* top-rated -----------------*/
+.top-rated {
+    background-color: #FFF6F8;
+    padding: 30px 78px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    @include xxl {
+        padding: 30px 40px;
+    }
+
+    @media(max-width: 480px) {
+        flex-direction: column;
+        gap: 30px;
+    }
+
+    .author {
+        margin-bottom: 10px;
+    }
+
+    .h4 {
+        margin-bottom: 0;
+
+        @include ml {
+            font-size: 20px;
+            line-height: 30px;
+        }
+    }
+
+    .title {
+        font-family: $body-font;
+        font-weight: 600;
+        font-size: 20px;
+        line-height: 20px;
+        color: $title-color;
+        margin-bottom: 0;
+
+    }
+
+    .text {
+        font-weight: 500;
+        font-size: 14px;
+        color: $title-color;
+        margin-bottom: 0;
+
+    }
+
+}

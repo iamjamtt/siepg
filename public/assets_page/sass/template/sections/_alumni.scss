@@ -1,0 +1,66 @@
+/* Alumni 1 ---------------------------------- */
+
+.alumni {
+    &-shape {
+        @include xxl {
+            display: none;
+        }
+    }
+
+    &-imgbox {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        row-gap: 4px;
+        column-gap: 4px;
+        margin-right: -35px;
+
+        @include lg {
+            margin-right: 0;
+        }
+
+        @include xs {
+            grid-template-columns: repeat(2, 1fr);
+            margin-right: 0;
+        }
+
+        @include vxs {
+            grid-template-columns: repeat(1, 1fr);
+        }
+    }
+
+    &-img {
+        img {
+            width: 100%;
+        }
+
+    }
+
+    &-content {
+        position: relative;
+        margin-left: 45px;
+
+        .sec-title-wrap {
+            max-width: 445px;
+
+            @include xl {
+                max-width: 100%;
+            }
+        }
+
+        .sec-text-wrap {
+            max-width: 530px;
+
+            @include xl {
+                max-width: 100%;
+            }
+        }
+
+        @include xl {
+            margin-left: 0;
+        }
+    }
+
+    .btn-wrap {
+        margin-top: -3px;
+    }
+}

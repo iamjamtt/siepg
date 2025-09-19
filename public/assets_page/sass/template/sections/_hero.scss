@@ -1,0 +1,462 @@
+/* Hero Global ---------------------------------- */
+.th-hero-wrapper {
+    position: relative;
+    z-index: 2;
+    overflow: hidden;
+
+    .hero-text-wrap {
+        @include xl {
+            margin-top: -60px;
+        }
+
+        @include md {
+            margin-top: 0;
+        }
+    }
+}
+
+.th-hero-bg {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+
+    img {
+        height: 100%;
+        width: 100%;
+        object-fit: cover;
+        background-size: cover;
+    }
+}
+
+/* Hero 1 ---------------------------------- */
+.hero-1 {
+    position: relative;
+    overflow: hidden;
+
+    .th-hero-bg {
+        &::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(270deg, rgba(3, 6, 14, 0) -46.25%, rgba(3, 6, 14, 0.7) 68.02%);
+        }
+    }
+
+    .slider-pagination {
+        position: absolute;
+        right: 150px;
+        left: auto !important;
+        bottom: 18.5% !important;
+        margin: 0;
+        width: auto !important;
+        height: auto;
+        transform: translate(0, 50%);
+
+        .swiper-pagination-bullet {
+            border-color: #D3DBE2;
+        }
+    }
+
+    @include lg {
+        .slider-pagination {
+            display: none;
+        }
+    }
+
+    .hero-video {
+        @include md {
+            padding: 0 0 160px 0;
+        }
+
+        @include xs {
+            padding: 0 0 100px 0;
+        }
+    }
+
+    .video-play-btn {
+        width: 89px;
+        height: 89px;
+        line-height: 89px;
+        font-size: 30px;
+        color: $theme-color; 
+    }
+}
+
+.hero-style1 {
+    padding: 180px 0 229px 0;
+    max-width: 694px;
+
+    @include xl {
+        padding: 210px 0 210px 0;
+    }
+
+    @include md {
+        padding: 170px 0 40px 0;
+        text-align: center;
+    }
+
+    @include xs {
+        padding: 150px 0 0px 0;
+    }
+
+    .hero-title {
+        font-weight: 500;
+        margin-bottom: 30px;
+    }
+
+    .hero-text {
+        font-weight: 400;
+        margin-bottom: 50px;
+        max-width: 695px;
+
+        @include sm {
+            max-width: 100%;
+        }
+    }
+
+    .th-btn {
+        color: $white-color;
+        padding: 19px 25px;
+        @include vxs {
+            padding: 15px 20px; 
+        }
+
+        .th-arrow {
+            filter: brightness(1) contrast(1);
+        }
+    }
+}
+
+/* Hero 2 --------------------------------------*/
+.hero-2 {
+    overflow: hidden;
+
+    &::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(270deg, rgba(3, 6, 14, 0) -7.32%, rgba(3, 6, 14, 0.6) 51.2%);
+    }
+
+    .hero-image {
+        position: absolute;
+        right: 70px;
+        bottom: 0;
+
+        @include xxl {
+            right: 0px;
+        }
+
+        @include md {
+            position: relative;
+        }
+    }
+
+    &-social {
+        position: absolute;
+        left: 80px;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 2;
+
+        @include xxl {
+            display: none !important;
+        }
+    }
+
+    .th-social {
+        a {
+            width: 40px;
+            height: 40px;
+            line-height: 40px;
+            border: 1px solid $border-color;
+            display: block;
+
+            &:not(:last-child) {
+                margin-bottom: 16px;
+            }
+
+            &:hover {
+                border: 1px solid $theme-color;
+            }
+        }
+    }
+}
+
+.hero-2-inner {
+    position: relative;
+
+    & .hero-text {
+        @include lg {
+            text-align: center;
+        }
+    }
+}
+
+.hero-slider2 {
+    position: relative;
+
+    .slider-pagination {
+        position: absolute;
+        right: 150px;
+        left: auto !important;
+        bottom: 16.5% !important;
+        margin: 0;
+        width: auto !important;
+        height: auto;
+        transform: translate(0, 50%);
+
+        @include lg {
+            bottom: 3.5% !important;
+            left: 50% !important;
+            transform: translateX(-50%);
+            right: unset;
+        }
+
+
+        .swiper-pagination-bullet {
+            border-color: $white-color;
+        }
+    }
+}
+
+.hero-style2 {
+    position: relative;
+    z-index: 6;
+    padding: 220px 0 232px 0;
+
+    @include lg {
+        padding: 160px 0 180px 0;
+    }
+
+    @include md {
+        padding: 130px 0 80px 0;
+    }
+
+    @include xs {
+        padding: 90px 0 80px 0;
+    }
+
+    .hero-title {
+        font-weight: 500;
+    }
+
+    .hero-text {
+        max-width: 694px;
+        margin-bottom: 50px;
+
+        @include lg {
+            max-width: 100%;
+        }
+    }
+
+    .th-btn {
+        padding: 19px 25px;
+        color: $white-color;
+
+        .th-arrow {
+            filter: brightness(1) contrast(1);
+        }
+    }
+
+
+    @include md {
+        text-align: center;
+
+        .hero-text {
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .btn-wrap {
+            justify-content: center;
+        }
+    }
+}
+
+/* Hero 3 --------------------------------------*/
+.hero-style3 {
+    padding: 188px 0;
+    padding-left: 72px;
+
+    @include lg {
+        padding-left: 30px;
+    }
+
+    @include md {
+        padding: 120px 0 70px 0;
+        text-align: center;
+    }
+
+    @include sm {
+        padding: 90px 0 70px 0;
+    }
+
+    .hero-title {
+        @include md {
+            font-size: 45px;
+        }
+
+        @include xs {
+            font-size: 38px;
+        }
+
+        @include vxs {
+            font-size: 34px;
+        }
+    }
+
+    .hero-text {
+        font-size: 18px;
+        max-width: 750px;
+        margin-bottom: 50px;
+    }
+}
+
+.hero-3 {
+    background-color: $theme-color;
+
+    .th-hero-bg {
+        margin-left: 150px;
+
+        @media(max-width: 1799px) {
+            margin-left: 50px;
+        }
+
+        @include md {
+            margin: 0;
+        }
+
+
+        &:before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(271.73deg, rgba(3, 6, 14, 0) -39.89%, rgba(3, 6, 14, 0.7) 77.99%);
+
+        }
+    }
+
+    .slider-pagination {
+        position: absolute;
+        top: 38%;
+        transform: translateY(-50%);
+        left: 48px;
+
+        @media(max-width: 1799px) {
+            left: 0;
+        }
+
+        @include md {
+            top: 86%;
+            width: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        @include xs {
+            display: none !important;
+        }
+
+        &::before,
+        &::after {
+            width: 1px;
+            height: 130px;
+            position: absolute;
+            content: "";
+            left: 20px;
+            top: 154px;
+            transform: translateX(-50%);
+            background-color: $border-color;
+
+            @include md {
+                display: none;
+            }
+        }
+
+        &::after {
+            top: -188px;
+        }
+
+        .swiper-pagination-bullet {
+            display: block;
+            margin-bottom: 16px;
+            background-color: transparent;
+            border: 1px solid rgba(211, 219, 226, 0.5);
+
+            &.swiper-pagination-bullet-active {
+                border-color: $white-color;
+            }
+
+            &:before {
+                background-color: $white-color;
+            }
+
+            @include md {
+                display: inline-block;
+                margin-bottom: 0;
+            }
+
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+    }
+
+    .hero-video {
+        text-align: center;
+
+        @include md {
+            margin-bottom: 120px;
+        }
+
+        .video-play-btn {
+            width: 90px;
+            height: 90px;
+            line-height: 90px;
+
+            i {
+                font-size: 30px;
+                color: $theme-color;
+            }
+        }
+    }
+
+    .hero-search-wrap {
+        max-width: 685px;
+        position: relative;
+        margin-top: 2px;
+
+        @include xl {
+            max-width: 590px;
+        }
+
+        @include md {
+            max-width: 100%;
+        }
+
+        input {
+            font-size: 14px;
+            border-radius: 0;
+            height: 56px;
+        }
+
+        button[type="submit"] {
+            position: absolute;
+            right: 0;
+            height: 56.5px;
+            border: 0;
+            width: 56px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background-color: $theme-color;
+            color: $white-color;
+            transform: 0.4s;
+
+            &:hover {
+                background-color: $title-color;
+            }
+        }
+    }
+}

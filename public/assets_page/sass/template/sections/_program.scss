@@ -1,0 +1,356 @@
+/* Program Style 1 ---------------------------------- */
+
+.program-card {
+    border: 1px solid $border-color;
+    transition: .4s;
+
+    &:hover {
+        border: 1px solid transparent;
+        background-color: $white-color;
+        box-shadow: 0 10px 15px 0 rgba(135, 143, 151, 0.2);
+
+        .program-img {
+            position: relative;
+
+            img {
+                transform: scale(1.2);
+            }
+        }
+    }
+
+    .program-content {
+        padding: 32px;
+
+        .box-text {
+            margin-bottom: 25px;
+            font-size: 14px;
+            line-height: 28px;
+            margin-top: -0.3em;
+        }
+
+        .box-title {
+            margin-bottom: 13px;
+        }
+    }
+
+    .program-img {
+        overflow: hidden;
+
+        img {
+            width: 100%;
+            transition: 1.4s;
+        }
+    }
+
+    .btn-wrap {
+        a {
+            font-size: 16px;
+            font-weight: 500;
+            line-height: 28px;
+            color: $black-color8;
+            transition: linear 0.3s ease;
+
+            img {
+                filter: brightness(0) contrast(1);
+                transition: linear 0.3s ease;
+                position: relative;
+                top: -1px;
+                left: -5px;
+            }
+
+            &:hover {
+                color: $theme-color;
+
+                img {
+                    filter: invert(79%) sepia(40%) saturate(7323%) hue-rotate(333deg) brightness(85%) contrast(93%);
+                }
+            }
+        }
+    }
+}
+
+/*---------- program inner area ------------------*/
+.program-btn {
+    display: block;
+
+    @include ml {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+    }
+
+    .th-btn {
+        font-family: $title-font;
+        display: inline-block;
+        font-weight: 500;
+        font-size: 24px;
+        letter-spacing: 0.02em;
+        color: $theme-color;
+        padding: 16px 24px;
+        color: $theme-color;
+        border-color: #B7C2CC;
+
+        @include ml {
+            padding: 16px 18px;
+            font-size: 20px;
+        }
+
+        &:before {
+            background-color: $theme-color;
+        }
+
+        &:hover {
+            border-color: $theme-color;
+        }
+
+        &:not(:last-child) {
+            margin-bottom: 16px;
+        }
+
+    }
+}
+
+/* program-item -----------------------------*/
+.program-item {
+    position: relative;
+    z-index: 2;
+    overflow: hidden;
+    min-height: 474px;
+
+    .box-img {
+        position: relative;
+        z-index: 2;
+        width: 100%;
+        height: 372px;
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    }
+
+    .box-content {
+        position: absolute;
+        inset: 0;
+        background-color: #EEF1F4;
+        z-index: 2;
+        transform: translateY(79%);
+        transition: all 0.4s ease-in-out;
+
+        @include ml {
+            transform: translateY(80%);
+        }
+    }
+
+    .box-title {
+        background-color: $title-color;
+        padding: 38px 32px;
+        color: $white-color;
+        font-size: 28px;
+        line-height: 28px;
+        display: block;
+        margin-top: -0.4rem;
+        margin-bottom: 0;
+
+        @include ml {
+            font-size: 24px;
+            line-height: 24px;
+        }
+
+        @include vxs {
+            font-size: 20px;
+            line-height: 20px;
+        }
+
+    }
+
+    .box-subject {
+        padding: 40px 33px 30px 33px;
+
+        @include xl {
+            padding: 30px 33px 30px 33px;
+        }
+
+        ul {
+            padding: 0;
+            margin: 0;
+
+            li {
+                list-style: none;
+                font-weight: 500;
+                font-size: 24px;
+                color: $title-color;
+                font-family: $body-font;
+
+                @include ml {
+                    font-size: 20px;
+                }
+
+                @include vxs {
+                    font-size: 18px;
+                }
+
+                &:not(:last-child) {
+                    margin-bottom: 10px;
+
+                    @include vxs {
+                        margin-bottom: 5px;
+                    }
+                }
+            }
+        }
+    }
+
+    &:hover {
+        .box-content {
+            transform: translateY(0%);
+
+        }
+    }
+}
+
+/* program-details  --------------------------------*/
+.program-details {
+    .program-content {
+        border: 1px solid #B7C2CC;
+        padding: 36px 32px;
+        display: flex;
+        justify-content: space-between;
+        gap: 42px;
+
+        @include xxl {
+            gap: 20px;
+        }
+
+        @include md {
+            flex-direction: column;
+        }
+    }
+
+    .program-grid {
+        position: relative;
+
+        .box-title {
+            margin-bottom: 0;
+        }
+
+        .box-text {
+            font-weight: 400;
+            font-size: 18px;
+            letter-spacing: 0.02em;
+            color: $body-color;
+            max-width: 280px;
+        }
+    }
+
+    .divided {
+        height: 77px;
+        width: 1px;
+        background-color: #B7C2CC;
+
+        @include xxl {
+            display: none;
+        }
+
+    }
+
+    .program-blockquote {
+        position: relative;
+        background-color: #EEF1F4;
+        padding: 56px 56px 21px 56px;
+        border: none !important;
+        color: $body-color;
+        font-size: 20px;
+        z-index: 2;
+        margin-bottom: 60px;
+
+        @include sm {
+            padding: 36px 36px 21px 36px;
+        }
+
+        .review {
+            margin-bottom: 12px;
+
+            i {
+                color: #FF9F43;
+                margin-right: 5px;
+            }
+        }
+
+        &:before,
+        &:after {
+            display: none;
+        }
+
+        cite {
+            position: relative;
+            left: 0;
+            bottom: 0;
+            clip-path: none;
+            margin: 30px 0 0 0;
+            background-color: transparent;
+            padding: 0;
+            display: block;
+            font-weight: 700;
+            font-size: 28px;
+            letter-spacing: 0.02em;
+            color: #081933;
+            font-family: $title-font;
+
+            @include sm {
+                font-size: 24px;
+            }
+
+
+        }
+
+        span {
+            font-weight: 500;
+            font-size: 16px;
+            color: #081933;
+
+        }
+
+        .quote {
+            position: absolute;
+            right: 104px;
+            bottom: 26px;
+
+            @include sm {
+                right: 30px;
+                bottom: 20px;
+            }
+            @include xs {
+                position: relative;
+                bottom: 0;
+                right: unset;
+                left: 0px;
+            }
+        }
+    }
+}
+
+.peogram-area {
+    position: relative;
+    z-index: 2;
+
+    .program-wrapp {
+        position: absolute;
+        top: 113px;
+        right: 80px;
+
+        @include ml {
+            top: 40px;
+            right: 0px;
+        }
+
+        @include md {
+            top: 0;
+        }
+
+        @include xs {
+            position: relative;
+        }
+    }
+}

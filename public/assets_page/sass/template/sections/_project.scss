@@ -1,0 +1,674 @@
+/* Project Card -------------------------------*/
+.project-card {
+    position: relative;
+    overflow: hidden;
+    border-radius: 24px;
+    .box-img {
+        overflow: hidden;
+        position: relative;
+        border-radius: 24px;
+        img {
+            width: 100%;
+            object-fit: cover;
+            transition: 0.4s;
+            filter: blur(5px);
+        }
+        &:after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(19, 24, 43, 0) 17.42%, rgba(19, 24, 43, 0.8) 75.87%);
+            transition: 0.4s;
+            opacity: 0;
+        }
+    }
+    .box-content {
+        padding: 40px 36px 40px;
+        background-color: transparent;
+        border-radius: 0px;
+        position: absolute;
+        z-index: 3;
+        transition: 0.4s ease-in-out;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        opacity: 0;
+        visibility: hidden;
+    }
+    .box-number {
+        font-size: 40px;
+        font-weight: 600;
+        font-family: $title-font;
+        color: $white-color;
+        line-height: 0.7em;
+        margin-bottom: 22px;
+    }
+    .box-title {
+        font-weight: 600;
+        font-size: 28px;
+        margin-top: -0.2em;
+        margin-bottom: 5px;
+        a {
+            color: $white-color;
+            &:hover {
+                color: $theme-color;
+            }
+        }
+    }
+    .box-text {
+        color: $white-color;
+    }
+    &:hover {
+        .project-img {
+            img {
+                filter: grayscale(1);
+            }
+        }
+        .project-content {
+            opacity: 1;
+            visibility: visible;
+            left: 0;
+        }
+        .project-card-bg-shape {
+            width: 100%;
+        }
+    }
+    @include md {
+        .project-content {
+            margin-right: 0;
+        }
+    }
+    @include xs {
+        .box-number {
+            font-size: 24px;
+            margin-bottom: 17px;
+        }
+        .box-title {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        .box-text {
+            font-size: 14px;
+        }
+    }
+    @include vxs {
+        .box-content {
+            padding: 30px 26px 30px;
+        }
+    }
+}
+
+/* Project Card 2 -------------------------------*/
+.sticky-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 80px;
+    @include md {
+        gap: 50px;
+    }
+}
+.single-sticky-wrap {
+    position: sticky;
+    top: 140px;
+    width: 100%;
+    &.position-sticky {
+        .project-card2 {
+            transform: scale3d(0.98, 0.98, 1);
+        }
+    }
+    @include md {
+        position: relative !important;
+        top: 0;
+        .project-card2 {
+            transform: none !important;
+        }
+    }
+}
+.project-card2 {
+    display: flex;
+    flex-direction: row-reverse;
+    gap: 40px;
+    justify-content: space-between;
+    transition: transform .6s cubic-bezier(.38, .005, .215, 1);
+    .box-img {
+        border-radius: 24px;
+        overflow: hidden;
+        flex: 1;
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    }
+    .box-content {
+        max-width: 550px;
+        background: $white-color;
+        flex: 1;
+    }
+    .box-number {
+        font-size: 56px;
+        font-weight: 700;
+        font-family: $title-font;
+        letter-spacing: 0.02em;
+        line-height: 0.8em;
+        color: $white-color;
+        -webkit-text-stroke: 1px $title-color;
+        display: block;
+        margin-bottom: 32px;
+        @include lg {
+            font-size: 40px;
+        }
+    }
+    .box-subtitle {
+        font-size: 16px;
+        font-weight: 500;
+        color: $theme-color;
+        background: $smoke-color2;
+        padding: 6px 12px;
+        display: inline-block;
+        margin-bottom: 32px;
+    }
+    .box-title {
+        font-size: 40px;
+        font-weight: 600;
+        line-height: 1.2em;
+        margin-bottom: 14px;
+        @include lg {
+            font-size: 30px;
+        }
+    }
+    .box-text {
+        max-width: 495px;
+    }
+    .th-btn {
+        margin-top: 64px;
+        @include lg {
+            margin-top: 40px;
+        }
+    }
+    @include md {
+        display: block;
+        .box-img {
+            margin-bottom: 30px;
+        }
+        .box-content {
+            max-width: none;
+        }
+        .box-text {
+            max-width: none;
+        }
+    }
+    @include xs {
+        .box-img {
+            border-radius: 16px;
+        }
+        .box-number {
+            font-size: 30px;
+            margin-bottom: 24px;
+        }
+        .box-subtitle {
+            margin-bottom: 30px;
+        }
+        .box-title {
+            font-size: 24px;
+        }
+        .th-btn {
+            margin-top: 30px;
+        }
+    }
+}
+
+/* Project Card 2.1-------------------------------*/
+.project-slider2 {
+    margin-right: -315px;
+    .swiper-wrapper {
+        &:has(.swiper-slide.swiper-slide-prev) {
+            margin-left: 428px;
+        }
+    }
+    .swiper-slide {
+        display: inline-block;
+        width: auto;
+        &.swiper-slide-active {
+            .project-card2.style2 {
+                .box-thumb {
+                    filter: none;
+                    img {
+                        width: 828px;
+                    }
+                }
+                .box-content {
+                    transform: translate(0, 0);
+                    &:after {
+                        left: 0;
+                        right: auto;
+                        transform: translate(0, 0);
+                    }
+                }
+            }
+        }
+    }
+    .slider-pagination {
+        padding-right: 315px;
+        --swiper-pagination-bottom: 0;
+    }
+    @include hd {
+        margin-right: 0;
+    }
+    @include xl {
+        margin-right: 0;
+        .swiper-wrapper {
+            &:has(.swiper-slide.swiper-slide-prev) {
+                margin-left: 0;
+            }
+        }
+        .slider-pagination {
+            padding-right: 0;
+        }
+        .swiper-slide {
+            &.swiper-slide-active {
+                .project-card2.style2 {
+                    .box-thumb {
+                        img {
+                            width: 100%;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+.project-card2.style2 {
+    display: block;
+    transition: 0.4s;
+    position: relative;
+    padding: 0;
+    overflow: hidden;
+    .box-thumb {
+        border-radius: 0;
+        position: relative;
+        filter: blur(7.5px);
+        transition: 0.4s;
+        img {
+            border-radius: 0;
+            transition: 0.4s;
+            width: 402px;
+            height: 650px;
+            object-fit: cover;
+        }
+        &:after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: $title-color;
+            opacity: 0.2;
+        }
+    }
+    .box-content {
+        position: absolute;
+        background: $black-color2;
+        padding: 40px 100px 40px 36px;
+        bottom: 24px;
+        left: 0;
+        transition: 0.4s;
+        justify-content: space-between;
+        transform: translate(-100%, 0);
+        display: inline-block;
+        &:after {
+            content: '';
+            position: absolute;
+            height: 100%;
+            width: 3px;
+            background: $theme-color;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            z-index: 2;
+            transform: translate(100%, 0);
+        }
+    }
+    .box-text {
+        font-size: 14px;
+        font-weight: 400;
+        font-family: $title-font;
+        color: $theme-color;
+        margin-top: -0.4em;
+        margin-bottom: 12px;
+    }
+    .box-title {
+        font-size: 24px;
+        font-weight: 600;
+        margin-bottom: -0.3em;
+        position: relative;
+        z-index: 1;
+        a {
+            color: $white-color;
+            &:hover {
+                color: $theme-color;
+            }
+        }
+        @include sm {
+            font-size: 20px;
+        }
+    }
+    .icon-btn {
+        position: absolute;
+        right: 8px;
+        top: 8px;
+        border-radius: 0;
+        color: $title-color;
+        --btn-size: 48px;
+        --btn-font-size: 36px;
+        &:hover {
+            color: $theme-color;
+        }
+    }
+    @include xl {
+        .box-thumb {
+            img {
+                width: 100%;
+            }
+        }
+    }
+    @include sm {
+        .box-thumb {
+            img {
+                height: auto;
+            }
+        }
+    }
+    @include vxs {
+        .icon-btn {
+            --btn-size: 40px;
+            --btn-font-size: 30px;
+        }
+        .box-content {
+            right: 24px;
+            padding: 35px 40px 35px 24px;
+        }
+    }
+}
+
+/* Project Card 3-------------------------------*/
+.project-slider3 {
+    .swiper-slide {
+        filter: blur(2.5px);
+        transition: 0.4s;
+        &.swiper-slide-active {
+            filter: none;
+            .project-card3 {
+                .project-content {
+                    transform: scaleY(1);
+                }
+            }
+        }
+    }
+    .slider-scrollbar {
+        margin-left: 30px;
+        margin-right: 30px;
+        width: -webkit-fill-available;
+    }
+    @include xs {
+        margin: 0 15px;
+        .slider-scrollbar {
+            margin-left: 0px;
+            margin-right: 0px;
+            width: -webkit-fill-available;
+        }   
+    }
+}
+.project-card3 {
+    position: relative;
+    .project-img {
+        transition: 0.4s;
+        position: relative;
+        &:after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border: 24px solid $white-color;            
+        }
+        img {
+            width: 100%;
+            object-fit: cover;
+        }
+    }
+    .project-content {
+        position: absolute;
+        bottom: 24px;
+        left: 24px;
+        right: 24px;
+        background: rgba($color: #13182B, $alpha: 0.9);
+        backdrop-filter: blur(5px);
+        padding: 40px;
+        transition: 0.4s;
+        transform: scaleY(0);
+        transform-origin: bottom;
+    }
+    .icon-btn {
+        position: absolute;
+        right: 8px;
+        top: 8px;
+        border-radius: 0;
+        --btn-font-size: 36px;
+        --btn-size: 48px;
+    }
+    .project-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+        a {
+            border-radius: 30px;
+            text-transform: capitalize;
+            margin-bottom: 0;
+            &:hover {
+                background: $theme-color;
+            }
+        }
+    }
+    .box-title {
+        font-size: 28px;
+        font-weight: 600;
+        margin-bottom: -0.32em;
+        margin-top: 15px;
+        max-width: 520px;
+        a {
+            color: $white-color;
+            &:hover {
+                color: $theme-color;
+            }
+        }
+    }
+    @include xl {
+        .box-title {
+            font-size: 24px;
+        }
+    }
+    @include sm {
+        .project-img:after {
+            border: 12px solid $white-color;
+        }
+        .project-content {
+            bottom: 12px;
+            left: 12px;
+            right: 12px;
+            padding: 30px;
+        }
+        .box-title {
+            font-size: 20px;
+        }
+    }
+    @include xs {
+        .project-img {
+            img {
+                height: 500px;
+            }
+        }
+    }
+}
+
+/* Project Card 4-------------------------------*/
+.project-slider4 {
+    margin-right: -140px;
+    @include hd {
+        margin-right: 0;
+    }
+    @include xxl {
+        margin-right: 0;
+    }
+}
+.project-card4 {
+    display: flex;
+    .box-img {
+        flex: 1;
+        img {
+            height: 100%;
+            object-fit: cover;
+        }
+    }
+    .box-content {
+        background: $smoke-color;
+        padding: 84px;
+        flex: 1;
+    }
+    .box-title {
+        font-size: 40px;
+        font-weight: 600;
+        margin-bottom: 9px;
+        a {
+            &:hover {
+                color: $theme-color2;
+            }
+        }
+    }
+    .box-text {
+        font-size: 18px;
+        margin-bottom: 30px;
+    }
+    .checklist {
+        margin-bottom: 44px;
+    }
+    @include xl {
+        .box-content {
+            padding: 50px;
+        }
+    }
+    @include lg {
+        .box-title {
+            font-size: 30px;
+        }
+    }
+    @include md {
+        display: block;
+    }
+    @include sm {
+        .box-content {
+            padding: 40px;
+        }
+        .box-title {
+            font-size: 24px;
+        }
+    }
+    @include xs {
+        .box-text {
+            font-size: 16px;
+        }
+    }
+    @include vxs {
+        .box-content {
+            padding: 30px;
+        }
+    }
+}
+
+/* Project Card 5-------------------------------*/
+.project-title-wrap5 {
+    max-width: 485px;
+}
+.project-card5 {
+    .box-img {
+        position: relative;
+        display: inline-block;
+        &.small-img-width {
+            max-width: 544px;
+            @include md {
+                max-width: none;
+                width: 100%;
+            }
+        }
+        img {
+            width: 100%;
+            filter: brightness(0.8);
+        }
+        .icon-btn {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(5px);
+            color: $white-color;
+            --btn-size: 80px;
+            --btn-font-size: 30px;
+            opacity: 0;
+            &:hover {
+                background: $theme-color;
+            }
+        }
+    }
+    .box-content {
+        margin-top: -30px;
+        position: relative;
+        z-index: 1;
+    }
+    .box-number {
+        font-size: 56px;
+        font-weight: 700;
+        font-family: $title-font;
+        color: transparent;
+        letter-spacing: 0.02em;
+        -webkit-text-stroke: 1px $title-color;
+        display: block;
+        line-height: 0.75em;
+        margin-bottom: 32px;
+    }
+    .box-subtitle {
+        font-size: 16px;
+        font-weight: 500;
+        color: $theme-color;
+        background: $smoke-color2;
+        padding: 6px 12px;
+        display: inline-block;
+        margin-bottom: 32px;
+    }
+    .box-title {
+        font-size: 40px;
+        font-weight: 600;  
+        margin-bottom: 12px;      
+    }
+    .th-btn {
+        margin-top: 48px;
+    }
+    &:hover {
+        .box-img {
+            opacity: 1;
+            .icon-btn {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 1;
+            }
+        }
+    }
+    @include md {
+        .box-title {
+            font-size: 30px;
+        }
+    }
+    @include sm {
+        .box-title {
+            font-size: 24px;
+        }
+        .th-btn {
+            margin-top: 36px;
+        }
+    }
+}

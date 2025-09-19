@@ -1,0 +1,179 @@
+:root {
+  --theme-color         : #D3224D;
+  --theme-color2        : #FFEC40;
+  --title-color         : #081933;
+  --title-color2         : #00274C;
+  --title-color3         : #070E20;
+  --title-color4         : #13182B;
+  --body-color          : #506172;
+  --smoke-color         : #FFF6F8;
+  --smoke-color2        : #F8FAFE;
+  --smoke-color3        : #FCF6F1;
+  --black-color         : #081933;
+  --black-color2        : #202844;
+  --th-border-color     : #D3DBE2;
+  --th-border-color2    : #EEEFF2;
+  --th-border-color3    : rgba(87, 88, 95, 0.5);
+  --th-border-color4    : rgba(198, 201, 212, 0.5);
+  --th-border-color7    : #B7C2CC;
+  --light-color         : #C6C9D4;
+  --gray-color          : #EEF1F4;
+  --gray-color2         : #F4F3E6;
+  --gray-color3         : #57585F;
+  --black-color3        : #051311;
+  --black-color4        : #00110E;
+  --black-color5        : #22272E;
+  --black-color6        : #2D333D;
+  --black-color7        : #0E0E13;
+  --black-color8        : #070E20;
+  --white-color         : #ffffff;
+  --yellow-color        : #FFB539;
+  --success-color       : #28a745;
+  --error-color         : #dc3545;
+  --th-border-color5    : #49515C;
+  --th-border-color6    : #383D46;
+  --title-font          : "Playfair Display", serif;
+  --subtitle-font       : "Urbanist", sans-serif;
+  --body-font           : "Plus Jakarta Sans", sans-serif;
+  --icon-font           : "Font Awesome 6 Pro";
+  --main-container      : 1320px;
+  --container-gutters   : 24px;
+  --section-space       : 120px;
+  --section-space-mobile: 80px;
+  --section-title-space : 56px;
+  --ripple-ani-duration : 5s;
+  --th-body-background  : #ffffff;
+  --light-white         : #f9f9f9;
+}
+
+// Color Variation
+$theme-color          : var(--theme-color);
+$theme-color2         : var(--theme-color2);
+$title-color          : var(--title-color);
+$title-color2         : var(--title-color2);
+$title-color3         : var(--title-color3);
+$title-color4         : var(--title-color4);
+$body-color           : var(--body-color);
+$smoke-color          : var(--smoke-color);
+$smoke-color2         : var(--smoke-color2);
+$smoke-color3         : var(--smoke-color3);
+$white-color          : var(--white-color);
+$light-color          : var(--light-color);
+$black-color          : var(--black-color);
+$black-color2         : var(--black-color2);
+$black-color3         : var(--black-color3);
+$black-color4         : var(--black-color4);
+$black-color5         : var(--black-color5);
+$black-color6         : var(--black-color6);
+$black-color7         : var(--black-color7);
+$black-color8         : var(--black-color8);
+$gray-color           : var(--gray-color);
+$gray-color2          : var(--gray-color2);
+$gray-color3          : var(--gray-color3);
+$yellow-color         : var(--yellow-color);
+$success-color        : var(--success-color);
+$error-color          : var(--error-color);
+$border-color         : var(--th-border-color);
+$border-color2        : var(--th-border-color2);
+$border-color3        : var(--th-border-color3);
+$border-color4        : var(--th-border-color4);
+$border-color5        : var(--th-border-color5);
+$border-color6        : var(--th-border-color6);
+$border-color7        : var(--th-border-color7);
+$body-background      : var(--th-body-background);
+$light-white          : var(--light-white);
+
+// Font Variation
+$icon-font   : var(--icon-font);
+
+// Typography
+$title-font      : var(--title-font);
+$subtitle-font   : var(--subtitle-font);
+$body-font       : var(--body-font);
+$body-font-size  : 18px;
+$body-line-Height: 32px;
+$body-font-weight: 400;
+$p-line-Height   : 1.75;
+$body-letter-spacing:0.36px;
+
+// Device Variation
+$hd: 1921px; // Large Device Than 1920
+$xxl: 1500px; // Extra large Device
+$ml: 1399px; // Medium Large Device
+$xl: 1299px; // Medium Large Device
+$lg: 1199px; // Large Device (Laptop)
+$md: 991px; // Medium Device (Tablet)
+$sm: 767px; // Small Device
+$xs: 575px; // Extra Small Device
+$vxs: 375px; // Extra Small Device
+
+// Spacing Count with 5x
+$space-count: 10;
+
+// Section Space  For large Device
+$space         : var(--section-space);
+$space-extra   : calc(var(--section-space) - 30px);
+$space-extra2  : calc(var(--section-space) - 40px);
+
+// Section Space On small Device
+$space-mobile      : var(--section-space-mobile);
+$space-mobile-extra: calc(var(--section-space-mobile) - 30px);
+
+
+// BG Color Mapping (bg-gray)
+$bgcolorMap  : ();
+$bgcolorMap  : map-merge((
+  "theme"    : $theme-color,
+  "theme2"   : $theme-color2,
+  "smoke"    : $smoke-color,
+  "smoke2"   : $smoke-color2,
+  "gray"     : $gray-color,
+  "gray2"    : $gray-color2,
+  "white"    : $white-color,
+  "light"    : $light-color,
+  "black"    : $black-color,
+  "black2"   : $black-color2,
+  "black3"   : $black-color3,
+  "black4"   : $black-color4,
+  "title"    : $title-color,
+  "body"     : $body-color,
+), $bgcolorMap);
+
+
+// Overlay Color Mapping (data-overlay)
+$overlaycolorMap : ();
+$overlaycolorMap : map-merge((
+  "theme"        : $theme-color,
+  "theme2"       : $theme-color2,
+  "title"        : $title-color,
+  "smoke"        : $smoke-color,
+  "gray"         : $gray-color,
+  "white"        : $white-color,
+  "black"        : $black-color,
+  "black4"       : $black-color4,
+  "black7"       : $black-color7,
+), $overlaycolorMap);
+
+
+// Text Color Mapping (text-white)
+$textColorsMap : ();
+$textColorsMap : map-merge((
+  "theme"      : $theme-color,
+  "theme2"     : $theme-color2,
+  "title"      : $title-color,
+  "body"       : $body-color,
+  "white"      : $white-color,
+  "light"      : $light-color,
+  "yellow"     : $yellow-color,
+  "success"    : $success-color,
+  "error"      : $error-color
+), $textColorsMap);
+
+
+// Font Mapping  (fontboyd)
+$fontsMap    : ();
+$fontsMap    : map-merge((
+  "icon"     : $icon-font,
+  "title"    : $title-font,
+  "body"     : $body-font,
+), $fontsMap);

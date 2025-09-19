@@ -1,0 +1,45 @@
+.link-btn:before {
+    left: auto;
+    right: 0;
+}
+.th-btn,
+.link-btn {
+    i.fa-arrow-up-right {
+        transform: rotateY(180deg);
+    }
+    &:hover,
+    &:active {
+        i.fa-arrow-up-right {
+            transform: rotate(-45deg) rotateY(180deg);
+        }
+    }
+}
+
+select, .form-control, .form-select, textarea, input {
+    direction: ltr;
+}
+.checklist ul {
+    padding: 0;
+    text-align: right;
+}
+.th-menu-wrapper {
+    direction: ltr;
+}
+.sidemenu-wrapper .closeButton {
+    left: 20px;
+    right: auto;
+}
+.preloader {
+    direction: ltr;
+}
+.icon-box .slider-arrow:not(:last-child) {
+    margin-left: 8px;
+    margin-right: 0;
+}
+.th-social a {
+    margin-left: 7px;
+    margin-right: 0;
+    &:last-child {
+        margin-left: 0;
+    }
+}

@@ -1,0 +1,148 @@
+//Call to action 1---------------------------------------
+.cta-card {
+    border-radius: 30px;
+    padding: 55px 40px;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+    .cta-card-bg-shape {
+        mix-blend-mode: overlay;
+        transition: 0.4s;
+        &:after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: $theme-color2;
+            transition: 0.4s;
+        }
+    }
+    &:before {
+        z-index: -1;
+        transition: 0.4s;
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: $title-color;
+        opacity: 0.8;
+    }
+    .box-title {
+        color: $white-color;
+        font-size: 36px;
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+    .box-text {
+        font-size: 16px;
+        font-weight: 400;
+        color: $white-color;
+        margin-bottom: 20px;
+    }
+    &.style2 {
+        .cta-card-bg-shape {
+            transform: rotateY(180deg);
+        }
+    }
+    &:hover {
+        &:before {
+            background: $theme-color;
+        }
+        .cta-card-bg-shape {
+            &:after {
+                background: #122F2A;
+            }
+        }
+    }
+    @include xs {
+        padding: 40px 30px;
+        .box-title {
+            font-size: 24px;
+        }
+    }
+}
+//Call to action 2---------------------------------------
+.cta-bg-shape2-4,
+.cta-bg-shape2-3 {
+    @include xxl {
+        max-width: 420px;
+    }
+    @include ml {
+        max-width: 400px;
+    }
+    @include xl {
+        max-width: 300px;
+    }
+    @include md {
+        max-width: 250px;
+    }
+}
+.cta-bg-shape2-2 {
+    @include ml {
+        max-width: 200px;
+    }
+}
+
+//Call to action 3---------------------------------------
+.cta-wrap3 {
+    border-radius: 0 0 50px 50px;
+    overflow: hidden;
+    margin: 0 auto;
+    max-width: 1720px;
+    .cta-content-wrap {
+        padding: 80px 80px 56px;
+    }
+    .contact-map {
+        width: 100%;
+        height: 434px;
+        iframe {
+            height: 100%;
+            border-radius: 0;
+            filter: invert(0) grayscale(1) contrast(0.6);
+        }
+    }
+    @include xxl {
+        .cta-content-wrap {
+            padding: 80px 60px 56px;
+        }
+    }
+    @include ml {
+        .contact-map {
+            height: 513px;
+        }
+    }
+    @include xl {
+        .cta-content-wrap {
+            padding: 60px 60px 36px;
+        }
+        .contact-map {
+            height: 532px;
+        }
+    }
+    @include lg {
+        display: block;
+        .cta-content-wrap {
+            padding: 80px 60px 56px;
+        }
+        .contact-map {
+            height: auto;
+            iframe {
+                height: 400px;
+            }
+        }
+    }
+    @include md {
+        .cta-content-wrap {
+            padding: 60px 40px 36px;
+        }
+    }
+    @include xs {
+        .cta-content-wrap {
+            padding: 60px 15px 36px;
+        }
+    }
+}
+
+//Call to action 3 style2---------------------------------------
+.cta-wrap3.style2 {
+    border-radius: 0;
+    max-width: none;
+}

@@ -1,0 +1,160 @@
+.instr-area-1 {
+    background-color: $gray-color;
+
+    .instr-shape1,
+    .instr-shape2 {
+        @include sm {
+            display: none;
+        }
+    }
+
+    .title-wrap {
+        max-width: 340px;
+
+        @include md {
+            max-width: 100%;
+        }
+    }
+}
+
+.instr-card {
+    position: relative;
+    --space: 20px;
+
+    &.style2 {
+        .instr-img {
+            background-color: #EEF1F4;
+        }
+
+        .card-icon {
+            color: $title-color;
+            line-height: 44px;
+
+            i {
+                font-size: 25px;
+            }
+
+        }
+    }
+
+    .instr-img {
+        position: relative;
+        background-color: $white-color;
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    }
+
+    .box-content {
+        padding: 8px 10px 16px 10px;
+        position: absolute;
+        bottom: var(--space);
+        margin: 0 20px;
+        max-width: calc(100% - var(--space)*2);
+        width: 100%;
+        z-index: 2;
+        text-align: center;
+        filter: drop-shadow(0px 10px 50px rgba(135, 143, 151, 0.2));
+        transition: all 0.4s ease-in-out;
+
+        &:before,
+        &:after {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            mask-image: url("../img/mentor/team-shape.png");
+            background-color: $theme-color;
+            background-repeat: no-repeat;
+            background-size: cover;
+            mask-repeat: no-repeat;
+            mask-position: center;
+            mask-size: 100% 100%;
+            z-index: -1;
+            transition: all 0.4s ease-in-out;
+        }
+
+        &:after {
+            background-color: $white-color;
+            width: 100%;
+            z-index: -1;
+        }
+    }
+
+    .card-icon {
+        width: 40px;
+        height: 40px;
+        line-height: 37px;
+        display: block;
+        border: 1px solid #B7C2CC;
+        border-radius: 48px;
+        margin: auto auto 16px auto;
+
+        img {
+            margin: 0;
+        }
+
+    }
+
+    .box-title {
+        margin-bottom: 0;
+    }
+
+    .instr-desig {
+        font-weight: 500;
+        font-size: 16px;
+        color: #506172;
+        display: block;
+        margin-bottom: 10px;
+
+    }
+
+    .th-social {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        a {
+            border-color: transparent;
+            box-shadow: 0px 10px 50px rgba(135, 143, 151, 0.3);
+            border-radius: 48px;
+
+        }
+    }
+
+    &:hover {
+        .box-content {
+            &:after {
+                width: 0;
+            }
+        }
+
+        .card-icon {
+            background-color: $white-color;
+            border: 1px solid transparent;
+        }
+
+        .box-title {
+            a {
+                color: $white-color;
+            }
+        }
+
+        .instr-desig {
+            color: $white-color;
+        }
+
+        .th-social {
+            a {
+                background-color: $white-color;
+                color: $title-color;
+                border: 1px solid transparent;
+            }
+        }
+    }
+}
