@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ModuloAdministrador\DashboardController;
 use App\Http\Controllers\ModuloInscripcion\InscripcionController;
+use App\Http\Controllers\PaginaController;
 use App\Http\Controllers\RecordAcademicoController;
 
 // Routa para o dashboard do administrador y otros roles
@@ -37,3 +38,6 @@ Route::get('/buscar/record-academico/{admitido}', [RecordAcademicoController::cl
     ->name('record.buscar');
 
 //
+
+// Ruta para la pagina de inicio
+Route::get('/', [PaginaController::class, 'inicio'])->name('pagina.inicio');
