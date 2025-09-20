@@ -69,7 +69,7 @@
         <div class="th-menu-area text-center">
             <button class="th-menu-toggle"><i class="fal fa-times"></i></button>
             <div class="mobile-logo">
-                <a href="home-university.html">
+                <a href="{{ route('pagina.inicio') }}">
                     <img src="{{ asset('assets/media/logos/logo-pg.png') }}" width="100" alt="Logo">
                     <br>
                     <b>Escuela de Posgrado</b>
@@ -81,21 +81,21 @@
                     <li class="menu-item-has-children">
                         <a href="#">Nosotros</a>
                         <ul class="sub-menu">
-                            <li><a href="#">Misión</a></li>
-                            <li><a href="#">Visión</a></li>
-                            <li><a href="#">Objetivos</a></li>
-                            <li><a href="#">Reseña Histórica</a></li>
-                            <li><a href="#">Autoridades</a></li>
-                            <li><a href="#">Reglamento</a></li>
+                            <li><a href="{{ route('pagina.mision') }}">Misión</a></li>
+                            <li><a href="{{ route('pagina.vision') }}">Visión</a></li>
+                            <li><a href="{{ route('pagina.objetivos') }}">Objetivos</a></li>
+                            <li><a href="{{ route('pagina.resena-historica') }}">Reseña Histórica</a></li>
+                            <li><a href="{{ route('pagina.autoridades') }}">Autoridades</a></li>
+                            <li><a href="{{ route('pagina.reglamento') }}">Reglamento</a></li>
                         </ul>
                     </li>
                     <li class="menu-item-has-children">
                         <a href="#">Admisión</a>
                         <ul class="sub-menu">
-                            <li><a href="#">Requisitos de ingreso</a></li>
-                            <li><a href="#">Procesos y cronogramas</a></li>
-                            <li><a href="#">Costos y modalidades de pago</a></li>
-                            <li><a href="#">Link para SIEPG</a></li>
+                            <li><a href="{{ route('pagina.requisito-ingreso') }}">Requisitos de ingreso</a></li>
+                            <li><a href="{{ route('pagina.procesos-cronogramas') }}">Procesos y cronogramas</a></li>
+                            <li><a href="{{ route('pagina.costos-modalidades') }}">Costos y modalidades de pago</a></li>
+                            <li><a href="{{ route('pagina.link-siepg') }}">Link para SIEPG</a></li>
                         </ul>
                     </li>
                     <li class="menu-item-has-children">
@@ -264,10 +264,10 @@
                                             <li class="menu-item-has-children">
                                                 <a href="#">Admisión</a>
                                                 <ul class="sub-menu">
-                                                    <li><a href="#">Requisitos de ingreso</a></li>
-                                                    <li><a href="#">Procesos y cronogramas</a></li>
-                                                    <li><a href="#">Costos y modalidades de pago</a></li>
-                                                    <li><a href="#">Link para SIEPG</a></li>
+                                                    <li><a href="{{ route('pagina.requisito-ingreso') }}">Requisitos de ingreso</a></li>
+                                                    <li><a href="{{ route('pagina.procesos-cronogramas') }}">Procesos y cronogramas</a></li>
+                                                    <li><a href="{{ route('pagina.costos-modalidades') }}">Costos y modalidades de pago</a></li>
+                                                    <li><a href="{{ route('pagina.link-siepg') }}">Link para SIEPG</a></li>
                                                 </ul>
                                             </li>
                                             <li class="menu-item-has-children">
