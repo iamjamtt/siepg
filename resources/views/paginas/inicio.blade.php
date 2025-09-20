@@ -260,118 +260,56 @@
                         <h2 class="sec-title text-anim2">Anuncios Importantes</h2>
                     </div>
                 </div>
+                @if (count($anuncios) > 3)
                 <div class="col-auto align-self-end">
                     <div class="sec-btn wow fadeInUp" data-wow-delay=".3s">
                         <a href="#" class="th-btn style-border1 th-icon"> Explorar todos </a>
                     </div>
                 </div>
+                @endif
             </div>
             <div class="academic-wrapp">
                 <div class="slider-area">
                     <div class="swiper th-slider has-shadow" id="academicSlider2" data-slider-options='{"breakpoints":{"0":{"slidesPerView":1},"576":{"slidesPerView":"1"},"768":{"slidesPerView":"1"},"992":{"slidesPerView":"2"},"1200":{"slidesPerView":"3"},"1400":{"slidesPerView":"3", "spaceBetween": "24"}},"autoHeight": "true", "autoplay" : "false"}'>
                         <div class="swiper-wrapper">
-                            <div class="swiper-slide">
-                                <div class="academic-card">
-                                    <div class="academic-img">
-                                        <a href="program-details.html">
-                                            <img src="https://images.unsplash.com/photo-1755867712452-871192ab3b2e?q=80&w=1752&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="anuncio 1">
-                                        </a>
-                                        <div class="academic-tag">
-                                            <span><i class="fa-solid fa-tags"></i> Importante</span>
+                            @forelse ($anuncios as $item)
+                                <div class="swiper-slide">
+                                    <div class="academic-card">
+                                        <div class="academic-img">
+                                            <a href="{{ route('pagina.anuncio', $item['slug']) }}">
+                                                <img src="{{ $item['imagen'] }}" alt="{{ $item['titulo_corto'] }}">
+                                            </a>
+                                            <div class="academic-tag">
+                                                <span><i class="fa-solid fa-tags"></i> {{ $item['grado'] }}</span>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="academic-content">
-                                        <h3 class="box-title">
-                                            <a href="program-details.html">Titulo del anuncio</a>
-                                        </h3>
-                                        <div class="academic-review">
-                                            <span><i class="fa-solid fa-star"></i></span>
-                                            <span><i class="fa-solid fa-star"></i></span>
-                                            <span><i class="fa-solid fa-star"></i></span>
-                                            <span><i class="fa-solid fa-star"></i></span>
-                                            <span><i class="fa-solid fa-star"></i></span>
-                                            <p class="review-text">(4.8)</p>
+                                        <div class="academic-content">
+                                            <h3 class="box-title">
+                                                <a href="program-details.html">{{ $item['titulo_corto'] }}</a>
+                                            </h3>
+                                            <div class="academic-review">
+                                                <span><i class="fa-solid fa-star"></i></span>
+                                                <span><i class="fa-solid fa-star"></i></span>
+                                                <span><i class="fa-solid fa-star"></i></span>
+                                                <span><i class="fa-solid fa-star"></i></span>
+                                                <span><i class="fa-solid fa-star"></i></span>
+                                                <p class="review-text">(5)</p>
+                                            </div>
+                                            <p class="box-text style2">
+                                                {{ $item['descripcion_corto'] }}
+                                            </p>
                                         </div>
-                                        <p class="box-text style2">
-                                            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Distinctio doloribus quas ipsam culpa eligendi iste consectetur ducimus officiis ipsa, in, aperiam quasi?.
-                                        </p>
-                                    </div>
-                                    <div class="academic-meta-wrap">
-                                        <div class="academic-meta">
-                                            <a href="#" class="duration"><i class="fa-solid fa-clock"></i> 04/10/2025</a>
+                                        <div class="academic-meta-wrap">
+                                            <div class="academic-meta">
+                                                <a href="javascript:void(0)" class="duration"><i class="fa-solid fa-clock"></i> {{ $item['fecha'] }}</a>
+                                            </div>
+                                            <a href="{{ route('pagina.anuncio', $item['slug']) }}" class="th-btn style-border1 th-icon">Ver</a>
                                         </div>
-                                        <a href="#" class="th-btn style-border1 th-icon">Ver</a>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="swiper-slide">
-                                <div class="academic-card">
-                                    <div class="academic-img">
-                                        <a href="program-details.html">
-                                            <img src="https://images.unsplash.com/photo-1755867712452-871192ab3b2e?q=80&w=1752&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="anuncio 1">
-                                        </a>
-                                        <div class="academic-tag">
-                                            <span><i class="fa-solid fa-tags"></i> Importante</span>
-                                        </div>
-                                    </div>
-                                    <div class="academic-content">
-                                        <h3 class="box-title">
-                                            <a href="program-details.html">Titulo del anuncio</a>
-                                        </h3>
-                                        <div class="academic-review">
-                                            <span><i class="fa-solid fa-star"></i></span>
-                                            <span><i class="fa-solid fa-star"></i></span>
-                                            <span><i class="fa-solid fa-star"></i></span>
-                                            <span><i class="fa-solid fa-star"></i></span>
-                                            <span><i class="fa-solid fa-star"></i></span>
-                                            <p class="review-text">(4.8)</p>
-                                        </div>
-                                        <p class="box-text style2">
-                                            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Distinctio doloribus quas ipsam culpa eligendi iste consectetur ducimus officiis ipsa, in, aperiam quasi?.
-                                        </p>
-                                    </div>
-                                    <div class="academic-meta-wrap">
-                                        <div class="academic-meta">
-                                            <a href="#" class="duration"><i class="fa-solid fa-clock"></i> 04/10/2025</a>
-                                        </div>
-                                        <a href="#" class="th-btn style-border1 th-icon">Ver</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="swiper-slide">
-                                <div class="academic-card">
-                                    <div class="academic-img">
-                                        <a href="program-details.html">
-                                            <img src="https://images.unsplash.com/photo-1755867712452-871192ab3b2e?q=80&w=1752&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="anuncio 1">
-                                        </a>
-                                        <div class="academic-tag">
-                                            <span><i class="fa-solid fa-tags"></i> Importante</span>
-                                        </div>
-                                    </div>
-                                    <div class="academic-content">
-                                        <h3 class="box-title">
-                                            <a href="program-details.html">Titulo del anuncio</a>
-                                        </h3>
-                                        <div class="academic-review">
-                                            <span><i class="fa-solid fa-star"></i></span>
-                                            <span><i class="fa-solid fa-star"></i></span>
-                                            <span><i class="fa-solid fa-star"></i></span>
-                                            <span><i class="fa-solid fa-star"></i></span>
-                                            <span><i class="fa-solid fa-star"></i></span>
-                                            <p class="review-text">(4.8)</p>
-                                        </div>
-                                        <p class="box-text style2">
-                                            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Distinctio doloribus quas ipsam culpa eligendi iste consectetur ducimus officiis ipsa, in, aperiam quasi?.
-                                        </p>
-                                    </div>
-                                    <div class="academic-meta-wrap">
-                                        <div class="academic-meta">
-                                            <a href="#" class="duration"><i class="fa-solid fa-clock"></i> 04/10/2025</a>
-                                        </div>
-                                        <a href="#" class="th-btn style-border1 th-icon">Ver</a>
-                                    </div>
-                                </div>
-                            </div>
+                            @empty
+                                <p class="text-center">No hay anuncios disponibles en este momento.</p>
+                            @endforelse
                         </div>
                     </div>
                 </div>
