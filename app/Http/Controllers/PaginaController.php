@@ -234,13 +234,13 @@ class PaginaController extends Controller
 
     public function reglamento()
     {
-        $resena = <<<'MD'
+        $descripcion = <<<'MD'
             ### Reglamentos
             MD;
 
         $detalle = [
             'titulo' => 'Reglamentos',
-            'descripcion_md' => $resena,
+            'descripcion_md' => $descripcion,
             'fecha' => '03/09/2019',
         ];
 
@@ -258,5 +258,104 @@ class PaginaController extends Controller
         ];
 
         return view('paginas.detalle', compact('detalle', 'reglamentos'));
+    }
+
+    public function requisito_ingreso()
+    {
+        $detalle = [
+            'titulo' => 'Requisitos de Ingreso',
+            'descripcion_md' => <<<'MD'
+                ### Requisitos de ingreso
+
+                > **Nota general:** Todos los archivos deben enviarse en **formato PDF**. Otros formatos no serán aceptados.
+
+                #### Maestría
+                - Fotocopia **ampliada** del DNI. En caso de **postulante extranjero**, fotocopia **legalizada** del **carné de extranjería**.
+                - Constancia **en línea** otorgada por la **SUNEDU** del **grado académico de bachiller**.
+                - **Currículum vítae documentado** (últimos **5 años**).
+                - Recibo de pago por **derecho de inscripción**: **S/ 200.00**.
+
+                #### Doctorado
+                - Fotocopia **ampliada** del DNI. En caso de **postulante extranjero**, fotocopia **legalizada** del **carné de extranjería**.
+                - Constancia **en línea** otorgada por la **SUNEDU** del **grado académico de maestro**.
+                - **Currículum vítae documentado** (últimos **5 años**).
+                - **Tema tentativo** del **proyecto de tesis**.
+                - Recibo de pago por **derecho de inscripción**: **S/ 200.00**.
+                MD,
+            'fecha' => '06/02/2023',
+        ];
+
+        return view('paginas.detalle', compact('detalle'));
+    }
+
+    public function procesos_cronogramas()
+    {
+        $detalle = [
+            'titulo' => 'Procesos y Cronogramas',
+            'descripcion_md' => <<<'MD'
+                ### Procesos y Cronogramas
+                MD,
+            'fecha' => '06/02/2023',
+        ];
+
+        $imagen = asset('media/page/admision/foto_prueba.jpg');
+        // $imagen_opcional = null; // Puedes dejarlo como null si no hay imagen opcional
+        $imagen_opcional = asset('media/page/admision/foto_prueba.jpg'); // Puedes dejarlo como null si no hay imagen opcional
+
+        return view('paginas.detalle', compact('detalle', 'imagen', 'imagen_opcional'));
+    }
+
+    public function costos_modalidades()
+    {
+        $detalle = [
+            'titulo' => 'Costos y Modalidades de Pago',
+            'descripcion_md' => <<<'MD'
+                ### Costos y Modalidades de Pago
+                MD,
+            'fecha' => '06/02/2023',
+        ];
+
+        $imagen = asset('media/page/admision/foto_prueba.jpg');
+        // $imagen_opcional = null; // Puedes dejarlo como null si no hay imagen opcional
+        $imagen_opcional = asset('media/page/admision/foto_prueba.jpg'); // Puedes dejarlo como null si no hay imagen opcional
+
+        return view('paginas.detalle', compact('detalle', 'imagen', 'imagen_opcional'));
+    }
+
+    public function link_siepg()
+    {
+        $descripcion = <<<'MD'
+            ### Links de los sistemas de la Escuela de Posgrado
+
+            > **Nota general:** Estos enlaces son proporcionados para facilitar el acceso a las plataformas oficiales. Asegúrese de tener sus credenciales de acceso a mano.
+
+            A continuación, se presentan los enlaces directos a los sistemas más utilizados en la Escuela de Posgrado de la Universidad Nacional de Ucayali:
+            MD;
+
+        $detalle = [
+            'titulo' => 'Links de los sistemas de la Escuela de Posgrado',
+            'descripcion_md' => $descripcion,
+            'fecha' => '03/09/2019',
+        ];
+
+        $links = [
+            [
+                'nombre' => 'Plataforma de Estudiantes',
+                'url' => 'http://posgrado.unu.edu.pe/plataforma/login',
+                'icono' => asset('media/page/link-icon.png'),
+            ],
+            [
+                'nombre' => 'Plataforma de Docentes',
+                'url' => 'http://posgrado.unu.edu.pe/login',
+                'icono' => asset('media/page/link-icon.png'),
+            ],
+            [
+                'nombre' => 'Plataforma Administrativa',
+                'url' => 'http://posgrado.unu.edu.pe/login',
+                'icono' => asset('media/page/link-icon.png'),
+            ]
+        ];
+
+        return view('paginas.detalle', compact('detalle', 'links'));
     }
 }

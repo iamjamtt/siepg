@@ -96,6 +96,46 @@
                                 </div>
                             </div>
                         @endif
+                        @if (!empty($imagen))
+                            <div class="blog-content text-center" style="margin-top: 20px; margin-bottom: 20px;">
+                                <div class="row g-5 justify-content-center" style="margin-top: 20px;">
+                                    <div class="col-md-10">
+                                        <img src="{{ $imagen }}" alt="Imagen relacionada" class="mb-3" style="width: 100%; height: auto; border-radius: 10px;">
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+                        @if (!empty($imagen_opcional))
+                            <div class="blog-content text-center" style="margin-top: 20px; margin-bottom: 20px;">
+                                <div class="row g-5 justify-content-center" style="margin-top: 20px;">
+                                    <div class="col-md-10">
+                                        <img src="{{ $imagen_opcional }}" alt="Imagen relacionada" class="mb-3" style="width: 100%; height: auto; border-radius: 10px;">
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+                        @if (!empty($links))
+                            <div class="blog-content text-center" style="margin-top: 40px; margin-bottom: 20px;">
+                                <div class="row g-5 justify-content-center" style="margin-top: 20px;">
+                                    @foreach ($links as $link)
+                                        <div class="col-md-4">
+                                            <a href="{{ $link['url'] }}" target="_blank">
+                                                <div class="th-product product-grid">
+                                                    <div class="mb-1 text-center">
+                                                        <img src="{{ $link['icono'] }}" alt="{{ $link['nombre'] }}" style="max-width: 100px; height: auto;">
+                                                    </div>
+                                                    <div class="product-content mb-3">
+                                                        <p class="product-title fw-bold">
+                                                            {{ $link['nombre'] }}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>
