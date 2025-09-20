@@ -15,6 +15,9 @@
                         </h1>
                         <ul class="breadcumb-menu">
                             <li><a href="{{ route('pagina.inicio') }}">Inicio</a></li>
+                            @if (!empty($programa))
+                                <li><a href="{{ route('pagina.programa', ['slug' => $programa['slug_tipo']]) }}">{{ $programa['tipo'] }}</a></li>
+                            @endif
                             <li>{{ $detalle['titulo'] }}</li>
                         </ul>
                     </div>
