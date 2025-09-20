@@ -42,6 +42,60 @@
                                 {!! \Illuminate\Support\Str::markdown($detalle['descripcion_md']) !!}
                             </p>
                         </div>
+                        @if (!empty($autoridades))
+                            <div class="blog-content text-center" style="margin-top: 40px; margin-bottom: 20px;">
+                                <h3>ÓRGANOS DE GOBIERNO</h3>
+                                <div class="row g-5 justify-content-center" style="margin-top: 20px;">
+                                    @foreach ($autoridades as $autoridad)
+                                        <div class="col-md-6">
+                                            <img src="{{ $autoridad['foto'] }}" alt="{{ $autoridad['nombre'] }}" class="mb-3" style="max-width: 150px; border-radius: 50%;">
+                                            <br>
+                                            <strong>{{ $autoridad['nombre'] }}</strong>
+                                            <br>
+                                            {{ $autoridad['cargo'] }}
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @endif
+                        @if (!empty($directores))
+                            <div class="blog-content text-center" style="margin-top: 80px; margin-bottom: 20px;">
+                                <h3>DIRECTORES DE LAS UNIDADES DE POSGRADO</h3>
+                                <div class="row g-5 justify-content-center" style="margin-top: 20px;">
+                                    @foreach ($directores as $director)
+                                        <div class="col-md-6">
+                                            <img src="{{ $director['foto'] }}" alt="{{ $director['nombre'] }}" class="mb-3" style="max-width: 150px; border-radius: 50%;">
+                                            <br>
+                                            <strong>{{ $director['nombre'] }}</strong>
+                                            <br>
+                                            {{ $director['cargo'] }}
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @endif
+                        @if (!empty($reglamentos))
+                            <div class="blog-content text-center" style="margin-top: 40px; margin-bottom: 20px;">
+                                <div class="row g-5 justify-content-center" style="margin-top: 20px;">
+                                    @foreach ($reglamentos as $reglamento)
+                                        <div class="col-md-4">
+                                            <a href="{{ $reglamento['archivo'] }}" target="_blank">
+                                                <div class="th-product product-grid">
+                                                    <div class="mb-3 text-center">
+                                                        <img src="{{ $reglamento['icono'] }}" alt="{{ $reglamento['nombre'] }}" style="max-width: 100px; height: auto;">
+                                                    </div>
+                                                    <div class="product-content">
+                                                        <p class="product-title fw-bold">
+                                                            {{ $reglamento['nombre'] }}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>

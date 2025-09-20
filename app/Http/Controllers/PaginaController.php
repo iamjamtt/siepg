@@ -8,9 +8,21 @@ use Illuminate\Support\Str;
 class PaginaController extends Controller
 {
     public array $noticias = [];
+    public array $programas = [];
+    public array $anuncios = [];
 
     public function __construct()
     {
+        $this->anuncios = [
+            [
+                'id' => 1,
+                'slug' => Str::slug('Maestría en Derecho Constitucional y Administrativo'),
+                'nombre' => 'Maestría en Derecho Constitucional y Administrativo',
+                'tipo' => 'Maestría',
+                'imagen' => asset('media/page/programa/foto_prueba.jpg'),
+            ],
+        ];
+
         $this->noticias = [
             [
                 'id' => 1,
@@ -46,6 +58,16 @@ class PaginaController extends Controller
                 'mes' => 'SEP',
                 'anio' => '2022',
                 'autor' => 'Autor'
+            ],
+        ];
+
+        $this->programas = [
+            [
+                'id' => 1,
+                'slug' => Str::slug('Maestría en Derecho Constitucional y Administrativo'),
+                'nombre' => 'Maestría en Derecho Constitucional y Administrativo',
+                'tipo' => 'Maestría',
+                'imagen' => asset('media/page/programa/foto_prueba.jpg'),
             ],
         ];
     }
@@ -117,5 +139,124 @@ class PaginaController extends Controller
             'fecha' => '06/02/2018',
         ];
         return view('paginas.detalle', compact('detalle'));
+    }
+
+    public function resena_historica()
+    {
+        $resena = <<<'MD'
+            ### Reseña Histórica
+            Mediante Resolución Nº 061-2005-R-UNU del 12 de Febrero del 2005, se designa la Comisión encargada del Estudio y Organización para la creación de la Escuela de Posgrado de la Universidad Nacional de Ucayali, presidida por el Blgo. Mg. Emilio Pascual Valentín.
+
+            Posteriormente, según Resolución Nº 022-2006-CU-R-UNU del 19 de Enero del 2006, el Consejo Universitario propone a la Asamblea Universitaria la creación de la Escuela de Posgrado de la UNU y se nombre una Comisión para que se encargue de elaborar los perfiles del proyecto.
+
+            Mediante Resolución Nº 003-2007-AU-R-UNU del 20 de Enero del 2007, la Asamblea Universitaria aprueba el Proyecto de Creación de la Escuela de Posgrado de la Universidad Nacional de Ucayali. Luego, con Resolución Nº 199-2007-CU-R-UNU del 12 de Junio del 2007, el Consejo Universitario conforma la Comisión Implementadora de la Escuela de Posgrado de la Universidad Nacional de Ucayali presidida por el Ing. M.Sc. Roly Baldoceda Astete y conformada por el Mg. Gustavo Horacio Celi Arévalo y la Mg. Isabel Esteban Robladillo. Posteriormente, según Resolución Nº 3250-2008-CU-R-UNU del 02 de julio del 2008, el Consejo Universitario aprueba el funcionamiento de la Escuela de Posgrado de la UNU y el Desarrollo de las Maestrías iniciales con las menciones en Ciencias de la Computación y Salud Pública.
+
+            **El 05 de diciembre del 2008, la Asamblea Nacional de Rectores mediante Resolución Nº 1079-2008-ANR aprueba la creación y funcionamiento de la Escuela de Posgrado en la Universidad Nacional de Ucayali con sede en la ciudad de Pucallpa**, con los Programas de Maestría en: Ciencias de la Computación, Salud Pública, Medio Ambiente, Gestión Sostenible y Responsable; y Gestión Pública.
+
+            Luego mediante Resolución Nº 864-2009-ANR del 11 de agosto del 2009 se declara que la creación y organización de los Programas de: Maestría en Derecho Constitucional y Administrativo; Maestría en Ciencias Agrícolas, mención Agricultura sostenible; y Maestría en Evaluación y Acreditación de la Calidad de la Educación, en la Escuela de Posgrado de la UNU, se ha realizado de acuerdo con lo previsto en el inciso e) del artículo 92º de la Ley Universitaria Nº 23733. El 04 de Agosto del 2010 por resolución Nº011–CEP–D-UNU se aprueba la creación de la Maestría en Ingeniería de Sistemas, Mención Gestión de Tecnologías de Información.
+
+            Finalmente, mediante Resolución Nº 008-2012-CEP–D-UNU del 08 de febrero del 2012 se aprueba la creación de la Maestría en Gestión Empresarial, Menciones: Auditoria de la Gestión Empresarial. Gestión de Negocios Internacionales y Comercio Exterior, Finanzas para Empresas Financieras, Gestión de Recursos y Costos de Agronegocios, Gestión Tributaria y Fiscal y Gestión de Proyectos de Inversión.
+            MD;
+
+        $detalle = [
+            'titulo' => 'Reseña Histórica',
+            'descripcion_md' => $resena,
+            'fecha' => '01/04/2018',
+        ];
+        return view('paginas.detalle', compact('detalle'));
+    }
+
+    public function autoridades()
+    {
+        $autoridades = <<<'MD'
+            ### Autoridades
+            MD;
+
+        $detalle = [
+            'titulo' => 'Autoridades',
+            'descripcion_md' => $autoridades,
+            'fecha' => '03/09/2019',
+        ];
+
+        $autoridades = [
+            [
+                'nombre' => 'Mg. Gustavo Horacio Celi Arévalo',
+                'cargo' => 'DIRECTOR DE LA ESCUELA DE POSGRADO',
+                'foto' => asset('media/page/autoridad/avatar_prueba.png'),
+            ],
+            [
+                'nombre' => 'Dra. Auristela Chávez Vidalón',
+                'cargo' => 'SECRETARIO ACADÉMICO DE POSGRADO',
+                'foto' => asset('media/page/autoridad/avatar_prueba.png'),
+            ]
+        ];
+
+        $directores = [
+            [
+                'nombre' => 'Mg. Isabel Esteban Robladillo',
+                'cargo' => 'FACULTAD DE CIENCIAS DE LA SALUD',
+                'foto' => asset('media/page/autoridad/avatar_prueba.png'),
+            ],
+            [
+                'nombre' => 'Dr. Jorge Luis Hilario Riva',
+                'cargo' => 'FACULTAD DE CIENCIAS ECONÓMICAS, ADMINISTRATIVAS Y CONTABLES',
+                'foto' => asset('media/page/autoridad/avatar_prueba.png'),
+            ],
+            [
+                'nombre' => 'Dr. Wilmer Ortega Chávez',
+                'cargo' => 'FACULTAD DE CIENCIAS FORESTALES Y AMBIENTALES',
+                'foto' => asset('media/page/autoridad/avatar_prueba.png'),
+            ],
+            [
+                'nombre' => 'Mg. César Augusto Salas Huamán',
+                'cargo' => 'FACULTAD DE DERECHO Y CIENCIAS POLÍTICAS',
+                'foto' => asset('media/page/autoridad/avatar_prueba.png'),
+            ],
+            [
+                'nombre' => 'Mg. Juan Carlos Huamán Huamán',
+                'cargo' => 'FACULTAD DE INGENIERÍA DE SISTEMAS E INGENIERÍA CIVIL',
+                'foto' => asset('media/page/autoridad/avatar_prueba.png'),
+            ],
+            [
+                'nombre' => 'Mg. César Augusto Salas Huamán',
+                'cargo' => 'FACULTAD DE EDUCACIÓN Y CIENCIAS SOCIALES',
+                'foto' => asset('media/page/autoridad/avatar_prueba.png'),
+            ],
+            [
+                'nombre' => 'Mg. Juan Carlos Huamán Huamán',
+                'cargo' => 'FACULTAD DE CIENCIAS AGROPECUARIAS',
+                'foto' => asset('media/page/autoridad/avatar_prueba.png'),
+            ],
+        ];
+
+        return view('paginas.detalle', compact('detalle', 'autoridades', 'directores'));
+    }
+
+    public function reglamento()
+    {
+        $resena = <<<'MD'
+            ### Reglamentos
+            MD;
+
+        $detalle = [
+            'titulo' => 'Reglamentos',
+            'descripcion_md' => $resena,
+            'fecha' => '03/09/2019',
+        ];
+
+        $reglamentos = [
+            [
+                'nombre' => 'Reglamento General de la Escuela de Posgrado 2024',
+                'archivo' => asset('media/page/reglamento/reglamento_general_2024.pdf'),
+                'icono' => asset('media/page/pdf-icon.webp'),
+            ],
+            [
+                'nombre' => 'Reglamento de Grado de la Escuela de Posgrado 2025',
+                'archivo' => asset('media/page/reglamento/reglamento_de_grado_2025.pdf'),
+                'icono' => asset('media/page/pdf-icon.webp'),
+            ]
+        ];
+
+        return view('paginas.detalle', compact('detalle', 'reglamentos'));
     }
 }
