@@ -1345,85 +1345,57 @@
                         <h2 class="sec-title text-anim2">Noticias</h2>
                     </div>
                 </div>
-                <div class="col-auto align-self-end">
-                    <div class="sec-btn wow fadeInUp" data-wow-delay=".3s">
-                        <a href="blog.html" class="th-btn style-border1 th-icon"> Ver Todas </a>
+                @if (count($noticias) > 3)
+                    <div class="col-auto align-self-end">
+                        <div class="sec-btn wow fadeInUp" data-wow-delay=".3s">
+                            <a href="blog.html" class="th-btn style-border1 th-icon"> Ver Todas </a>
+                        </div>
                     </div>
-                </div>
+                @endif
             </div>
             <div class="row gy-4">
-                <div class="col-lg-4">
-                    <div class="blog-card wow fadeInUp">
-                        <div class="blog-img position-relative">
-                            <a href="#">
-                                <div class="blog-img-box position-relative overflow-hidden">
-                                    <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=1742&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="blog image">
-                                    <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=1742&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="blog image">
+                @forelse ($noticias as $item)
+                    <div class="col-lg-4">
+                        <div class="blog-card wow fadeInUp">
+                            <div class="blog-img position-relative">
+                                <a href="{{ route('pagina.noticia', $item['slug']) }}">
+                                    <div class="blog-img-box position-relative overflow-hidden">
+                                        <img src="{{ $item['imagen'] }}" alt="blog image">
+                                        <img src="{{ $item['imagen'] }}" alt="blog image">
+                                    </div>
+                                </a>
+                                <div class="blog-date">
+                                    <h5 class="blog-date-title">{{ $item['dia'] }}</h5>
+                                    <p class="blog-date-text">{{ $item['mes'] }}, {{ $item['anio'] }}</p>
                                 </div>
-                            </a>
-                            <div class="blog-date">
-                                <h5 class="blog-date-title">24</h5>
-                                <p class="blog-date-text">FEB,2025</p>
                             </div>
-                        </div>
-                        <div class="blog-content">
-                            <div class="blog-meta">
-                                <a class="author" href="blog.html">
-                                    <span class="author-icon"><img src="https://icons.veryicon.com/png/o/miscellaneous/standard/avatar-15.png" alt="img"></span>Autor
-                                </a>
-                            </div>
-                            <h3 class="box-title">
-                                <a href="blog-details.html">
-                                    Nombre de la noticia
-                                </a>
-                            </h3>
-                            <p class="box-text">
-                                Aqui va una pequeña descripcion de la noticia para que los usuarios tengan una idea de su contenido.
-                            </p>
-                            <div class="btn-wrap">
-                                <a href="blog-details.html" class="th-btn style-border1 th-icon">
-                                    Leer Más
-                                </a>
+                            <div class="blog-content">
+                                <div class="blog-meta">
+                                    <a class="author" href="blog.html">
+                                        <span class="author-icon"><img src="https://icons.veryicon.com/png/o/miscellaneous/standard/avatar-15.png" alt="img"></span>Autor
+                                    </a>
+                                </div>
+                                <h3 class="box-title">
+                                    <a href="{{ route('pagina.noticia', $item['slug']) }}">
+                                        {{ $item['titulo_corto'] }}
+                                    </a>
+                                </h3>
+                                <p class="box-text">
+                                    {{ $item['descripcion_corto'] }}
+                                </p>
+                                <div class="btn-wrap">
+                                    <a href="{{ route('pagina.noticia', $item['slug']) }}" class="th-btn style-border1 th-icon">
+                                        Leer Más
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="blog-card wow fadeInUp">
-                        <div class="blog-img position-relative">
-                            <a href="#">
-                                <div class="blog-img-box position-relative overflow-hidden">
-                                    <img src="https://images.unsplash.com/photo-1561089489-f13d5e730d72?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="blog image">
-                                    <img src="https://images.unsplash.com/photo-1561089489-f13d5e730d72?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="blog image">
-                                </div>
-                            </a>
-                            <div class="blog-date">
-                                <h5 class="blog-date-title">04</h5>
-                                <p class="blog-date-text">SET,2025</p>
-                            </div>
-                        </div>
-                        <div class="blog-content">
-                            <div class="blog-meta">
-                                <a class="author" href="blog.html">
-                                    <span class="author-icon"><img src="https://icons.veryicon.com/png/o/miscellaneous/standard/avatar-15.png" alt="img"></span>Autor
-                                </a>
-                            </div>
-                            <h3 class="box-title">
-                                <a href="blog-details.html">
-                                    Nombre de la noticia
-                                </a>
-                            </h3>
-                            <p class="box-text">
-                                Aqui va una pequeña descripcion de la noticia para que los usuarios tengan una idea de su contenido.
-                            </p>
-                            <div class="btn-wrap">
-                                <a href="blog-details.html" class="th-btn style-border1 th-icon">
-                                    Leer Más
-                                </a>
-                            </div>
-                        </div>
+                @empty
+                    <div class="col-12">
+                        <p class="text-center">No hay noticias disponibles en este momento.</p>
                     </div>
-                </div>
+                @endforelse
             </div>
         </div>
     </section>

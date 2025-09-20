@@ -253,12 +253,12 @@
                                             <li class="menu-item-has-children">
                                                 <a href="#">Nosotros</a>
                                                 <ul class="sub-menu">
-                                                    <li><a href="#">Misión</a></li>
-                                                    <li><a href="#">Visión</a></li>
-                                                    <li><a href="#">Objetivos</a></li>
-                                                    <li><a href="#">Reseña Histórica</a></li>
-                                                    <li><a href="#">Autoridades</a></li>
-                                                    <li><a href="#">Reglamento</a></li>
+                                                    <li><a href="{{ route('pagina.mision') }}">Misión</a></li>
+                                                    <li><a href="{{ route('pagina.vision') }}">Visión</a></li>
+                                                    <li><a href="{{ route('pagina.objetivos') }}">Objetivos</a></li>
+                                                    <li><a href="{{ route('pagina.resena-historica') }}">Reseña Histórica</a></li>
+                                                    <li><a href="{{ route('pagina.autoridades') }}">Autoridades</a></li>
+                                                    <li><a href="{{ route('pagina.reglamento') }}">Reglamento</a></li>
                                                 </ul>
                                             </li>
                                             <li class="menu-item-has-children">
