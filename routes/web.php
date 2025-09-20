@@ -41,3 +41,10 @@ Route::get('/buscar/record-academico/{admitido}', [RecordAcademicoController::cl
 
 // Ruta para la pagina de inicio
 Route::get('/', [PaginaController::class, 'inicio'])->name('pagina.inicio');
+Route::get('/noticia/{slug}', [PaginaController::class, 'noticia'])->name('pagina.noticia');
+Route::get('/mision', [PaginaController::class, 'mision'])->name('pagina.mision');
+Route::get('/vision', [PaginaController::class, 'vision'])->name('pagina.vision');
+Route::get('/objetivos', [PaginaController::class, 'objetivos'])->name('pagina.objetivos');
+Route::get('/resena-historica', [PaginaController::class, 'resena_historica'])->name('pagina.resena-historica');
+Route::get('/autoridades', [PaginaController::class, 'autoridades'])->name('pagina.autoridades');
+Route::get('/reglamento', [PaginaController::class, 'reglamento'])->name('pagina.reglamento');
