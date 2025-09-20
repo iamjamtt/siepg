@@ -101,23 +101,11 @@
                     <li class="menu-item-has-children">
                         <a href="#">Programas académicos</a>
                         <ul class="sub-menu">
-                            <li class="menu-item-has-children">
-                                <a href="#">Maestrías</a>
-                                <ul class="sub-menu">
-                                    <li><a href="#">Maestría 1</a></li>
-                                    <li><a href="#">Maestría 2</a></li>
-                                </ul>
-                            </li>
-                            <li class="menu-item-has-children">
-                                <a href="#">Doctorados</a>
-                                <ul class="sub-menu">
-                                    <li><a href="#">Doctorado 1</a></li>
-                                    <li><a href="#">Doctorado 2</a></li>
-                                </ul>
-                            </li>
+                            <li><a href="{{ route('pagina.programa', ['slug' => 'maestrias']) }}">Maestrías</a></li>
+                            <li><a href="{{ route('pagina.programa', ['slug' => 'doctorados']) }}">Doctorados</a></li>
                         </ul>
                     </li>
-                    <li><a href="#">Contáctenos</a></li>
+                    <li><a href="{{ route('pagina.contacto') }}">Contáctenos</a></li>
                 </ul>
             </div>
         </div>
@@ -242,7 +230,7 @@
                                         </a>
                                     </div>
                                     <div class="header-button d-none d-sm-block">
-                                        <a href="#" class="th-btn">
+                                        <a href="{{ route('pagina.contacto') }}" class="th-btn">
                                             Obtén más información
                                             <i class="fa-solid fa-arrow-right-long"></i>
                                         </a>
@@ -273,23 +261,11 @@
                                             <li class="menu-item-has-children">
                                                 <a href="#">Programas académicos</a>
                                                 <ul class="sub-menu">
-                                                    <li class="menu-item-has-children">
-                                                        <a href="#">Maestrías</a>
-                                                        <ul class="sub-menu">
-                                                            <li><a href="#">Maestría 1</a></li>
-                                                            <li><a href="#">Maestría 2</a></li>
-                                                        </ul>
-                                                    </li>
-                                                    <li class="menu-item-has-children">
-                                                        <a href="#">Doctorados</a>
-                                                        <ul class="sub-menu">
-                                                            <li><a href="#">Doctorado 1</a></li>
-                                                            <li><a href="#">Doctorado 2</a></li>
-                                                        </ul>
-                                                    </li>
+                                                    <li><a href="{{ route('pagina.programa', ['slug' => 'maestrias']) }}">Maestrías</a></li>
+                                                    <li><a href="{{ route('pagina.programa', ['slug' => 'doctorados']) }}">Doctorados</a></li>
                                                 </ul>
                                             </li>
-                                            <li><a href="#">Contáctenos</a></li>
+                                            <li><a href="{{ route('pagina.contacto') }}">Contáctenos</a></li>
                                         </ul>
                                     </nav>
                                 </div>

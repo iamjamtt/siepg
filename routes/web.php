@@ -42,6 +42,7 @@ Route::get('/buscar/record-academico/{admitido}', [RecordAcademicoController::cl
 // Ruta para la pagina de inicio
 Route::get('/', [PaginaController::class, 'inicio'])->name('pagina.inicio');
 Route::get('/noticia/{slug}', [PaginaController::class, 'noticia'])->name('pagina.noticia');
+Route::get('/anuncio/{slug}', [PaginaController::class, 'anuncio'])->name('pagina.anuncio');
 
 Route::get('/mision', [PaginaController::class, 'mision'])->name('pagina.mision');
 Route::get('/vision', [PaginaController::class, 'vision'])->name('pagina.vision');
@@ -54,3 +55,8 @@ Route::get('/requisito-ingreso', [PaginaController::class, 'requisito_ingreso'])
 Route::get('/procesos-cronogramas', [PaginaController::class, 'procesos_cronogramas'])->name('pagina.procesos-cronogramas');
 Route::get('/costos-modalidades', [PaginaController::class, 'costos_modalidades'])->name('pagina.costos-modalidades');
 Route::get('/link-siepg', [PaginaController::class, 'link_siepg'])->name('pagina.link-siepg');
+
+Route::get('/programa/{slug}', [PaginaController::class, 'programa'])->name('pagina.programa');
+Route::get('/programa/{slug_tipo}/{slug}', [PaginaController::class, 'programa_detalle'])->name('pagina.programa-detalle');
+
+Route::get('/contacto', [PaginaController::class, 'contacto'])->name('pagina.contacto');
