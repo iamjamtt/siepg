@@ -1,0 +1,60 @@
+/* Category Card Style 1 -------------------------------------*/
+.cat-card {
+    background-color: $white-color;
+    height: 150px;
+    @include vxs{
+        padding: 0 16px;
+    }
+    .box-title {
+        margin-bottom: -0.10em;
+        transition: 0.1s;
+        @include lg{
+            font-size: 20px;
+        }
+        a {
+            &:hover {
+                color: $title-color;
+            }
+        }
+    }
+    .box-text {
+        margin-top: 2px;
+        font-weight: 500;
+        letter-spacing: 0.36px;
+        color: $black-color8;
+        @include lg{
+            font-size: 16px;
+        }
+    }
+    &:hover {
+        .box-title {
+            color: $theme-color;
+        }
+        .box-icon {
+            img {
+                transform: rotateY(180deg);
+            }
+        }
+    }
+}
+
+/* Category Area 1 -------------------------------------*/
+.cat-area-1{
+    background-color: $gray-color;
+}
+.cat-wrap1{
+    margin-bottom: 56px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    row-gap: 24px;
+    column-gap: 24px;
+    @include xxl{
+        grid-template-columns: repeat(3, 1fr);
+    }
+    @include xl{
+        grid-template-columns: repeat(2, 1fr);
+    }
+    @include sm{
+        grid-template-columns: repeat(1, 1fr);
+    }
+}

@@ -1,0 +1,227 @@
+.breadcumb-menu {
+    max-width: 100%;
+    padding: 0;
+    list-style-type: none;
+    position: relative;
+    margin-bottom: -0.5em;
+    margin-top: 18px;
+
+    li {
+        display: inline-block;
+        margin-right: 3px;
+        padding-right: 3px;
+        list-style: none;
+        position: relative;
+
+        &:after {
+            content: "\f101";
+            position: relative;
+            margin-left: 10px;
+            font-weight: 500;
+            font-size: 16px;
+            color: $black-color;
+            font-family: $icon-font;
+        }
+
+        &:last-child {
+            padding-right: 0;
+            margin-right: 0;
+            color: $theme-color;
+
+            &:after {
+                display: none;
+            }
+        }
+    }
+
+    li,
+    a,
+    span {
+        white-space: normal;
+        word-break: break-word;
+        font-weight: 500;
+        font-size: 18px;
+        font-family: $title-font;
+        color: $black-color;
+    }
+
+    a:hover {
+        color: $theme-color;
+    }
+}
+
+.breadcumb-title {
+    font-size: 40px;
+    font-weight: 500;
+    line-height: 1.285;
+    color: $title-color;
+    letter-spacing: 0.02em;
+    text-transform: capitalize;
+    margin-bottom: -0.3em;
+    margin-top: -0.3em;
+
+}
+
+.breadcumb-patern,
+.breadcumb-banner {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.breadcumb-banner {
+    height: 100%;
+    left: auto;
+    right: -10px;
+    z-index: 2;
+    width: 1091px;
+    mask-image: url("../img/bg/breadcrumbs-shape.png");
+    mask-repeat: no-repeat;
+
+    &::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(0deg, rgba(7, 14, 32, 0.3), rgba(7, 14, 32, 0.3));
+        z-index: 1;
+    }
+
+    img {
+        object-fit: cover;
+        height: 100%;
+        width: 100%;
+        // mask-image: url("../img/bg/breadcrumbs-shape.png");
+        // mask-repeat: no-repeat;
+    }
+
+    @media (min-width: 1501px) and (max-width: 1700px) {
+        width: 900px;
+    }
+
+    @include xxl {
+        width: 850px;
+    }
+
+    @include ml {
+        width: 800px;
+    }
+
+    @include xl {
+        width: 720px;
+    }
+
+    @include lg {
+        width: 590px;
+    }
+
+    @include md {
+        width: 420px;
+    }
+
+    @include sm {
+        display: none;
+    }
+}
+
+.breadcumb-shape {
+    position: absolute;
+    top: 15px;
+    left: 38%;
+}
+
+// body .th-header.header-default~.breadcumb-wrapper .breadcumb-content {
+//     padding: calc(var(--space) + 142px) 0 var(--space);
+
+//     @include md {
+//         padding: calc(var(--space) + 120px) 0 var(--space);
+//     }
+
+//     @include xs {
+//         padding: calc(var(--space) + 92px) 0 var(--space);
+//     }
+// }
+
+// body .th-header.header-default:has(.header-top)~.breadcumb-wrapper .breadcumb-content {
+//     padding: calc(var(--space) + 191px) 0 var(--space);
+
+//     @include md {
+//         padding: calc(var(--space) + 168px) 0 var(--space);
+//     }
+
+//     @include xs {
+//         padding: calc(var(--space) + 140px) 0 var(--space);
+//     }
+// }
+
+.breadcumb-wrapper {
+    background-color: $smoke-color;
+    overflow: hidden;
+    position: relative;
+    z-index: 1;
+
+    .breadcumb-content {
+        --space: 142px;
+        padding: var(--space) 0;
+        position: relative;
+        z-index: 1;
+
+        @include ml {
+            max-width: 500px;
+        }
+
+        @include md {
+            max-width: 470px;
+        }
+
+        @include sm {
+            max-width: 100%;
+            text-align: center;
+        }
+    }
+
+    .breadcumb-thumb {
+        position: relative;
+        z-index: 1;
+        text-align: end;
+        margin: -124px -50px 0px 0;
+    }
+}
+
+@include lg {
+    .breadcumb-wrapper {
+        .breadcumb-content {
+            --space: 120px;
+        }
+    }
+
+    .breadcumb-menu {
+
+        li,
+        a,
+        span {
+            font-size: 16px;
+        }
+    }
+}
+
+@include md {
+    .breadcumb-title {
+        font-size: 35px;
+    }
+}
+
+@include sm {
+    .breadcumb-title {
+        font-size: 40px;
+    }
+}
+
+@include xs {
+    .breadcumb-title {
+        font-size: 34px;
+    }
+
+    .breadcumb-wrapper .breadcumb-content {
+        --space: 100px;
+    }
+}

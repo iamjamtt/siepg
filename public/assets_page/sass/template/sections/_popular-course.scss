@@ -1,0 +1,264 @@
+// Start Popular Course - Card Style 1
+// ======================================
+.course-card {
+    position: relative;
+    border: 1px solid $border-color;
+    padding: 32px;
+
+    @include xxl {
+        padding: 28px;
+    }
+
+    @include ml {
+        padding: 32px;
+    }
+
+    @include vxs {
+        padding: 20px;
+    }
+
+    .course-img-thumb {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .course-img-thumb {
+        margin-bottom: 32px;
+
+        img {
+            @include ml {
+                width: 100%;
+            }
+
+            transition: 0.4s ease-in;
+        }
+
+        .wishlist-icon {
+            position: absolute;
+            top: 17px;
+            right: 17px;
+            color: $white-color;
+            font-size: 22px;
+            transition: 0.4 ease-in;
+
+            &:hover {
+                color: $theme-color;
+            }
+        }
+    }
+
+    .card-content {
+        .tag {
+            padding: 0px 10px;
+            border: 1px solid $border-color;
+            max-width: max-content;
+            margin-bottom: 15px;
+
+            a {
+                font-size: 14px;
+                font-weight: 500;
+                transition: 0.4s ease-in;
+            }
+
+            &:hover {
+                a {
+                    color: $title-color;
+                }
+            }
+        }
+
+        .course-rating {
+            display: flex;
+            align-items: center;
+            margin-top: 21px;
+            margin-bottom: 28px;
+
+            .rating-text {
+                margin-bottom: 0;
+                color: $black-color8;
+                font-size: 16px;
+                font-weight: 500;
+                line-height: 28px;
+            }
+
+            .star-rating {
+                &::before {
+                    color: $yellow-color;
+                }
+            }
+
+        }
+
+        .course-meta {
+            border: 1px solid $border-color;
+            justify-content: space-between;
+            padding: 16px 24px;
+
+            @include xs {
+                justify-content: start;
+                gap: 8px; 
+                padding: 16px 13px; 
+            }
+
+            a {
+                @include xxl {
+                    margin-right: 0;
+                }
+
+                @include ml {
+                    margin-right: 30px;
+                }
+
+                @include lg {
+                    margin-right: 0;
+                }
+
+                @include md {
+                    margin-right: 30px;
+                }
+
+                @include xs {
+                    margin-right: 0;
+                }
+
+                &::after {
+                    right: -25px;
+
+                    @include xxl {
+                        display: none;
+                    }
+
+                    @include ml {
+                        display: block;
+                        right: -40px;
+                    }
+
+                    @include xl {
+                        right: -25px;
+                    }
+
+                    @include lg {
+                        display: none;
+                    }
+
+                    @include md {
+                        display: block;
+                        right: -65px;
+                    }
+
+                    @include sm {
+                        right: -18px;
+                    }
+
+                    @include xs {
+                        display: none;
+                    }
+                }
+
+                &:last-child {
+                    &::after {
+                        display: none;
+                    }
+                }
+
+                img {
+                    position: relative;
+                    top: -1px;
+                    margin-right: 8px;
+                }
+            }
+        }
+
+        .card-content-bottom {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 32px;
+
+            @include xs {
+                display: block;
+            }
+
+            .author {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+
+                p {
+                    margin-bottom: 0;
+
+                    a {
+                        font-size: 18px;
+                        line-height: 32px;
+                        font-weight: 500;
+                        color: $black-color8;
+                        transition: 0.4s ease-in;
+
+                        &:hover {
+                            color: $theme-color;
+                        }
+                    }
+                }
+
+                img {
+                    width: 32px;
+                    height: 32px;
+                    border-radius: 50%;
+                }
+            }
+
+            >.btn-wrap {
+                margin-top: 0;
+
+                @include xs {
+                    margin-top: 32px;
+                }
+
+                a {
+                    @include xs {
+                        width: 100%;
+                        text-align: center;
+                    }
+                }
+            }
+        }
+
+        .box-title {
+            margin-bottom: 0;
+        }
+    }
+    .review-text{
+        margin-bottom: 0;
+    }
+}
+
+// Start Popular Course area 1
+// ======================================
+
+.nav-tabs.course-tabs .nav-link.active {
+    background-color: $theme-color;
+    color: $white-color;
+    border-color: transparent;
+}
+
+.nav-tabs.course-tabs .nav-link {
+    border-radius: 0;
+}
+
+.nav-tabs.course-tabs {
+    gap: 16px;
+    border-bottom: unset;
+
+    @include xl {
+        margin-top: -10px;
+    }
+}
+
+.title-wrap {
+    max-width: 496px;
+
+    @include xl {
+        max-width: 100%;
+        text-align: center;
+    }
+}

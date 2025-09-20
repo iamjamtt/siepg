@@ -1,0 +1,114 @@
+.apply-stadum {
+    &-titlebox {
+        .sec-title-wrap {
+            max-width: 375px;
+
+            @include lg {
+                max-width: 100%;
+            }
+        }
+
+        .box-text-wrap {
+            max-width: 552px;
+
+            @include lg {
+                max-width: 100%;
+            }
+        }
+    }
+
+    &-box {
+        display: flex;
+        gap: 56px;
+        margin-top: 53px;
+
+        @include xl {
+           flex-direction: column;
+           gap: 14px;
+        }
+
+        @include lg {
+            display: flex;
+        }
+
+        .checklist {
+            ul {
+                li {
+                    font-size: 18px;
+                    color: $white-color;
+                }
+            }
+        }
+    }
+
+    &-wrapp {
+        .box-text {
+            font-size: 18px;
+            max-width: 520px;
+
+            @include lg {
+                max-width: 100%;
+            }
+        }
+
+    }
+
+    &-thumb {
+        position: relative;
+        z-index: 3;
+        min-width: 696px;
+        margin-left: 50px;
+        margin-right: -10%;
+
+        @include xxl {
+            min-width: 100%; 
+            margin-right: 0;
+        }
+        @include lg {
+            margin: 0;
+        }
+    }
+
+    &-action {
+        &.th-btn-wrap {
+            margin-top: 50px;
+        }
+
+        @include md {
+            margin-top: 42px;
+        }
+
+        .th-btn {
+            color: $white-color;
+            border: 0;
+            background-color: $theme-color;
+        }
+    }
+
+    &-shape {
+        position: absolute;
+        width: 40%;
+        height: 100%;
+        right: 0;
+        top: 0;
+
+        @include lg {
+            width: 370px;
+        }
+
+        &::before {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            right: 0;
+            content: "";
+            background-color: $theme-color;
+            clip-path: polygon(52% 0, 100% 0%, 100% 100%, 0 100%);
+
+            @include lg {
+                display: none;
+            }
+        }
+    }
+}

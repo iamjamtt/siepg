@@ -1,0 +1,213 @@
+/* Story Area 1 ---------------------------------- */
+.story-area-1 {
+    padding-top: 1px;
+}
+
+.story {
+    &-card {
+        position: relative;
+        transition: all 0.4s ease-in-out;
+
+        &::before,
+        &::after {
+            position: absolute;
+            width: 50%;
+            height: 0;
+            top: 0;
+            left: 0;
+            content: "";
+            background: linear-gradient(0deg, rgba(3, 6, 14, 0.7), rgba(3, 6, 14, 0.7)); 
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s ease-in-out;
+        }
+
+        &:hover {
+            &::after {
+                height: 100%;
+                opacity: 1;
+                visibility: visible;
+            }
+
+            &::before {
+                height: 100%;
+                top: auto;
+                left: auto;
+                right: 0;
+                bottom: 0;
+                opacity: 1;
+                visibility: visible;
+            }
+
+            & .story {
+                &-content {
+                    opacity: 0;
+                    visibility: hidden;
+                    bottom: -60px;
+                    transition: all 0.4s ease-in-out;
+
+                    &.hover-style {
+                        opacity: 1;
+                        visibility: visible;
+                        bottom: 50px;
+
+                        @include lg {
+                            bottom: 15px;
+                        }
+
+                        @include xs {
+                            bottom: 35px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    &-thumb {
+        img {
+            width: 100%;
+        }
+    }
+
+    &-content {
+        position: absolute;
+        bottom: 50px;
+        left: 20px;
+        right: 20px;
+        z-index: 2;
+        text-align: center;
+      transition: all 0.4s ease;
+
+        @include xxl {
+            bottom: 20px;
+        }
+
+        @include lg {
+            bottom: 10px;
+        }
+
+        @include xs {
+            bottom: 20px;
+        }
+
+        & .quote-icon {
+            display: inline-block;
+            margin-bottom: 18px;
+
+            @include lg {
+                margin-bottom: 10px;
+            }
+
+            @include xs {
+                margin-bottom: 15px;
+            }
+        }
+
+        & .box-text {
+            color: $white-color;
+            margin-bottom: 45px;
+            font-size: 16px;
+            letter-spacing: 0;
+
+            @include xxl {
+                margin-bottom: 20px;
+            }
+
+            @include lg {
+                margin-bottom: 10px;
+            }
+
+            @include xs {
+                margin-bottom: 18px;
+            }
+        }
+
+        & .box-title {
+            color: $white-color;
+            font-weight: 700;
+            font-size: 28px;
+            line-height: 1.4;
+            letter-spacing: 0.02em;
+            margin-bottom: 0;
+        }
+
+        &.hover-style {
+            opacity: 0;
+            visibility: hidden;
+            bottom: -60px;
+        }
+
+    }
+
+    &-slider1 {
+        margin: 0 -30px;
+    }
+}
+
+.story-list-wrap {
+    .single-story-list {
+        display: flex;
+        gap: 68px;
+
+        &:not(:last-child) {
+            margin-bottom: 100px;
+        }
+
+        .story-date {
+            flex: none;
+            font-size: 16px;
+            font-weight: 600;
+            color: $title-color;
+            margin-top: -0.3em;
+            position: relative;
+            padding-right: 64px;
+            align-self: start;
+
+            &:before,
+            &:after {
+                content: '';
+                position: absolute;
+                width: 48px;
+                height: 2px;
+                background: $light-color;
+                right: 0;
+                top: 50%;
+                transform: translate(0, -50%);
+            }
+
+            &:before {
+                width: 8px;
+                height: 8px;
+                border-radius: 50%;
+                background: $theme-color;
+                z-index: 1;
+            }
+        }
+
+        .box-title {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+    }
+
+    @include xs {
+        .single-story-list {
+            display: block;
+
+            .story-date {
+                display: inline-block;
+                margin-bottom: 24px;
+            }
+
+            .box-title {
+                font-size: 24px;
+            }
+
+            &:not(:last-child) {
+                margin-bottom: 50px;
+            }
+        }
+    }
+}

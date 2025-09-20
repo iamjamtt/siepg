@@ -1,0 +1,302 @@
+.img-box1 .img1 {
+    transform: rotateY(180deg);
+    img {
+        transform: rotateY(180deg);
+    }
+}
+.img-box1 .about-shape1-1 {
+    right: -186px;
+    left: auto;
+    img {
+        transform: rotateY(180deg);
+    }
+    @include xxl {
+        right: 0;
+    }
+}
+.story-card .quote-icon {
+    left: 35px;
+    right: auto;
+}
+
+.story-img-box1 .year-counter .year-counter_number {
+    text-align: left;
+}
+
+.team-card .th-social a:first-child {
+    transform: translate(15px, -35px);
+}
+.team-card .th-social a:nth-child(2) {
+    transform: translate(25px, -5px);
+}
+.team-card .th-social a:nth-child(3) {
+    transform: translate(-25px, -5px);
+}
+.team-card .th-social a:nth-child(4) {
+    transform: translate(-15px, -35px);
+}
+
+.counter-card-wrap {
+    $counter-list-border: 3;
+    $counter-twocolumn: 2;
+    --space-x: 60px;
+    --space-y: 40px;
+    --th-border-color: rgba(255,255,255,0.1);
+    padding: 0;
+    // Reset All
+    &:not(:nth-child(#{$counter-list-border}n)) {
+        border-left: unset;
+    }
+    // For 2 Column
+    &:not(:nth-last-child(-n + #{$counter-twocolumn})) {
+        padding-bottom: var(--space-y);
+    }
+    &:not(:nth-child(-n + #{$counter-twocolumn})) {
+        padding-top: var(--space-y);    
+        border-top: 2px solid $border-color;
+    }
+    &:nth-child(odd) {
+        padding-left: var(--space-x);
+    }
+    &:nth-child(even) {
+        padding-right: var(--space-x);
+        border-right: 2px solid $border-color;
+    }
+    &:not(:nth-last-child(-n + 4)) {
+        border-top: 0;
+    }
+    @include xxl {
+        --space-x: 40px;
+    }
+    @include xl {
+        --space-x: 30px;
+        --space-y: 30px;
+    }
+    @include sm {
+        &:nth-child(even) {
+            padding-right: 12px;
+            border-right: 0;
+        }
+        &:not(:nth-child(-n + 2)) {
+            border-top: 0;
+            padding-top: 0;
+        }
+        &:nth-child(odd) {
+            padding-right: 12px;
+            padding-left: 12px;
+            padding-top: 0;
+        }
+    }
+    @include xs {
+        &:not(:nth-child(-n + 2)) {
+            padding-bottom: var(--space-x);
+        }
+        &:last-child {
+            padding-bottom: 0;
+        }
+    }
+}
+.video-thumb1-1 {
+    margin: -120px 0 -120px -315px;
+    .play-btn {
+        left: auto;
+        right: 0;
+        transform: translate(50%, -50%);
+    }
+    @include xxl {
+        margin-left: -100px;
+    }
+    @include xl {
+        margin-left: -50px;
+    }
+    @include md {  
+        margin: 0;
+        .play-btn {
+            right: 50%;
+        }
+    }
+}
+.testi-bg-shape1-2 {
+    img {
+        transform: rotateY(180deg);
+    }
+}
+.testi-box-img {
+    border-radius: 0 50px 300px 300px;
+    .testi-card_review {
+        right: 0;
+        left: auto;
+        border-radius: 0px 0 50px 50px;
+    }
+    @include md {
+        border-radius: 300px 300px 50px 50px;
+        .testi-card_review {
+            border-radius: 50px 50px 0px 0px;
+        }
+    }
+}
+.testi-slider1 {
+    margin-right: -70px;
+    margin-left: 0;
+    .swiper-slide {
+        border-radius: 50px 0 0 50px;
+    }
+    .slider-pagination.swiper-pagination-progressbar {
+        margin: 85px auto 0 30px;
+    }
+    .slider-pagination2 {
+        left: 0;
+        right: auto;
+        .current-slide {
+            margin-left: 270px;
+            margin-right: 0;
+        }
+    }
+    .icon-box {
+        margin-right: 70px;
+        margin-left: 0;
+    }
+    @include xl {
+        margin-right: -120px;
+        margin-left: 0;
+        .icon-box {
+            margin-right: 120px;
+            margin-left: 0;
+        }
+    }
+    @include md {
+        margin-right: 0;
+        .icon-box {
+            margin-right: 0;
+        }
+    }
+    @include sm {
+        .slider-pagination.swiper-pagination-progressbar {
+            margin: 65px auto 0 30px;
+        }
+        .slider-pagination2 .current-slide {
+            margin-left: 220px;
+            margin-right: 0;
+        }
+    }
+    @include xs {
+        .slider-pagination.swiper-pagination-progressbar {
+            margin: 40px 40px 20px 30px;
+        }
+        .slider-pagination2 {
+            left: 0;
+            right: 0;
+            .current-slide {
+                margin-right: 0;
+                margin-left: 0;
+            }
+        }
+    }
+}
+
+.testi-card {
+    padding: 80px 150px 80px 80px;
+    .quote-icon {
+        left: 80px;
+        right: auto;
+        transform: rotateY(180deg);
+    }
+    @include xl {
+        padding: 60px 180px 60px 60px;
+        .quote-icon {
+            left: 60px;
+        }
+    }
+    @include lg {
+        padding: 40px 160px 40px 40px;
+        .quote-icon {
+            left: 40px;
+        }
+    }
+    @include md {
+        padding: 40px;
+    }
+    @include xs {
+        padding: 30px;
+        .quote-icon {
+            left: 30px;
+        }
+    }
+}
+
+.project-card {
+    .project-content {
+        right: -20px;
+        left: 0;
+        margin-left: 55px;
+        margin-right: 0;
+        .project-card-bg-shape {
+            transform: rotateY(180deg);
+        }
+    }
+    &:hover {
+        .project-content {
+            right: 0;
+        }
+    }
+    @include md {
+        .project-content {
+            margin-left: 0;
+        }
+    }
+}
+
+.faq-img-box1 {
+    margin-right: -345px;
+    margin-left: 0;
+    padding: 0 0px 67px 110px;
+    .img2 {
+        left: 0;
+        right: auto;
+    }
+    .img3 {
+        left: 0;
+        right: auto;
+    }
+    .mask-shape {
+        left: 109px;
+        right: auto;
+        transform: rotateY(180deg);
+    }
+    @include lg {
+        margin-right: 0;
+    }
+    @include sm {
+        padding: 0 0 40px;
+        .mask-shape {
+            left: 0;
+        }
+    }
+}
+
+.accordion-card {
+    text-align: right;
+    .accordion-button {
+        padding: 24px 30px 24px 55px;
+        text-align: right;
+        &:after {
+            left: 30px;
+            right: auto;
+        }
+        &:before {
+            right: 30px;
+            left: 30px;
+        }
+    }
+    .accordion-body {
+        padding: 24px 0 30px;
+    }
+}
+
+@include xs {
+    .accordion-card {
+        .accordion-button {
+            padding: 19px 25px 19px 55px;
+        }
+    }
+}

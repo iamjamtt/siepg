@@ -1,0 +1,279 @@
+/* Pricing Card ---------------------------------- */
+.price-card {
+    position: relative;
+    padding: 48px 40px 40px 40px;
+    background: $white-color;
+    border: 1px solid $gray-color;
+    z-index: 1;
+
+    .card-icon {
+        margin-bottom: 15px;
+    }
+
+    .price-card_price {
+        font-size: 28px;
+        font-weight: 700;
+        font-family: $title-font;
+        line-height: 40px;
+        letter-spacing: 0.56px;
+
+       
+    }
+
+    .box-subtitle {
+        color: $theme-color;
+        margin-top: 30px;
+    }
+
+    .box-text {
+        margin-top: 8px;
+        margin-bottom: 29px;
+        font-size: 16px;
+    }
+
+    .checklist {
+        display: inline-block;
+        margin-top: 40px;
+
+        li {
+            color: $body-color;
+            align-items: start;
+            font-size: 16px;
+            font-weight: 500;
+            font-family: $body-font;
+
+            &:not(:last-child) {
+                margin-bottom: 20px;
+            }
+
+            &.unavailable {
+                i {
+                    color: $light-color;
+                    opacity: 0.5;
+                }
+            }
+        }
+    }
+
+    .btn-wrap {
+        margin-top: 62px;
+
+        a {
+            width: 100%;
+        }
+    }
+
+    &.active {
+        background: $title-color;
+
+        .card-sill-wrap {
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-top: 113px solid $theme-color;
+            border-left: 134px solid transparent;
+            top: 0;
+            right: 0;
+
+            .card-sill {
+                position: relative;
+                top: -110px;
+                left: -85px;
+                rotate: 40deg;
+
+            }
+
+            span {
+                font-size: 16px;
+                font-weight: 600;
+                color: $white-color;
+                line-height: 19.2px;
+            }
+        }
+
+        .box-title {
+            color: $white-color;
+        }
+
+        .box-subtitle {
+            color: $theme-color;
+        }
+
+        .price-card_price {
+            color: $white-color;
+        }
+
+        .box-text {
+            color: $white-color;
+        }
+
+        .checklist li {
+            color: $border-color7;
+        }
+    }
+
+    @include xl {
+        padding: 40px 25px;
+
+        .box-title {
+            font-size: 24px;
+        }
+
+        .price-card_price {
+            font-size: 36px;
+        }
+    }
+
+    @include md {
+        .box-title {
+            font-size: 20px;
+        }
+
+        .price-card_price {
+            font-size: 30px;
+        }
+    }
+    @include vxs {
+
+        .price-card_price {
+            font-size: 25px;
+        }
+    }
+}
+
+/* ------------- price-item ----------------------*/
+.price-item {
+    display: flex;
+    gap: 0px;
+
+    @include lg {
+        flex-direction: column;
+    }
+
+    &:not(:last-child) {
+        margin-bottom: 60px;
+    }
+
+    &:nth-child(even) {
+        .box-img {
+            order: 2;
+        }
+
+        .price-content {
+            order: 1;
+        }
+    }
+
+    &_wrapp {}
+
+    .box-img {
+        min-height: 586px;
+
+        @include md {
+            min-height: 100%;
+        }
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    }
+
+    .price-content {
+        background-color: #EEF1F4;
+        display: flex;
+        gap: 28px;
+        padding: 60px 40px 48px 40px;
+
+        @include xxl {
+            padding: 60px 20px 48px 20px;
+            gap: 15px;
+        }
+
+        @include md {
+            flex-direction: column;
+        }
+    }
+
+    .price-left {
+        display: flex;
+        gap: 16px;
+        align-items: center;
+        margin-bottom: 80px;
+
+        @include xxl {
+            margin-bottom: 30px;
+        }
+
+        .box-title {
+            font-weight: 700;
+            font-size: 28px;
+            letter-spacing: 0.02em;
+            margin-bottom: 0;
+            max-width: 150px;
+
+            @include xxl {
+                max-width: 100%;
+            }
+
+            @include vxs {
+                font-size: 22px;
+            }
+        }
+    }
+
+    .text {
+        font-weight: 700;
+        font-size: 24px;
+        letter-spacing: 0.02em;
+        color: #B30738;
+        display: block;
+        margin-bottom: 30px;
+
+
+    }
+
+    .price-descrition {
+        max-width: 369px;
+        margin-bottom: 90px;
+
+        @include xxl {
+            margin-bottom: 30px;
+        }
+    }
+
+    .pricce-list {
+        max-width: 310px;
+
+        &:not(:last-child) {
+            border-bottom: 1px solid #B7C2CC;
+            padding-bottom: 24px;
+            margin-bottom: 24px;
+        }
+
+        .box-title {
+            font-weight: 700;
+            font-size: 24px;
+            letter-spacing: 0.02em;
+
+            @include vxs {
+                font-size: 22px;
+            }
+        }
+    }
+
+    .divided {
+        background-color: #B7C2CC;
+        width: 1px;
+        height: 466px;
+
+        @include xxl {
+            display: none;
+        }
+    }
+
+    .btn-wrap {
+        gap: 16px;
+    }
+}

@@ -1,0 +1,90 @@
+// Start Professor Style 1- Home 2
+.professor-area-1 {
+    .professor-shape1 {
+        @include xl {
+            display: none;
+        }
+    }
+}
+
+.professor-card {
+    display: flex;
+    align-items: center;
+    border: 1px solid $border-color;
+    padding: 20px;
+    gap: 40px;
+
+    @include xl {
+        gap: 20px;
+    }
+
+    @include lg {
+        gap: 40px;
+    }
+
+    @include sm {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .professor-img {
+        background-color: $gray-color;
+
+        @include sm {
+            width: 100%;
+        }
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    }
+
+    .professor-content {
+        @include xs {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .box-title {
+            margin-bottom: 0;
+        }
+
+        .box-text {
+            font-size: 16px;
+            font-weight: 500;
+            color: #506172;
+            margin-bottom: 0px;
+        }
+
+        .professor-details {
+            margin-top: 15px;
+            margin-bottom: 24px;
+
+            a {
+                display: block;
+            }
+
+            @include xs {
+                display: block;
+                text-align: center;
+            }
+        }
+
+        .professor-contact {
+            font-size: 14px;
+            line-height: 21px;
+
+            i {
+                font-size: 14px;
+            }
+
+            &:last-child {
+                margin-top: 8px;
+            }
+        }
+    }
+}
+
+// End Professor Style 1 - Home 2

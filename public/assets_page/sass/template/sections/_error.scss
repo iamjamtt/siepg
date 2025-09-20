@@ -1,0 +1,44 @@
+.error-page-wrap {
+	background: $smoke-color;
+	display: flex;
+	flex-direction: row-reverse;
+	border-radius: 16px;
+	overflow: hidden;
+
+	@include md {
+		display: block;
+	}
+}
+
+.error-content {
+	text-align: center;
+	flex: 1;
+	align-self: center;
+	padding: 20px;
+
+	@include md {
+		padding: 60px 30px;
+	}
+
+	.page-title {
+		margin-bottom: 14px !important;
+
+		&:before {
+			display: none;
+		}
+	}
+
+	.th-btn {
+		padding: 19px 25px;
+	}
+}
+
+.error-img {
+	flex: 1;
+
+	img {
+		height: 100%;
+		width: 100%;
+		object-fit: cover;
+	}
+}

@@ -1,0 +1,35 @@
+/******footer layout1******/
+.footer-widget .widget_title:before, .footer-widget .widget_title:after {
+    left: auto;
+    right: 0;
+}
+.footer-links li {
+    margin-left: 20px;
+    margin-right: 0;
+}
+.footer-links li:last-child {
+    margin-left: 0;
+}
+.footer-widget.widget_nav_menu,
+.footer-widget.widget_categories, 
+.footer-widget.widget_archive,
+.footer-widget.widget_pages,
+.footer-widget.widget_meta {
+    a {
+        padding: 0 24px 0 0px;
+        &:before {
+            left: auto;
+            right: 0;
+            transform: rotateY(180deg);
+        }
+        &:hover {
+            &:before {
+                transform: rotateY(180deg) rotate(45deg);
+            }
+        }
+    }
+}
+
+.th-widget-contact .th-social a {
+    margin: 0;
+}

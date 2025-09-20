@@ -1,0 +1,21 @@
+.blog-meta {
+    span,
+    a {
+        margin-left: 30px;
+        margin-right: 0;
+        i {
+            margin-left: 10px;
+            margin-right: 0;
+        }
+        &:last-child {
+            margin-left: 0;
+            padding-left: 0;
+        }
+    }
+    .author {
+        img {
+            margin-left: 6px;
+            margin-right: 0;
+        }
+    }
+}

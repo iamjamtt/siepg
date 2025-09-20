@@ -1,0 +1,314 @@
+/****header-default****/
+.header-default .header-notice {
+    margin-right: auto;
+    margin-left: 0;
+}
+.main-menu ul li.menu-item-has-children > a,
+.main-menu ul li:has(.mega-menu) > a,
+.main-menu ul li:has(.sub-menu) > a {
+    &:after {
+        margin-left: 0px;
+        margin-right: 5px;
+        transform: rotate(0deg);
+    }
+    &:hover{
+        &:after {
+            transform: rotate(360deg);
+        }
+    }
+}
+.main-menu > ul > li:first-child {
+    margin-left: 15px !important;
+    margin-right: 0;
+}
+.main-menu > ul > li:last-child {
+    margin-right: 15px !important;
+    margin-left: 0;
+}
+.header-default .menu-area .menu-area-wrap {
+    padding: 0 30px 0 18px;
+    @include vxs {
+        padding: 0;
+    }
+}
+.info-card-wrap {
+    .info-card {
+        border-right: 2px solid $border-color;
+        padding-right: 40px;
+        padding-left: 0;
+        border-left: 0;
+        &:first-child {
+            border-right: 0;
+            padding-right: 0;
+        }
+        @include lg {
+            border: 0 !important;
+            padding-right: 0;
+        }
+    }
+    @include lg {
+        gap: 20px;
+    }
+    @include md {
+        .info-card .box-title {
+            font-size: 16px;
+        }
+    }
+}
+
+/****header-layout1****/
+.header-layout1 {
+    .header-notice {
+        margin-right: auto;
+        margin-left: 0;
+    }
+    .header-logo {
+        margin-left: 80px;
+        margin-right: 0;
+    }
+    .menu-area {
+        .menu-area-wrap {
+            padding: 0 30px 0 18px;
+            @include xxl {
+                padding: 0;
+            }
+        }
+    }
+}
+.video-bg-shape2-1 {
+    transform: rotateY(180deg);
+}
+
+/****header-layout2****/
+.header-layout2 {
+    .header-top {
+        padding: 11px 72px 18px 72px;
+        @include xxl{
+            padding: 11px 12px 14px 12px;
+        }
+        @include lg {
+            padding: 11px 30px 14 12px;
+        }
+    
+        @include md {
+            padding: 12px;
+        }
+    }
+
+    .header-links li,
+    .header-links span,
+    .header-links p,
+    .header-links a {
+        color: $light-color;
+    }
+
+    .header-links li{
+        &:not(:last-child) {
+            @include xxl{
+                margin: 0 30px 0 0;
+            }
+            @include xs{
+                margin: 0 16px 0 0;
+            }
+        }
+    }
+
+    .header-links a {
+        &:hover {
+            color: $theme-color;
+        }
+    }
+
+    .dropdown-menu {
+        background: $title-color;
+        border-color: $light-color;
+
+        &:before {
+            background: $title-color;
+            border-color: $light-color;
+        }
+
+        a {
+            color: $light-color !important;
+
+            &:hover {
+                color: $theme-color !important;
+            }
+        }
+    }
+
+    .main-menu a {
+
+        &:hover {
+            color: $theme-color;
+        }
+    }
+
+    .main-menu>ul>li>a {
+        padding: 33.5px 0 !important;
+
+        &:hover {
+            color: $theme-color;
+        }
+    }
+
+    .main-menu ul li{
+        @media (max-width: 1600px) {
+            margin: 0 8px;
+        }
+
+        @include xxl{
+            margin: 0 14px;
+        }
+
+        @include xl{
+            margin: 0 5px;
+        }
+    }
+
+    .main-menu ul li:has(.sub-menu)>a:after,
+    .main-menu ul li:has(.mega-menu)>a:after,
+    .main-menu ul li.menu-item-has-children>a:after {
+        color: $title-color;
+    }
+
+    .main-menu ul li:has(.sub-menu)>a:hover:after,
+    .main-menu ul li:has(.mega-menu)>a:hover:after,
+    .main-menu ul li.menu-item-has-children>a:hover:after {
+        color: $theme-color;
+    }
+
+    .mega-menu-box .mega-menu-img .btn-wrap .th-btn {
+        color: $title-color;
+
+        &:hover {
+            color: $white-color;
+        }
+    }
+
+    .main-menu ul.sub-menu {
+        background: $white-color;
+        box-shadow: 0px 4px 15px rgba(255, 255, 255, 0.05);
+    }
+
+    .menu-area {
+        padding: 0 72px 0 72px;
+        background: $white-color;
+
+        @include xxl {
+            padding: 0 12px;
+        }
+
+        @include lg {
+            padding: 0 30px 0 12px;
+        }
+    
+        @include md {
+            padding: 0 12px;
+        }
+    }
+
+    .header-logo {
+        position: relative;
+
+        &::before {
+            position: absolute;
+            width: 420px;
+            height: 100px;
+            top: -22px;
+            left: -72px;
+            content: "";
+            background-color: $theme-color;
+            clip-path: polygon(0 0, 100% 0%, 93% 100%, 0% 100%);
+            z-index: -1;
+            @media (max-width: 1800px) {
+                width: 350px;
+            }
+
+            @include xxl{
+                left: -85px;
+            }
+            @include lg{
+                left: -30px;
+            }
+
+            @include xs{
+                width: 230px;
+                top: -27px;
+            }
+        }
+    }
+
+    .header-action {
+        .th-btn {
+            padding: 15px 34px;
+        }
+
+        @media (min-width: 1600px) {
+            display: block;
+        }
+        @media (max-width: 1599px) {
+            display: none;
+        }
+    }
+
+    .header-right {
+        display: flex;
+        gap: 16px;
+        @include lg{
+            padding: 22px 0;
+        }
+    }
+
+    .header-search{
+        width: 56px;
+        height: 56px;
+        line-height: 56px;
+        text-align: center;
+        background: none;
+        display: inline-block;
+        border: 1px solid $border-color;
+        &:hover{
+            color: $white-color;
+            background-color: $theme-color;
+            border: 1px solid $theme-color;
+        }
+    }
+
+    .header-bars {
+        width: 56px;
+        height: 56px;
+        font-size: inherit;
+        line-height: 50px;
+        text-align: center;
+        background: none;
+        display: inline-block;
+        border: 1px solid $border-color;
+        border-radius: 0;
+        &:hover{
+            color: $white-color;
+            background-color: $theme-color;
+            border: 1px solid $theme-color;
+
+            & .bars{
+                filter: brightness(1) contrast(1);
+            }
+        }
+    }
+}
+
+@include xs {
+    .header-layout2 {
+        .header-logo {
+            margin-right: 0;
+
+            h2 {
+                font-size: 36px;
+            }
+
+            img {
+                max-width: 160px;
+            }
+        }
+    }
+}

@@ -1,0 +1,180 @@
+/* Chancellor 1 ---------------------------------- */
+// @use 'base/variable'as *;
+// @use 'base/mixin'as *; 
+.chancellor {
+    &-thumb {
+        position: relative;
+        width: 593px;
+        height: 535px;
+        background-color: #EEF1F4; 
+        overflow: hidden;
+
+        @include xl {
+            width: unset;
+        }
+
+        @include lg {
+            text-align: center;
+            margin: auto; 
+            margin-bottom: 50px;
+            width: 100%;
+        }
+
+        @include md {
+            width: 100%;
+        }
+
+        img {
+            position: absolute;
+            left: 0;
+            right: 0;
+            text-align: center;
+            margin: auto;
+            bottom: 0;
+            z-index: 2;
+        }
+
+        .ripple-1,
+        .ripple-2,
+        .ripple-3,
+        .ripple-4,
+        .ripple-5 {
+            width: 456px;
+            height: 456px;
+            position: absolute;
+            left: 0;
+            right: 0;
+            text-align: center;
+            bottom: -285px;
+            margin: auto;
+            background-color: transparent;
+            border: 1px solid rgba(87, 88, 95, 0.5);
+            border-radius: 50%;
+            animation: ripple2 10s linear infinite;
+            opacity: 0;
+        }
+
+        .ripple-1 {
+            animation-delay: 0;
+        }
+
+        .ripple-2 {
+            animation-delay: 2s;
+        }
+
+        .ripple-3 {
+            animation-delay: 4s;
+        }
+
+        .ripple-4 {
+            animation-delay: 6s;
+        }
+
+        .ripple-5 {
+            animation-delay: 8s;
+        }
+    }
+
+    &-titlebox {
+        .box-text {
+            font-size: 18px;
+            max-width: 520px;
+
+            @include xl {
+                max-width: 100%;
+            }
+        }
+    }
+
+    &-bottom {
+        display: flex;
+        align-items: center;
+        gap: 69px;
+        margin-top: 52px;
+
+        @include xl {
+            gap: 30px;
+        }
+
+        @include xs {
+            display: block;
+        }
+    }
+
+    &-action {
+        // & .th-btn {
+        //     color: $white-color;
+        //     background: $theme-color;
+        //     border: 0;
+
+        //     .th-arrow {
+        //         filter: brightness(1) contrast(1);
+        //     }
+        // }
+        @include xs {
+            margin-bottom: 30px;
+        }
+    }
+
+    &-signature {
+        margin-top: -20px;
+
+        &-box {
+            .box-text {
+                font-weight: 600;
+                font-size: 18px;
+                letter-spacing: 0.02em;
+                color: $title-color;
+                position: relative;
+                top: 16px;
+
+            }
+        }
+    }
+}
+
+.chancellor-content {
+    position: relative;
+    top: -3px;
+}
+
+.skill-feature {
+    text-align: left;
+
+    &:not(:last-child) {
+        margin-bottom: 27px;
+    }
+
+    &-title,
+    .progress-value {
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 8px;
+        margin-top: -0.5em;
+        letter-spacing: 0.02em;
+        font-family: var(--subtitle-cont);
+        color: $title-color;
+    }
+
+    .progress {
+        position: relative;
+        overflow: visible;
+        background: var(--smoke-color);
+        height: 8px;
+        border-radius: 24px;
+    }
+
+    .progress-bar {
+        background-color: $theme-color;
+        height: 8px;
+        border-radius: inherit;
+        overflow: visible;
+        position: relative;
+    }
+
+    .progress-value {
+        position: absolute;
+        top: -30px;
+        right: -8px;
+    }
+}

@@ -1,0 +1,150 @@
+.video-box-center {
+    position: relative;
+
+    .play-btn {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+    }
+}
+
+/* Video Area 1 -------------------------------*/
+.video-area-1 {
+    position: relative;
+    overflow: hidden;
+    background-attachment: fixed;
+    background-size: cover;
+    background-position: 100% 100%;
+    padding: 310px 0;
+
+    @include md {
+        padding: 200px 0;
+    }
+}
+
+.video-thumb1-1 {
+    img {
+        height: 100%;
+        width: 100%;
+        object-fit: cover;
+    }
+
+    .video-play-btn {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 2;
+
+        @include sm {
+            width: 55px;
+            height: 55px;
+            line-height: 55px;
+        }
+
+        i {
+            color: $theme-color;
+
+            @include sm {
+                width: 55px;
+                height: 55px;
+                line-height: 55px;
+            }
+        }
+    }
+}
+
+/* Video Area 2 -------------------------------*/
+.video-thumb2-1 {
+    position: relative;
+
+    .play-btn {
+        --icon-size: 80px;
+        --icon-font-size: 24px;
+
+        @include xs {
+            --icon-size: 70px;
+        }
+
+        &:hover {
+
+            &:after,
+            &:before {
+                background: $black-color2;
+            }
+
+            i {
+                background: $black-color2;
+                color: $theme-color;
+            }
+        }
+    }
+}
+
+/* Video Area 3 -------------------------------*/
+.video-thumb3-1 {
+    text-align: center;
+    position: relative;
+
+    .video-trigger-thumb {
+        position: relative;
+        border-radius: 50%;
+        width: 1153px;
+        height: 1153px;
+        object-fit: cover;
+        top: 0;
+        display: inline-block;
+    }
+
+    @include ml {
+        .video-trigger-thumb {
+            width: 850px;
+            height: 850px;
+        }
+    }
+
+    @include lg {
+        .video-trigger-thumb {
+            width: 600px;
+            height: 600px;
+            transform: scale(1);
+            top: 0;
+        }
+    }
+
+    @include md {
+        .video-trigger-thumb {
+            width: 450px;
+            height: 450px;
+        }
+    }
+
+    @include sm {
+        .video-trigger-thumb {
+            width: 350px;
+            height: 350px;
+        }
+    }
+
+    @include xs {
+        .video-trigger-thumb {
+            width: 100%;
+            height: auto;
+            border-radius: 0;
+        }
+    }
+}
+
+/* Video Area 4 -------------------------------*/
+.video-thumb4-1 {
+    margin-right: -140px;
+
+    @include hd {
+        margin-right: 0;
+    }
+
+    @include xxl {
+        margin-right: 0;
+    }
+}

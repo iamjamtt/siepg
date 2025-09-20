@@ -1,0 +1,202 @@
+hero-3 .hero-bg-3-1 {
+    transform: rotateY(180deg);
+    inset: 0 310px 0 0;
+}
+.feature-area-1 .feature-bg-wrap {
+    transform: rotateY(180deg);
+}
+
+.img-box3 {
+    padding: 148px 0 0 60px;
+    .img2 {
+        left: -10px;
+        right: auto;
+    }
+    .about-shape3-1 {
+        left: auto;
+        right: -250px;
+        z-index: -1;
+        animation: none !important;
+        transform: rotateY(180deg);
+        @include xxl {
+            right: 0;
+        }
+    }
+    .year-counter {
+        left: -160px;
+        right: auto;
+    }
+    @include ml {
+        .year-counter {
+            left: -140px;
+        }
+    }
+    @include xl {
+        .year-counter {
+            left: -70px;
+        }
+    }
+    @include md {
+        .year-counter {
+            left: 0;
+        }
+    }
+    @include xs {
+        padding: 0;
+    }
+}
+.about-wrap3 {
+    margin-right: 140px;
+    margin-left: 0;
+    @include xl {
+        margin-right: 120px;
+    }
+    @include lg {
+        margin-right: 0;
+    }
+}
+.service-bg-shape2-1 {
+    transform: rotateY(180deg);
+}
+.service-bg-shape2-2 {
+    margin-right: -315px;
+    margin-left: 0;
+    transform: rotateY(180deg);
+    img {
+        width: 100%;
+    }
+    .service-bg-shape2-3 {
+        img {
+            width: auto;
+        }
+    }
+}
+.service-card2 .icon-btn {
+    left: 20px;
+    right: auto;
+}
+.cigmaion-card.style3 .box-thumb .cigmaion-card-shape {
+    left: 0;
+    right: auto;
+    transform: rotateY(180deg);
+}
+.cigmaion-card.style3 .box-thumb .cigmaion-card-tag {
+    left: auto;
+    right: 10px;
+}
+.why-img-box1 {
+    margin: 0 -315px 0 0;
+    .why-img-shape {
+        right: auto;
+        left: 0;
+        transform: rotateY(180deg);
+    }
+    @include xxl {
+        margin-right: -100px;
+    }
+    @include xl {
+        margin-right: -50px;
+    }
+    @include lg {    
+        margin: 0;
+    }
+}
+.progress-bar-wrap .progress .progress-value {
+    left: 0;
+    right: auto;
+}
+.team-card3 .th-social a {
+    margin-left: 16px;
+    margin-right: 0;
+    &:last-child {
+        margin-left: 0;
+    }
+}
+
+.price-card2 .price-card-title-wrap {
+    border-radius: 100px 30px 30px 0;
+}
+.price-card2 .price-card-price-wrap {
+    border-radius: 50% 50% 0 50%;
+}
+.price-card2 .price-card_content {
+    border-radius: 30px 100px 100px 30px;
+    padding: 40px 80px 40px 40px;
+    @include lg {
+        padding: 0;
+        border-radius: 0;
+    }
+}
+
+.faq-wrap2 {
+    margin-left: -15px;
+    margin-right: 0;
+    @include ml {
+        margin-left: 0;
+    }
+}
+.faq-img-box2 {
+    margin: -120px 0 -120px -315px;
+    .faq-img-shape {
+        right: -1px;
+        left: auto;
+        transform: rotateY(180deg);
+    }
+    @include xxl {
+        margin-left: -100px;
+    }
+    @include xl {
+        margin-left: -50px;
+    }
+    @include lg {  
+        margin: 0;
+    }
+}
+.testi-card3 {
+    .testi-card_review {
+        left: 0;
+        right: auto;
+        border-radius: 0px 50% 50px 50px;
+    }
+    .testi-card_profile {
+        .box-thumb {
+            .quote-icon {
+                right: -14px;
+                left: auto;
+            }
+        }
+        .testi-card_name {
+            font-size: 30px;
+            font-weight: 700;
+            margin-bottom: 0;
+        }
+        .testi-card_desig {
+            font-weight: 600;
+            margin-bottom: -0.3em;
+        }
+    }
+    .testi-card_text {
+        font-weight: 600;
+        margin-bottom: -0.4em;
+    }
+    @include xl {
+        .testi-card_profile .testi-card_name {
+            font-size: 24px;
+        }
+    }
+    @include lg {
+        padding: 60px 40px 90px;
+    }
+    @include md {
+        padding: 60px 60px 100px;
+    }
+    @include xs {
+        padding: 40px 40px 80px;
+        .testi-card_profile {
+            display: block;
+        }
+        .box-thumb {
+            margin-bottom: 20px;
+        }
+    }
+}

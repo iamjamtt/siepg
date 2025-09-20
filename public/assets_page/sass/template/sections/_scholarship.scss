@@ -1,0 +1,73 @@
+/* Scholarship 1 ---------------------------------- */
+.scholar-area {
+    background-color: $smoke-color3;
+    padding-bottom: 37px;
+    @include xs{
+        padding-bottom: 0;
+    }
+    .btn-wrap {
+        margin-top: -2px;
+    }
+}
+
+.scholar {
+    &-right {
+        margin-top: 380px;
+        @include lg{
+            margin-top: 445px;
+        }
+        @include md{
+            margin-top: 440px;
+        }
+        @include sm {
+            margin-top: 320px;
+        }
+        @include xs{
+            margin-top: -40px;
+        }
+    }
+
+    &-imgbox {
+        position: absolute;
+        bottom: -10px;
+        z-index: 2;
+
+        @include lg {
+            left: 0;
+            right: 0;
+            text-align: center;
+        }
+        @include xs{
+            position: relative;
+        }
+        img {
+            max-width: inherit;
+
+            @include md {
+                max-width: 100%;
+            }
+        }
+    }
+
+    &-dot-shape {
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+
+    &-dash-shape {
+        @include hd {
+            display: none;
+        }
+
+        position: absolute;
+        bottom: 4%;
+        left: 0;
+    }
+
+    &-style {
+        @include lg {
+            padding-bottom: 0;
+        }
+    }
+}

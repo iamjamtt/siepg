@@ -1,0 +1,76 @@
+// Start Features Area home 1
+.feature-sec-1 {
+    z-index: 2;
+    margin-top: -70px;
+
+    &__shep1 {
+        top: 92px;
+        left: 0;
+        z-index: -1;
+    }
+}
+
+.feature-card {
+    padding: 48px 40px;
+    background-color: #FFF6F8;
+    @include ml {
+        padding: 38px 30px;
+    }
+
+    &_wrapp {
+        
+        &:nth-child(2) {
+            .feature-card {
+                background-color: #EEF1F4;
+            }
+        }
+
+        &:nth-child(3) {
+            .feature-card {
+                background-color: #F3F0F8;
+            }
+        }
+
+        &:nth-child(4) {
+            .feature-card {
+                background-color: #F0FFF6;
+            }
+        }
+    }
+
+    @include xl {
+        padding: 48px 35px;
+    }
+
+    .th-btn {
+        padding: 11px 25px; 
+    }
+
+    &:hover {
+
+        .box-icon {
+            img {
+                transform: rotateY(180deg);
+            }
+        }
+    }
+
+    .box-icon {
+        margin-bottom: 28px;
+
+        img {
+            transition: 0.4s ease-in-out;
+        }
+    }
+
+    .box-title {
+        font-size: 28px;
+        margin-bottom: 13px;
+    }
+
+    .box-text {
+        margin-bottom: 42px;
+    }
+}
+
+// End Features Area home 1

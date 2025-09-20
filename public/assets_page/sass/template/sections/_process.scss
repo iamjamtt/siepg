@@ -1,0 +1,192 @@
+/* Process Card ---------------------------------- */
+.process-area {
+    background-color: #FFF6F8;
+}
+
+.process-card {
+    position: relative;
+    padding: 60px 60px 0px 60px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    text-align: center;
+    z-index: 2;
+    margin-top: 30px;
+
+    @include xl {
+        padding: 30px 20px;
+    }
+
+    &:before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        bottom: 75px;
+        background-color: $white-color;
+        z-index: -1;
+    }
+
+    @include lg {
+        margin-top: 30px;
+    }
+
+    &:nth-child(even) {
+        padding-bottom: 60px;
+
+        @include xl {
+            padding-bottom: 30px;
+        }
+
+        &:before {
+            top: 75px;
+            bottom: 0;
+        }
+
+        .process-card_icon {
+            order: 3;
+
+            .number {
+                @include md {
+                    margin-top: 20px; 
+                }
+            }
+        }
+
+        .process-card_content {
+            order: 2;
+        }
+
+        .process-card_img {
+            margin-top: -75px;
+            order: 1;
+        }
+    }
+
+    &_wrapp {
+        display: flex;
+        gap: 24px;
+
+        @include lg {
+            justify-content: center;
+        }
+
+        @include lg {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+
+        }
+
+        @include md {
+            grid-template-columns: repeat(1, 1fr);
+        }
+
+        .process-card_icon {
+            order: 1;
+        }
+
+        .process-card_content {
+            order: 2;
+        }
+
+        .process-card_img {
+            order: 3;
+        }
+    }
+
+    &_img {
+        position: relative;
+        width: 174px;
+        height: 174px;
+        line-height: 174px;
+        background: $theme-color;
+        border-radius: 0px 0px 87px 87px;
+        transition: 0.4s;
+        margin-top: 42px;
+
+        img {
+            transition: all 0.4s ease-in-out;
+        }
+    }
+
+    &_icon {
+        .number {
+            font-weight: 700;
+            font-size: 57px;
+            letter-spacing: 0.02em;
+            color: $title-color;
+            display: block;
+            margin: auto;
+            font-family: $title-font;
+            transition: 0.4s;
+
+        }
+
+        .step {
+            display: block;
+            font-family: $body-font;
+            font-style: normal;
+            font-weight: 500;
+            font-size: 20px;
+            display: block;
+            margin-top: 16px;
+
+        }
+
+        &:last-child {
+            .number {
+                border: none;
+                line-height: 45px;
+                border-top: 5px solid $theme-color;
+                border-radius: 0px 0px 30px 30px;
+            }
+        }
+    }
+
+    .box-title {
+        font-size: 28px;
+        margin: 20px 0 12px 0;
+
+        @include xl {
+            font-size: 24px;
+        }
+    }
+
+    .th-btn {
+        padding: 11px 25px;
+
+        &:before {
+            background-color: $theme-color;
+        }
+
+        &:hover {
+            border-color: $theme-color;
+        }
+    }
+
+    &_text {
+        font-size: 16px;
+        margin-bottom: 30px;
+    }
+
+    &_content {
+        @include lg {
+            padding: 0 30px;
+        }
+
+        @include vxs {
+            padding: 0;
+        }
+    }
+
+    &:hover {
+        .process-card {
+            &_img {
+                img {
+                    transform: rotateY(180deg);
+                }
+            }
+        }
+    }
+}
+
+/* Process Card 2---------------------------------- */
