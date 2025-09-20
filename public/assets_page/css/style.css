@@ -11160,7 +11160,7 @@ te .footer-widget .widget_title:before {
   left: auto;
   right: -10px;
   z-index: 2;
-  width: 1091px;
+  width: 900px;
   -webkit-mask-image: url("../img/bg/breadcrumbs-shape.png");
           mask-image: url("../img/bg/breadcrumbs-shape.png");
   -webkit-mask-repeat: no-repeat;
@@ -19832,7 +19832,7 @@ span.select2-selection.select2-selection--single:focus {
 
 .blog-img a .blog-img-box {
   width: 100%;
-  height: 270px;
+  height: 220px;
   /* Medium Large devices */
   /* Extra small devices */
   /* Extra small devices */
@@ -19840,13 +19840,13 @@ span.select2-selection.select2-selection--single:focus {
 
 @media (max-width: 1299px) {
   .blog-img a .blog-img-box {
-    height: 220px;
+    height: 200px;
   }
 }
 
 @media (max-width: 575px) {
   .blog-img a .blog-img-box {
-    height: 230px;
+    height: 200px;
   }
 }
 
