@@ -16,10 +16,22 @@ class PaginaController extends Controller
         $this->anuncios = [
             [
                 'id' => 1,
-                'slug' => Str::slug('Maestría en Derecho Constitucional y Administrativo'),
-                'nombre' => 'Maestría en Derecho Constitucional y Administrativo',
-                'tipo' => 'Maestría',
-                'imagen' => asset('media/page/programa/foto_prueba.jpg'),
+                'slug' => Str::slug('Titulo del anuncio'),
+                'titulo' => 'Titulo del anuncio',
+                'titulo_corto' => Str::limit('Titulo del anuncio', 50),
+                'descripcion_md' => <<<'MD'
+                    ## ESCUELA DE POSGRADO UNU
+                    **Titulo del anuncio**
+
+                    - opcion 1
+                    - opcion 2
+                    - opcion 3
+                    - opcion 4
+                    MD,
+                'descripcion_corto' => Str::limit('Es un anuncio importante sobre el programa de posgrado.', 80),
+                'imagen' => asset('media/page/anuncio/foto_prueba.jpg'),
+                'fecha' => '20/09/2025',
+                'grado' => 'Importante',
             ],
         ];
 
@@ -62,11 +74,197 @@ class PaginaController extends Controller
         ];
 
         $this->programas = [
+            // DOCTORADOS
             [
                 'id' => 1,
+                'slug' => Str::slug('Doctorado en Administración'),
+                'nombre' => 'Doctorado en Administración',
+                'tipo' => 'Doctorado',
+                'slug_tipo' => Str::slug('doctorados'),
+                'imagen' => asset('media/page/programa/foto_prueba.jpg'),
+            ],
+            [
+                'id' => 2,
+                'slug' => Str::slug('Doctorado en Educación'),
+                'nombre' => 'Doctorado en Educación',
+                'tipo' => 'Doctorado',
+                'slug_tipo' => Str::slug('doctorados'),
+                'imagen' => asset('media/page/programa/foto_prueba.jpg'),
+            ],
+            [
+                'id' => 3,
+                'slug' => Str::slug('Doctorado en Salud Pública'),
+                'nombre' => 'Doctorado en Salud Pública',
+                'tipo' => 'Doctorado',
+                'slug_tipo' => Str::slug('doctorados'),
+                'imagen' => asset('media/page/programa/foto_prueba.jpg'),
+            ],
+
+            // MAESTRÍAS
+            [
+                'id' => 4,
+                'slug' => Str::slug('Maestría en Ciencias Agrícolas con mención en Agricultura Sostenible'),
+                'nombre' => 'Maestría en Ciencias Agrícolas con mención en Agricultura Sostenible',
+                'tipo' => 'Maestría',
+                'slug_tipo' => Str::slug('maestrias'),
+                'imagen' => asset('media/page/programa/foto_prueba.jpg'),
+            ],
+            [
+                'id' => 5,
+                'slug' => Str::slug('Maestría en Ciencias de la Computación'),
+                'nombre' => 'Maestría en Ciencias de la Computación',
+                'tipo' => 'Maestría',
+                'slug_tipo' => Str::slug('maestrias'),
+                'imagen' => asset('media/page/programa/foto_prueba.jpg'),
+            ],
+            [
+                'id' => 6,
                 'slug' => Str::slug('Maestría en Derecho Constitucional y Administrativo'),
                 'nombre' => 'Maestría en Derecho Constitucional y Administrativo',
                 'tipo' => 'Maestría',
+                'slug_tipo' => Str::slug('maestrias'),
+                'imagen' => asset('media/page/programa/foto_prueba.jpg'),
+            ],
+
+            // Maestría en Educación (menciones)
+            [
+                'id' => 7,
+                'slug' => Str::slug('Maestría en Educación con mención en Didáctica de la Literatura'),
+                'nombre' => 'Maestría en Educación con mención en Didáctica de la Literatura',
+                'tipo' => 'Maestría',
+                'slug_tipo' => Str::slug('maestrias'),
+                'imagen' => asset('media/page/programa/foto_prueba.jpg'),
+            ],
+            [
+                'id' => 8,
+                'slug' => Str::slug('Maestría en Educación con mención en Docencia y Pedagogía Universitaria'),
+                'nombre' => 'Maestría en Educación con mención en Docencia y Pedagogía Universitaria',
+                'tipo' => 'Maestría',
+                'slug_tipo' => Str::slug('maestrias'),
+                'imagen' => asset('media/page/programa/foto_prueba.jpg'),
+            ],
+            [
+                'id' => 9,
+                'slug' => Str::slug('Maestría en Educación con mención en Educación Infantil'),
+                'nombre' => 'Maestría en Educación con mención en Educación Infantil',
+                'tipo' => 'Maestría',
+                'slug_tipo' => Str::slug('maestrias'),
+                'imagen' => asset('media/page/programa/foto_prueba.jpg'),
+            ],
+            [
+                'id' => 10,
+                'slug' => Str::slug('Maestría en Educación con mención en Gestión Educativa'),
+                'nombre' => 'Maestría en Educación con mención en Gestión Educativa',
+                'tipo' => 'Maestría',
+                'slug_tipo' => Str::slug('maestrias'),
+                'imagen' => asset('media/page/programa/foto_prueba.jpg'),
+            ],
+            [
+                'id' => 11,
+                'slug' => Str::slug('Maestría en Educación con mención en Psicología Educativa'),
+                'nombre' => 'Maestría en Educación con mención en Psicología Educativa',
+                'tipo' => 'Maestría',
+                'slug_tipo' => Str::slug('maestrias'),
+                'imagen' => asset('media/page/programa/foto_prueba.jpg'),
+            ],
+            [
+                'id' => 12,
+                'slug' => Str::slug('Maestría en Educación con mención en Psicopedagogía'),
+                'nombre' => 'Maestría en Educación con mención en Psicopedagogía',
+                'tipo' => 'Maestría',
+                'slug_tipo' => Str::slug('maestrias'),
+                'imagen' => asset('media/page/programa/foto_prueba.jpg'),
+            ],
+
+            [
+                'id' => 13,
+                'slug' => Str::slug('Maestría en Evaluación y Acreditación de la Calidad de la Educación'),
+                'nombre' => 'Maestría en Evaluación y Acreditación de la Calidad de la Educación',
+                'tipo' => 'Maestría',
+                'slug_tipo' => Str::slug('maestrias'),
+                'imagen' => asset('media/page/programa/foto_prueba.jpg'),
+            ],
+
+            // Maestría en Gestión Empresarial (menciones)
+            [
+                'id' => 14,
+                'slug' => Str::slug('Maestría en Gestión Empresarial con mención en Auditoría de la Gestión Empresarial'),
+                'nombre' => 'Maestría en Gestión Empresarial con mención en Auditoría de la Gestión Empresarial',
+                'tipo' => 'Maestría',
+                'slug_tipo' => Str::slug('maestrias'),
+                'imagen' => asset('media/page/programa/foto_prueba.jpg'),
+            ],
+            [
+                'id' => 15,
+                'slug' => Str::slug('Maestría en Gestión Empresarial con mención en Finanzas para Empresas Financieras'),
+                'nombre' => 'Maestría en Gestión Empresarial con mención en Finanzas para Empresas Financieras',
+                'tipo' => 'Maestría',
+                'slug_tipo' => Str::slug('maestrias'),
+                'imagen' => asset('media/page/programa/foto_prueba.jpg'),
+            ],
+            [
+                'id' => 16,
+                'slug' => Str::slug('Maestría en Gestión Empresarial con mención en Gestión de Negocios Internacional y Comercio Exterior'),
+                'nombre' => 'Maestría en Gestión Empresarial con mención en Gestión de Negocios Internacional y Comercio Exterior',
+                'tipo' => 'Maestría',
+                'slug_tipo' => Str::slug('maestrias'),
+                'imagen' => asset('media/page/programa/foto_prueba.jpg'),
+            ],
+            [
+                'id' => 17,
+                'slug' => Str::slug('Maestría en Gestión Empresarial con mención en Gestión de Proyectos de Inversión'),
+                'nombre' => 'Maestría en Gestión Empresarial con mención en Gestión de Proyectos de Inversión',
+                'tipo' => 'Maestría',
+                'slug_tipo' => Str::slug('maestrias'),
+                'imagen' => asset('media/page/programa/foto_prueba.jpg'),
+            ],
+            [
+                'id' => 18,
+                'slug' => Str::slug('Maestría en Gestión Empresarial con mención en Gestión de Recursos y Costos de Agronegocios'),
+                'nombre' => 'Maestría en Gestión Empresarial con mención en Gestión de Recursos y Costos de Agronegocios',
+                'tipo' => 'Maestría',
+                'slug_tipo' => Str::slug('maestrias'),
+                'imagen' => asset('media/page/programa/foto_prueba.jpg'),
+            ],
+            [
+                'id' => 19,
+                'slug' => Str::slug('Maestría en Gestión Empresarial con mención en Gestión Tributaria Fiscal'),
+                'nombre' => 'Maestría en Gestión Empresarial con mención en Gestión Tributaria Fiscal',
+                'tipo' => 'Maestría',
+                'slug_tipo' => Str::slug('maestrias'),
+                'imagen' => asset('media/page/programa/foto_prueba.jpg'),
+            ],
+
+            [
+                'id' => 20,
+                'slug' => Str::slug('Maestría en Gestión Pública'),
+                'nombre' => 'Maestría en Gestión Pública',
+                'tipo' => 'Maestría',
+                'slug_tipo' => Str::slug('maestrias'),
+                'imagen' => asset('media/page/programa/foto_prueba.jpg'),
+            ],
+            [
+                'id' => 21,
+                'slug' => Str::slug('Maestría en Ingeniería de Sistemas con mención en Gestión de Tecnologías de la Información'),
+                'nombre' => 'Maestría en Ingeniería de Sistemas con mención en Gestión de Tecnologías de la Información',
+                'tipo' => 'Maestría',
+                'slug_tipo' => Str::slug('maestrias'),
+                'imagen' => asset('media/page/programa/foto_prueba.jpg'),
+            ],
+            [
+                'id' => 22,
+                'slug' => Str::slug('Maestría en Medio Ambiente, Gestión Sostenible y Responsabilidad Social'),
+                'nombre' => 'Maestría en Medio Ambiente, Gestión Sostenible y Responsabilidad Social',
+                'tipo' => 'Maestría',
+                'slug_tipo' => Str::slug('maestrias'),
+                'imagen' => asset('media/page/programa/foto_prueba.jpg'),
+            ],
+            [
+                'id' => 23,
+                'slug' => Str::slug('Maestría en Salud Pública'),
+                'nombre' => 'Maestría en Salud Pública',
+                'tipo' => 'Maestría',
+                'slug_tipo' => Str::slug('maestrias'),
                 'imagen' => asset('media/page/programa/foto_prueba.jpg'),
             ],
         ];
@@ -74,8 +272,9 @@ class PaginaController extends Controller
 
     public function inicio()
     {
+        $anuncios = $this->anuncios;
         $noticias = $this->noticias;
-        return view('paginas.inicio', compact('noticias'));
+        return view('paginas.inicio', compact('noticias', 'anuncios'));
     }
 
     public function noticia($slug)
@@ -93,6 +292,23 @@ class PaginaController extends Controller
         }
 
         return view('paginas.noticia', compact('noticia'));
+    }
+
+    public function anuncio($slug)
+    {
+        $anuncio = null;
+        foreach ($this->anuncios as $item) {
+            if ($item['slug'] === $slug) {
+                $anuncio = $item;
+                break;
+            }
+        }
+
+        if (!$anuncio) {
+            abort(404);
+        }
+
+        return view('paginas.anuncio', compact('anuncio'));
     }
 
     public function mision()
@@ -357,5 +573,71 @@ class PaginaController extends Controller
         ];
 
         return view('paginas.detalle', compact('detalle', 'links'));
+    }
+
+    public function programa($tipo)
+    {
+        if (!in_array($tipo, ['maestrias', 'doctorados'])) {
+            abort(404);
+        }
+
+        if ($tipo === 'maestrias') {
+            $detalle = [
+                'titulo' => 'Maestrías',
+                'descripcion_md' => '### Programas de Maestrías ofrecidos por la Escuela de Posgrado',
+                'fecha' => '20/09/2025',
+            ];
+        } else {
+            $detalle = [
+                'titulo' => 'Doctorados',
+                'descripcion_md' => '### Programas de Doctorados ofrecidos por la Escuela de Posgrado',
+                'fecha' => '20/09/2025',
+            ];
+        }
+
+        $programas = [];
+        foreach ($this->programas as $programa) {
+            if (Str::slug($programa['slug_tipo']) === $tipo) {
+                $programas[] = $programa;
+            }
+        }
+
+        return view('paginas.programas', compact('detalle', 'programas'));
+    }
+
+    public function programa_detalle($tipo, $slug)
+    {
+        if (!in_array($tipo, ['maestrias', 'doctorados'])) {
+            abort(404);
+        }
+
+        $programa = null;
+        foreach ($this->programas as $item) {
+            if (Str::slug($item['slug_tipo']) === $tipo && $item['slug'] === $slug) {
+                $programa = $item;
+                break;
+            }
+        }
+
+        if (!$programa) {
+            abort(404);
+        }
+
+        $detalle = [
+            'titulo' => $programa['nombre'],
+            'descripcion_md' => '### Información sobre ' . ($tipo == 'maestrias' ? 'la ' : 'el ') . $programa['nombre'],
+            'fecha' => '20/09/2025',
+        ];
+
+        $imagen = asset('media/page/admision/foto_prueba.jpg');
+        // $imagen_opcional = null; // Puedes dejarlo como null si no hay imagen opcional
+        $imagen_opcional = asset('media/page/admision/foto_prueba.jpg'); // Puedes dejarlo como null si no hay imagen opcional
+
+        return view('paginas.detalle', compact('programa', 'detalle', 'imagen', 'imagen_opcional'));
+    }
+
+    public function contacto()
+    {
+        return view('paginas.contacto');
     }
 }
