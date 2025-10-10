@@ -154,7 +154,7 @@
                         {{ $item->nombre_completo }}
                     </td>
                     <td style="border: 1px solid black; padding: 4px;" align="center">
-                        S/: {{ number_format($pago_matricula->pago_monto, 2, ',', '.') }}
+                        S/: {{ number_format($pago_matricula->pago_monto ?? 0, 2, ',', '.') }}
                     </td>
                     @if ($mayor == 0)
                         <td style="border: 1px solid black; padding: 4px;" align="center">
@@ -163,7 +163,7 @@
                     @else
                         @foreach ($mensualidades as $mensualidad)
                         <td style="border: 1px solid black; padding: 4px;" align="center">
-                            S/: {{ number_format($mensualidad->pago->pago_monto, 2, ',', '.') }}
+                            S/: {{ number_format($mensualidad->pago->pago_monto ?? 0, 2, ',', '.') }}
                         </td>
                         @endforeach
                         @if ($colspan > 0)
