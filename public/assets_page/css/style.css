@@ -11108,7 +11108,7 @@ te .footer-widget .widget_title:before {
   margin-left: 10px;
   font-weight: 500;
   font-size: 16px;
-  color: var(--black-color);
+  color: var(--white-color);
   font-family: var(--icon-font);
 }
 
@@ -11161,10 +11161,10 @@ te .footer-widget .widget_title:before {
   right: -10px;
   z-index: 2;
   width: 900px;
-  -webkit-mask-image: url("../img/bg/breadcrumbs-shape.png");
+  /* -webkit-mask-image: url("../img/bg/breadcrumbs-shape.png");
           mask-image: url("../img/bg/breadcrumbs-shape.png");
   -webkit-mask-repeat: no-repeat;
-          mask-repeat: no-repeat;
+          mask-repeat: no-repeat; */
   /* Extra large devices */
   /* Medium Large devices */
   /* Medium Large devices */
