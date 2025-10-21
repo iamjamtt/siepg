@@ -2,19 +2,19 @@
     <!--==============================
     Breadcumb
     ============================== -->
-    <div class="breadcumb-wrapper position-relative " data-bg-src="{{ asset('media/page/breadcrumb-shep.png') }}">
+    <div class="breadcumb-wrapper position-relative bg-title">
         <div class="breadcumb-banner">
             <img src="https://images.unsplash.com/photo-1755867712452-871192ab3b2e?q=80&w=1752&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="bg-banner">
         </div>
         <div class="container th-container4">
             <div class="row">
-                <div class="col-xxl-9">
+                <div class="col-lg-6">
                     <div class="breadcumb-content">
-                        <h1 class="breadcumb-title">
+                        <h1 class="breadcumb-title text-white">
                             Contáctenos
                         </h1>
                         <ul class="breadcumb-menu">
-                            <li><a href="{{ route('pagina.inicio') }}">Inicio</a></li>
+                            <li><a href="{{ route('pagina.inicio') }}" class="text-white">Inicio</a></li>
                             <li>Contáctenos</li>
                         </ul>
                     </div>

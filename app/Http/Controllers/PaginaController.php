@@ -629,11 +629,50 @@ class PaginaController extends Controller
             'fecha' => '20/09/2025',
         ];
 
-        $imagen = asset('media/page/admision/foto_prueba.jpg');
-        // $imagen_opcional = null; // Puedes dejarlo como null si no hay imagen opcional
-        $imagen_opcional = asset('media/page/admision/foto_prueba.jpg'); // Puedes dejarlo como null si no hay imagen opcional
+        $detalle_introduccion = [
+            'titulo' => 'Introducción al ' . ($tipo == 'maestrias' ? 'programa de maestría' : 'programa de doctorado'),
+            'descripcion_md' => <<<MD
+            La Escuela de Posgrado de la Universidad Nacional de Ucayali ofrece el programa de {$programa['nombre']} diseñado para formar profesionales altamente capacitados en su campo. Este programa combina teoría y práctica para garantizar una educación integral y de calidad.
+            MD,
+            'imagen' => asset('media/page/programa/foto_prueba.jpg'),
+        ];
 
-        return view('paginas.detalle', compact('programa', 'detalle', 'imagen', 'imagen_opcional'));
+        $detalle_perfil = [
+            'titulo' => 'Perfil del Egresado',
+            'descripcion_md' => <<<MD
+                Al completar el programa de {$programa['nombre']}, los egresados estarán preparados para enfrentar los desafíos profesionales en su área de especialización, contribuyendo al desarrollo científico, tecnológico y social.
+                MD,
+            'imagen' => asset('media/page/programa/foto_prueba.jpg'),
+        ];
+
+        $detalle_requisito = [
+            'titulo' => 'Requisitos',
+            'descripcion_md' => <<<MD
+                Los aspirantes al programa de {$programa['nombre']} deben cumplir con los siguientes requisitos de admisión:
+                - Título universitario en un campo relacionado.
+                - Experiencia profesional relevante.
+                - Presentar una propuesta de investigación (para doctorados).
+                MD,
+            'imagen' => asset('media/page/programa/foto_prueba.jpg'),
+        ];
+
+        $detalle_plan = [
+            'titulo' => 'Plan de Estudios',
+            'descripcion_md' => <<<MD
+                El plan de estudios del programa de {$programa['nombre']} está estructurado para proporcionar una formación sólida y especializada, incluyendo cursos teóricos, prácticos y un proyecto de investigación.
+                MD,
+            'imagen' => asset('media/page/programa/foto_prueba.jpg'),
+        ];
+
+        $detalle_costos = [
+            'titulo' => 'Costos',
+            'descripcion_md' => <<<MD
+                El programa de {$programa['nombre']} ofrece diversas modalidades de pago para facilitar el acceso a la educación de calidad. Los costos varían según la modalidad seleccionada.
+                MD,
+            'imagen' => asset('media/page/programa/foto_prueba.jpg'),
+        ];
+
+        return view('paginas.detalle', compact('programa', 'detalle', 'detalle_introduccion', 'detalle_perfil', 'detalle_requisito', 'detalle_plan', 'detalle_costos'));
     }
 
     public function contacto()
