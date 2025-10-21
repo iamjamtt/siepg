@@ -83,19 +83,10 @@
                         <ul class="sub-menu">
                             <li><a href="{{ route('pagina.mision') }}">Misión</a></li>
                             <li><a href="{{ route('pagina.vision') }}">Visión</a></li>
-                            <li><a href="{{ route('pagina.objetivos') }}">Objetivos</a></li>
+                            {{-- <li><a href="{{ route('pagina.objetivos') }}">Objetivos</a></li> --}}
                             <li><a href="{{ route('pagina.resena-historica') }}">Reseña Histórica</a></li>
                             <li><a href="{{ route('pagina.autoridades') }}">Autoridades</a></li>
                             <li><a href="{{ route('pagina.reglamento') }}">Reglamento</a></li>
-                        </ul>
-                    </li>
-                    <li class="menu-item-has-children">
-                        <a href="#">Admisión</a>
-                        <ul class="sub-menu">
-                            <li><a href="{{ route('pagina.requisito-ingreso') }}">Requisitos de ingreso</a></li>
-                            <li><a href="{{ route('pagina.procesos-cronogramas') }}">Procesos y cronogramas</a></li>
-                            <li><a href="{{ route('pagina.costos-modalidades') }}">Costos y modalidades de pago</a></li>
-                            <li><a href="{{ route('pagina.link-siepg') }}">Link para SIEPG</a></li>
                         </ul>
                     </li>
                     <li class="menu-item-has-children">
@@ -105,6 +96,15 @@
                             <li><a href="{{ route('pagina.programa', ['slug' => 'doctorados']) }}">Doctorados</a></li>
                         </ul>
                     </li>
+                    <li class="menu-item-has-children">
+                        <a href="#">Admisión</a>
+                        <ul class="sub-menu">
+                            <li><a href="{{ route('pagina.requisito-ingreso') }}">Requisitos de ingreso</a></li>
+                            <li><a href="{{ route('pagina.procesos-cronogramas') }}">Procesos y cronogramas</a></li>
+                            <li><a href="{{ route('pagina.costos-modalidades') }}">Costos y modalidades de pago</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="{{ route('pagina.link-siepg') }}">Link para SIEPG</a></li>
                     <li><a href="{{ route('pagina.contacto') }}">Contáctenos</a></li>
                 </ul>
             </div>
@@ -243,19 +243,10 @@
                                                 <ul class="sub-menu">
                                                     <li><a href="{{ route('pagina.mision') }}">Misión</a></li>
                                                     <li><a href="{{ route('pagina.vision') }}">Visión</a></li>
-                                                    <li><a href="{{ route('pagina.objetivos') }}">Objetivos</a></li>
+                                                    {{-- <li><a href="{{ route('pagina.objetivos') }}">Objetivos</a></li> --}}
                                                     <li><a href="{{ route('pagina.resena-historica') }}">Reseña Histórica</a></li>
                                                     <li><a href="{{ route('pagina.autoridades') }}">Autoridades</a></li>
                                                     <li><a href="{{ route('pagina.reglamento') }}">Reglamento</a></li>
-                                                </ul>
-                                            </li>
-                                            <li class="menu-item-has-children">
-                                                <a href="#">Admisión</a>
-                                                <ul class="sub-menu">
-                                                    <li><a href="{{ route('pagina.requisito-ingreso') }}">Requisitos de ingreso</a></li>
-                                                    <li><a href="{{ route('pagina.procesos-cronogramas') }}">Procesos y cronogramas</a></li>
-                                                    <li><a href="{{ route('pagina.costos-modalidades') }}">Costos y modalidades de pago</a></li>
-                                                    <li><a href="{{ route('pagina.link-siepg') }}">Link para SIEPG</a></li>
                                                 </ul>
                                             </li>
                                             <li class="menu-item-has-children">
@@ -265,6 +256,15 @@
                                                     <li><a href="{{ route('pagina.programa', ['slug' => 'doctorados']) }}">Doctorados</a></li>
                                                 </ul>
                                             </li>
+                                            <li class="menu-item-has-children">
+                                                <a href="#">Admisión</a>
+                                                <ul class="sub-menu">
+                                                    <li><a href="{{ route('pagina.requisito-ingreso') }}">Requisitos de ingreso</a></li>
+                                                    <li><a href="{{ route('pagina.procesos-cronogramas') }}">Procesos y cronogramas</a></li>
+                                                    <li><a href="{{ route('pagina.costos-modalidades') }}">Costos y modalidades de pago</a></li>
+                                                </ul>
+                                            </li>
+                                            <li><a href="{{ route('pagina.link-siepg') }}">Link para SIEPG</a></li>
                                             <li><a href="{{ route('pagina.contacto') }}">Contáctenos</a></li>
                                         </ul>
                                     </nav>
