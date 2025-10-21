@@ -379,7 +379,7 @@
     <!-- Gsap Animation -->
     <script src="{{ asset('assets_page/js/gsap.min.js') }}"></script>
     <!-- ScrollTrigger -->
-    <script src="{{ asset('assets_page/js/ScrollTrigger.min.js') }}"></script>
+    {{-- <script src="{{ asset('assets_page/js/ScrollTrigger.min.js') }}"></script> --}}
     <!-- SplitText -->
     <script src="{{ asset('assets_page/js/SplitText.min.js') }}"></script>
     <!-- Lenis Js -->
