@@ -68,6 +68,7 @@
                                 </div>
                             </div>
                         @endif
+
                         @if (!empty($directores))
                             <div class="blog-content text-center" style="margin-top: 80px; margin-bottom: 20px;">
                                 <h3>DIRECTORES DE LAS UNIDADES DE POSGRADO</h3>
@@ -84,6 +85,7 @@
                                 </div>
                             </div>
                         @endif
+
                         @if (!empty($reglamentos))
                             <div class="blog-content text-center" style="margin-top: 40px; margin-bottom: 20px;">
                                 <div class="row g-5 justify-content-center" style="margin-top: 20px;">
@@ -106,6 +108,109 @@
                                 </div>
                             </div>
                         @endif
+
+                        @if (!empty($programa))
+                            <ul class="nav nav-tabs mt-4" id="tabPrograma" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active" id="introduccion-tab" data-bs-toggle="tab" data-bs-target="#tab-introduccion" type="button" role="tab" aria-controls="tab-introduccion" aria-selected="true">
+                                        Introducción al programa
+                                    </button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="perfil-tab" data-bs-toggle="tab" data-bs-target="#tab-perfil" type="button" role="tab" aria-controls="tab-perfil" aria-selected="false">
+                                        Perfil del egresado
+                                    </button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="requisitos-tab" data-bs-toggle="tab" data-bs-target="#tab-requisitos" type="button" role="tab" aria-controls="tab-requisitos" aria-selected="false">
+                                        Requisitos
+                                    </button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="plan-estudios-tab" data-bs-toggle="tab" data-bs-target="#tab-plan-estudios" type="button" role="tab" aria-controls="tab-plan-estudios" aria-selected="false">
+                                        Plan de estudios
+                                    </button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="costos-tab" data-bs-toggle="tab" data-bs-target="#tab-costos" type="button" role="tab" aria-controls="tab-costos" aria-selected="false">
+                                        Costos
+                                    </button>
+                                </li>
+                            </ul>
+
+                            <div class="tab-content p-4 border border-top-0 bg-white rounded-bottom" id="tabProgramaContent">
+                                <div class="tab-pane fade show active" id="tab-introduccion" role="tabpanel" aria-labelledby="introduccion-tab" tabindex="0">
+                                    @if (!empty($detalle_introduccion['titulo']))
+                                        <h5>{{ $detalle_introduccion['titulo'] }}</h5>
+                                    @endif
+                                    {!! \Illuminate\Support\Str::markdown($detalle_introduccion['descripcion_md']) !!}
+                                    @if (!empty($detalle_introduccion['imagen']))
+                                        <div class="row g-5 justify-content-center">
+                                            <div class="col-md-10">
+                                                <img src="{{ $detalle_introduccion['imagen'] }}" alt="Imagen relacionada" class="mb-3" style="width: 100%; height: auto; border-radius: 10px;">
+                                            </div>
+                                        </div>
+                                    @endif
+                                </div>
+
+                                <div class="tab-pane fade" id="tab-perfil" role="tabpanel" aria-labelledby="perfil-tab" tabindex="0">
+                                    @if (!empty($detalle_perfil['titulo']))
+                                        <h5>{{ $detalle_perfil['titulo'] }}</h5>
+                                    @endif
+                                    {!! \Illuminate\Support\Str::markdown($detalle_perfil['descripcion_md']) !!}
+                                    @if (!empty($detalle_perfil['imagen']))
+                                        <div class="row g-5 justify-content-center">
+                                            <div class="col-md-10">
+                                                <img src="{{ $detalle_perfil['imagen'] }}" alt="Imagen relacionada" class="mb-3" style="width: 100%; height: auto; border-radius: 10px;">
+                                            </div>
+                                        </div>
+                                    @endif
+                                </div>
+
+                                <div class="tab-pane fade" id="tab-requisitos" role="tabpanel" aria-labelledby="requisitos-tab" tabindex="0">
+                                    @if (!empty($detalle_requisito['titulo']))
+                                        <h5>{{ $detalle_requisito['titulo'] }}</h5>
+                                    @endif
+                                    {!! \Illuminate\Support\Str::markdown($detalle_requisito['descripcion_md']) !!}
+                                    @if (!empty($detalle_requisito['imagen']))
+                                        <div class="row g-5 justify-content-center">
+                                            <div class="col-md-10">
+                                                <img src="{{ $detalle_requisito['imagen'] }}" alt="Imagen relacionada" class="mb-3" style="width: 100%; height: auto; border-radius: 10px;">
+                                            </div>
+                                        </div>
+                                    @endif
+                                </div>
+
+                                <div class="tab-pane fade" id="tab-plan-estudios" role="tabpanel" aria-labelledby="plan-estudios-tab" tabindex="0">
+                                    @if (!empty($detalle_plan['titulo']))
+                                        <h5>{{ $detalle_plan['titulo'] }}</h5>
+                                    @endif
+                                    {!! \Illuminate\Support\Str::markdown($detalle_plan['descripcion_md']) !!}
+                                    @if (!empty($detalle_plan['imagen']))
+                                        <div class="row g-5 justify-content-center">
+                                            <div class="col-md-10">
+                                                <img src="{{ $detalle_plan['imagen'] }}" alt="Imagen relacionada" class="mb-3" style="width: 100%; height: auto; border-radius: 10px;">
+                                            </div>
+                                        </div>
+                                    @endif
+                                </div>
+
+                                <div class="tab-pane fade" id="tab-costos" role="tabpanel" aria-labelledby="costos-tab" tabindex="0">
+                                    @if (!empty($detalle_costos['titulo']))
+                                        <h5>{{ $detalle_costos['titulo'] }}</h5>
+                                    @endif
+                                    {!! \Illuminate\Support\Str::markdown($detalle_costos['descripcion_md']) !!}
+                                    @if (!empty($detalle_costos['imagen']))
+                                        <div class="row g-5 justify-content-center">
+                                            <div class="col-md-10">
+                                                <img src="{{ $detalle_costos['imagen'] }}" alt="Imagen relacionada" class="mb-3" style="width: 100%; height: auto; border-radius: 10px;">
+                                            </div>
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+                        @endif
+
                         @if (!empty($imagen))
                             <div class="blog-content text-center" style="margin-top: 20px; margin-bottom: 20px;">
                                 <div class="row g-5 justify-content-center" style="margin-top: 20px;">
@@ -115,6 +220,7 @@
                                 </div>
                             </div>
                         @endif
+
                         @if (!empty($imagen_opcional))
                             <div class="blog-content text-center" style="margin-top: 20px; margin-bottom: 20px;">
                                 <div class="row g-5 justify-content-center" style="margin-top: 20px;">
@@ -124,6 +230,7 @@
                                 </div>
                             </div>
                         @endif
+
                         @if (!empty($links))
                             <div class="blog-content text-center" style="margin-top: 40px; margin-bottom: 20px;">
                                 <div class="row g-5 justify-content-center" style="margin-top: 20px;">
