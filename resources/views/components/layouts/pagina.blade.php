@@ -293,36 +293,14 @@
 	Footer Area
     ==============================-->
     <footer class="footer-wrapper footer-default footer-overlay bg-title">
-        {{-- <div class="footer-top">
-            <div class="container">
-                <div class="row gy-40 align-items-center justify-content-between">
-                    <div class="col-xl-auto">
-                        <div class="footer-logo z-index-common" data-cue="slideInLeft">
-                            <a href="{{ route('pagina.inicio') }}">
-                                <img src="{{ asset('assets/media/logos/logo-pg.png') }}" alt="Logo" width="100">
-                            </a>
-                        </div>
-                    </div>
-                    <div class="col-xl-auto">
-                        <div class="client-group-wrap z-index-common" data-cue="slideInRight">
-                            <h4 class="title">
-                                Estamos para ayudarte
-                            </h4>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div> --}}
         <div class="container">
             <div class="widget-area">
                 <div class="row justify-content-between">
                     <div class="col-md-6">
                         <div class="widget footer-widget">
                             <div class="th-widget-about">
-                                <h3 class="widget_title">Sobre la Escuela de Posgrado</h3>
-                                <p class="about-text">
-                                    Mediante Resolución Nº 061-2005-R-UNU del 12 de Febrero del 2005, se designa la Comisión encargada del Estudio y Organización para la creación de la Escuela de Posgrado de la Universidad Nacional de Ucayali, presidida por el Blgo. Mg. Emilio Pascual Valentín.
-                                </p>
+                                <img src="{{ asset('assets/media/logos/logo-pg.png') }}" alt="Logo" width="130">
+                                <h3 class="widget_title mt-3">Escuela de Posgrado</h3>
                                 <div class="footer-info">
                                     <a href="#">
                                         <span class="footer-info-icon"><i class="fa-solid fa-location-dot"></i></span> Carretera Federico Basadre Km. 6.00
