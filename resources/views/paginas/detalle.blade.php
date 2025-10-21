@@ -34,7 +34,14 @@
                 <div class="col-xl-9">
                     <div class="th-blog blog-single">
                         <div class="blog-img text-center" style="background-color: #ffffff;">
-                            <img src="{{ asset('media/page/cabecera-detalle.png') }}" alt="cabecera-detalle" style="max-width: 65%; height: auto;">
+                            <img src="{{ asset('media/page/cabecera-detalle.png') }}" alt="cabecera-detalle" class="img-fluid" style="max-width: 65%; height: auto;">
+                            <style>
+                                @media (max-width: 800px) {
+                                    .blog-img img {
+                                        max-width: 100% !important;
+                                    }
+                                }
+                            </style>
                         </div>
                         <div class="blog-content">
                             <div class="blog-meta">
