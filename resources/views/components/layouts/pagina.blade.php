@@ -196,7 +196,7 @@
                                 <div class="header-info-content">
                                     <span class="header-info-text">Correo electrónico</span>
                                     <h3 class="header-info-title">
-                                        <a href="tel:mesadepartes_epg@unu.edu.pe">mesadepartes_epg@unu.edu.pe</a>
+                                        <a href="mailto:mesadepartes_epg@unu.edu.pe">mesadepartes_epg@unu.edu.pe</a>
                                     </h3>
                                 </div>
                             </div>
