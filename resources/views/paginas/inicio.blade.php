@@ -21,7 +21,7 @@
                                             </p>
                                             <div class="btn-wrap justify-content-center justify-content-lg-start" data-ani="slideinup" data-ani-delay="0.8s">
                                                 <a href="#" class="th-btn white-hover th-icon">Ver Admisión</a>
-                                                <a href="#" class="th-btn style-border1 th-icon white-hover">Ver Programa</a>
+                                                <!-- <a href="#" class="th-btn style-border1 th-icon white-hover">Ver Programa</a> -->
                                             </div>
                                         </div>
                                     </div>
@@ -53,7 +53,7 @@
                                             </p>
                                             <div class="btn-wrap justify-content-center justify-content-lg-start" data-ani="slideinup" data-ani-delay="0.8s">
                                                 <a href="#" class="th-btn white-hover th-icon">Ver Admisión</a>
-                                                <a href="#" class="th-btn style-border1 th-icon white-hover">Ver Programa</a>
+                                                <!-- <a href="#" class="th-btn style-border1 th-icon white-hover">Ver Programa</a> -->
                                             </div>
                                         </div>
                                     </div>
