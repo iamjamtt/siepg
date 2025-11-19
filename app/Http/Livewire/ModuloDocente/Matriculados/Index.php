@@ -556,23 +556,39 @@ class Index extends Component
     public function render()
     {
         $docenteCurso = DocenteCurso::find($this->id_docente_curso);
-        $docente = Docente::find($docenteCurso->id_docente);
 
-        $this->matriculados = ModelMatriculaCurso::query()
-            ->join('tbl_matricula', 'tbl_matricula_curso.id_matricula', 'tbl_matricula.id_matricula')
-            ->join('admitido', 'tbl_matricula.id_admitido', 'admitido.id_admitido')
-            ->join('persona', 'admitido.id_persona', 'persona.id_persona')
-            ->where('admitido.admitido_estado', 1)
-            ->where('tbl_matricula_curso.id_curso_programa_plan', $this->id_curso_programa_plan)
-            ->where('tbl_matricula_curso.id_programa_proceso_grupo', $this->id_programa_proceso_grupo)
-            // ->where('tbl_matricula_curso.activo', 1)
-            ->where('persona.nombre_completo', 'like', '%'.$this->search.'%')
-            ->where('tbl_matricula_curso.id_docente', $docente->id_docente)
-            ->orderBy('persona.nombre_completo', 'asc')
-            ->select('tbl_matricula_curso.*')
-            ->get();
+        if ( $docenteCurso->docente_curso_estado == 2 ) {
+            $docente = Docente::find($docenteCurso->id_docente);
+            
+            $this->matriculados = ModelMatriculaCurso::query()
+                ->join('tbl_matricula', 'tbl_matricula_curso.id_matricula', 'tbl_matricula.id_matricula')
+                ->join('admitido', 'tbl_matricula.id_admitido', 'admitido.id_admitido')
+                ->join('persona', 'admitido.id_persona', 'persona.id_persona')
+                ->where('admitido.admitido_estado', 1)
+                ->where('tbl_matricula_curso.id_curso_programa_plan', $this->id_curso_programa_plan)
+                ->where('tbl_matricula_curso.id_programa_proceso_grupo', $this->id_programa_proceso_grupo)
+                // ->where('tbl_matricula_curso.activo', 1)
+                ->where('persona.nombre_completo', 'like', '%'.$this->search.'%')
+                ->where('tbl_matricula_curso.id_docente', $docente->id_docente)
+                ->orderBy('persona.nombre_completo', 'asc')
+                ->select('tbl_matricula_curso.*')
+                ->get();
 
-        if ( $this->matriculados->count() == 0 ) {
+            if ( $this->matriculados->count() == 0 ) {
+                $this->matriculados = ModelMatriculaCurso::query()
+                    ->join('tbl_matricula', 'tbl_matricula_curso.id_matricula', 'tbl_matricula.id_matricula')
+                    ->join('admitido', 'tbl_matricula.id_admitido', 'admitido.id_admitido')
+                    ->join('persona', 'admitido.id_persona', 'persona.id_persona')
+                    ->where('admitido.admitido_estado', 1)
+                    ->where('tbl_matricula_curso.id_curso_programa_plan', $this->id_curso_programa_plan)
+                    ->where('tbl_matricula_curso.id_programa_proceso_grupo', $this->id_programa_proceso_grupo)
+                    ->where('tbl_matricula_curso.activo', 1)
+                    ->where('persona.nombre_completo', 'like', '%'.$this->search.'%')
+                    ->orderBy('persona.nombre_completo', 'asc')
+                    ->select('tbl_matricula_curso.*')
+                    ->get();
+            }
+        } else {
             $this->matriculados = ModelMatriculaCurso::query()
                 ->join('tbl_matricula', 'tbl_matricula_curso.id_matricula', 'tbl_matricula.id_matricula')
                 ->join('admitido', 'tbl_matricula.id_admitido', 'admitido.id_admitido')
@@ -586,6 +602,7 @@ class Index extends Component
                 ->select('tbl_matricula_curso.*')
                 ->get();
         }
+
 
         $this->matriculados_count = cantidadAlumnosMatriculadosCurso($this->id_curso_programa_plan, $this->id_programa_proceso_grupo);
         $this->matriculados_finalizados_count = cantidadAlumnosMatriculadosCursoFinalizado($this->id_curso_programa_plan, $this->id_programa_proceso_grupo);
