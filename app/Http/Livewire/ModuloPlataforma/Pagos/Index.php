@@ -751,7 +751,7 @@ class Index extends Component
         $admision = $this->admitido ? $this->admitido->programa_proceso->admision : null; // admision del admitido del usuario logueado
 
         // verificar si el usuario logueado tiene una matricula activa
-        $this->activarConceptosDeMatricula = $this->verificarSiHayMatriculaActiva($this->admitido->id_admitido);
+        $this->activarConceptosDeMatricula = $this->admitido ? $this->verificarSiHayMatriculaActiva($this->admitido->id_admitido) : false;
 
         $matricula_count = $this->admitido ? $this->admitido->matriculas()->where('estado', 1)->count() : 0;
 
@@ -764,8 +764,8 @@ class Index extends Component
         $conceptos_pagos = ConceptoPago::where('concepto_pago_estado', 1)->get(); // canales de pago
 
         // obtenemos deuda de ultima matricula
-        $monto_total = calcularMontoTotalCostoPorEnsenhanzaEstudiante($this->admitido->id_admitido);
-        $monto_pagado = calcularMontoPagadoCostoPorEnsenhanzaEstudiante($this->admitido->id_admitido);
+        $monto_total = $this->admitido ? calcularMontoTotalCostoPorEnsenhanzaEstudiante($this->admitido->id_admitido) : 0;
+        $monto_pagado = $this->admitido ? calcularMontoPagadoCostoPorEnsenhanzaEstudiante($this->admitido->id_admitido) : 0;
         $deuda = $monto_total - $monto_pagado;
 
         // es ingresante
