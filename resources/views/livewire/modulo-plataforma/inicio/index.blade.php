@@ -136,12 +136,12 @@
                         </div>
                     </div>
                 </div>
-                {{-- <div class="col-md-4">
+                <div class="col-md-4">
                     <div id="slider" class="carousel carousel-custom slide pe-5" data-bs-ride="carousel"
                         data-bs-interval="5000">
                         <div class="carousel-inner">
                             <div class="carousel-item active">
-                                <img src="{{ asset('media/posgrado-banner-inicio-clases.jpeg') }}" alt="carousel"
+                                <img src="{{ asset('media/banner-2026-02.png') }}" alt="carousel"
                                     class="w-100 rounded" />
                             </div>
                         </div>
@@ -153,7 +153,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4">
+                {{-- <div class="col-md-4">
                     <div id="slider" class="carousel carousel-custom slide pe-5" data-bs-ride="carousel"
                         data-bs-interval="5000">
                         <div class="carousel-inner">
@@ -169,8 +169,8 @@
                             </ol>
                         </div>
                     </div>
-                </div>
-                <div class="col-md-4">
+                </div> --}}
+                {{-- <div class="col-md-4">
                     <div id="slider" class="carousel carousel-custom slide pe-5" data-bs-ride="carousel"
                         data-bs-interval="5000">
                         <div class="carousel-inner">
@@ -186,8 +186,8 @@
                             </ol>
                         </div>
                     </div>
-                </div>
-                <div class="col-md-4">
+                </div> --}}
+                {{-- <div class="col-md-4">
                     <div id="slider" class="carousel carousel-custom slide pe-5" data-bs-ride="carousel"
                         data-bs-interval="5000">
                         <div class="carousel-inner">
